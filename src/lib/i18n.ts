@@ -11,8 +11,10 @@ import type { Locale } from "@/lib/site";
  * the way English does: it has singular, dual and plural forms, and "3 case
  * studies" is not a substitution away from "1 case study".
  *
- * NOTE: the Arabic here is a first draft and wants a native review pass before
- * `translationReviewed` is ticked on anything.
+ * The Arabic is written in a clear, neutral register (العربية البيضاء) — plain
+ * Modern Standard Arabic, no dialect or heavy classical phrasing. Give it a
+ * native proofread before ticking `translationReviewed`, which is what lifts the
+ * /ar pages out of noindex.
  */
 export type Dictionary = {
   nav: {
@@ -292,6 +294,9 @@ const en: Dictionary = {
   },
 };
 
+// Arabic in a clear, neutral register (العربية البيضاء): plain Modern Standard
+// Arabic that reads naturally to any Arabic speaker — no dialect, no heavy
+// classical constructions. Kept professional and concise to match the English.
 const ar: Dictionary = {
   nav: {
     home: "الرئيسية",
@@ -304,41 +309,42 @@ const ar: Dictionary = {
     contact: "تواصل",
     services: "الخدمات",
     openMenu: "فتح القائمة",
-    backToTop: "أعلى الصفحة",
+    backToTop: "العودة إلى الأعلى",
   },
   hero: {
-    viewWork: "شاهد أعمالي",
+    viewWork: "استعرض أعمالي",
     getInTouch: "تواصل معي",
-    whatsapp: "محادثة على واتساب",
+    whatsapp: "تحدّث عبر واتساب",
     linkedin: "لينكدإن",
   },
   about: {
     eyebrow: "نبذة",
-    title: "تحويل العمليات المعقّدة إلى مسارات عمل بسيطة",
+    title: "أحوّل العمليات المعقّدة إلى مسارات عمل بسيطة",
     count: (n) => (n === 1 ? "خدمة واحدة" : n === 2 ? "خدمتان" : `${n} خدمات`),
   },
   skills: {
     eyebrow: "المهارات",
-    title: "ما أقدّمه",
-    description: "عمق هندسي، وعادات عمل تُبقي المشاريع في مسارها.",
+    title: "ما الذي أقدّمه",
+    description:
+      "خبرة هندسية عميقة، وعادات عمل تُبقي المشاريع على المسار الصحيح.",
     count: (n) => (n === 1 ? "أداة واحدة" : n === 2 ? "أداتان" : `${n} أدوات`),
-    howIWork: "أسلوب عملي",
+    howIWork: "طريقة عملي",
     techStack: "التقنيات",
   },
   experience: {
     eyebrow: "الخبرة",
-    title: "أين عملت",
+    title: "مسيرتي المهنية",
     count: (n) =>
       n === 1 ? "وظيفة واحدة" : n === 2 ? "وظيفتان" : `${n} وظائف`,
   },
   education: {
     eyebrow: "التعليم",
-    title: "الخلفية الأكاديمية",
+    title: "المؤهّلات الأكاديمية",
     count: (n) =>
       n === 1 ? "شهادة واحدة" : n === 2 ? "شهادتان" : `${n} شهادات`,
   },
   whereIWork: {
-    eyebrow: "الإتاحة",
+    eyebrow: "التوفّر",
     title: "أين أعمل",
     regions: "المناطق",
     hours: "ساعات العمل",
@@ -346,20 +352,21 @@ const ar: Dictionary = {
     languages: "اللغات",
     engagement: {
       "full-time": "دوام كامل",
-      contract: "عقد",
+      contract: "عمل تعاقدي",
       project: "حسب المشروع",
-      consultation: "استشارة",
+      consultation: "استشارات",
     },
     proficiency: {
       native: "لغة أم",
-      professional: "احترافي",
-      conversational: "محادثة",
+      professional: "مستوى احترافي",
+      conversational: "مستوى محادثة",
     },
   },
   work: {
     eyebrow: "الأعمال",
-    title: "دراسات حالة مختارة",
-    description: "مشاريع حقيقية والأرقام التي غيّرتها. افتح أي بطاقة للتفاصيل.",
+    title: "مختارات من دراسات الحالة",
+    description:
+      "مشاريع حقيقية والأرقام التي حرّكتها. افتح أي بطاقة للاطّلاع على التفاصيل.",
     count: (n) =>
       n === 1
         ? "دراسة حالة واحدة"
@@ -367,7 +374,7 @@ const ar: Dictionary = {
           ? "دراستا حالة"
           : `${n} دراسات حالة`,
     openCaseStudy: "دراسة الحالة",
-    visit: "زيارة",
+    visit: "زيارة الموقع",
     star: {
       result: "النتيجة",
       situation: "السياق",
@@ -383,13 +390,13 @@ const ar: Dictionary = {
   services: {
     eyebrow: "الخدمات",
     title: "كيف أساعد عملك",
-    description: "أربع طرق أعمل بها مع الفرق — كل منها مدعوم بمشاريع منجزة.",
+    description: "أربع طرق أعمل بها مع الفرق، كلٌّ منها مدعومة بمشاريع أنجزتها.",
     count: (n) => (n === 1 ? "خدمة واحدة" : n === 2 ? "خدمتان" : `${n} خدمات`),
     readMore: "اقرأ المزيد",
     faqTitle: "أسئلة شائعة",
-    relatedTitle: "أدلة عملية",
+    relatedTitle: "أعمال ذات صلة",
     ctaTitle: "لنبدأ الحديث",
-    ctaDescription: "أخبرني بما تبنيه. رسالة قصيرة تكفي للبداية.",
+    ctaDescription: "أخبرني بما تريد بناءه. رسالة قصيرة تكفي للبداية.",
     ctaWhatsapp: "راسلني على واتساب",
     ctaEmail: "أرسل بريدًا إلكترونيًا",
     breadcrumbHome: "الرئيسية",
@@ -398,7 +405,7 @@ const ar: Dictionary = {
     eyebrow: "تواصل",
     title: "لنبنِ شيئًا معًا",
     description:
-      "لديك مشروع أو فكرة؟ راسلني مباشرة، أو أرسل رسالة من النموذج أدناه.",
+      "لديك مشروع أو فكرة؟ راسلني مباشرة، أو أرسل رسالة عبر النموذج أدناه.",
     email: "البريد الإلكتروني",
     phone: "الهاتف",
     whatsapp: "واتساب",
@@ -410,19 +417,19 @@ const ar: Dictionary = {
     email: "البريد الإلكتروني",
     emailPlaceholder: "name@company.com",
     message: "الرسالة",
-    messagePlaceholder: "أخبرني عن مشروعك…",
-    inquiryType: "ما موضوع الرسالة؟",
+    messagePlaceholder: "حدّثني عن مشروعك…",
+    inquiryType: "ما موضوع رسالتك؟",
     inquiryTypes: {
       project: "استفسار عن مشروع",
       consultation: "مكالمة استشارية",
       job: "فرصة عمل",
-      other: "شيء آخر",
+      other: "موضوع آخر",
     },
     service: "الخدمة",
-    servicePlaceholder: "أي خدمة؟",
+    servicePlaceholder: "اختر خدمة",
     phone: "الهاتف / واتساب",
     phonePlaceholder: "+20 112 846 8458",
-    preferredChannel: "تواصل معي عبر",
+    preferredChannel: "قناة التواصل المفضّلة",
     channels: {
       email: "البريد الإلكتروني",
       whatsapp: "واتساب",
@@ -431,9 +438,9 @@ const ar: Dictionary = {
     optional: "اختياري",
     submit: "إرسال الرسالة",
     sending: "جارٍ الإرسال…",
-    successTitle: "تم إرسال الرسالة.",
-    successBody: "شكرًا لتواصلك — سأرد قريبًا.",
-    genericError: "حدث خطأ ما. حاول مرة أخرى.",
+    successTitle: "تم إرسال رسالتك.",
+    successBody: "شكرًا لتواصلك — سأرد عليك قريبًا.",
+    genericError: "حدث خطأ ما. يُرجى المحاولة مرة أخرى.",
   },
   footer: {
     copyright: (year, name) => `© ${year} ${name}`,
