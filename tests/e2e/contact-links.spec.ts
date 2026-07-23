@@ -55,9 +55,17 @@ test.describe("contact links", () => {
     const contact = page.locator("#contact");
 
     // Tapping "Phone" starts a call; "WhatsApp" opens a chat. Same number,
-    // different intent, so both rows earn their place.
-    await expect(contact.getByText("Phone", { exact: true })).toBeVisible();
-    await expect(contact.getByText("WhatsApp", { exact: true })).toBeVisible();
+    // different intent, so both rows earn their place. Scoped to the link cards
+    // so the contact form's channel <select> options (also "Phone"/"WhatsApp")
+    // don't count as matches.
+    await expect(
+      contact.locator('a[href^="tel:"]').getByText("Phone", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      contact
+        .locator('a[href^="https://wa.me/"]')
+        .getByText("WhatsApp", { exact: true }),
+    ).toBeVisible();
     await expect(contact.getByText("Start a chat")).toBeVisible();
   });
 

@@ -37,9 +37,11 @@ Values live in `.env` (already present for local dev):
 | `RESEND_FROM_EMAIL` | `From` header, e.g. `Abdalla Mostafa <onboarding@resend.dev>` |
 | `CONTACT_TO_EMAIL` | Where contact submissions land. Falls back to `Profile.contact.email` in Payload, then to a hardcoded address. |
 | `CONTACT_AUTO_REPLY` | `true` enables the visitor auto-reply. Keep `false` without a verified domain. |
-| `NEXT_PUBLIC_SITE_URL` | Canonical site URL — used by the sitemap and baked into the email templates. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin. Every absolute URL — canonicals, hreflang, sitemap, JSON-LD, OG images — derives from it (`src/lib/site.ts`). Set to the production domain on deploy. |
+| `GOOGLE_SITE_VERIFICATION` | Google Search Console verification token (the meta-tag content). Omit to emit no verification tag. |
+| `NEXT_PUBLIC_MEDIA_URL` | Public base URL of the media bucket once S3/R2 is configured — declares the host `next/image` may optimise from. Leave blank while media is on local disk. |
 | `PAYLOAD_MCP_API_KEY` | Payload MCP key, minted in `/admin` under MCP → API Keys. Mirrored in the gitignored `.mcp.json`. |
-| `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE` | Optional — enable cloud media. Leave blank to keep uploads on local disk (`public/media`). |
+| `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE` | Optional — enable cloud media. Works with Cloudflare R2 (`S3_REGION=auto`). Leave blank to keep uploads on local disk (`public/media`). Set `NEXT_PUBLIC_MEDIA_URL` alongside these. |
 
 > **SRV note:** some Node/Windows setups can't perform the SRV DNS lookup that
 > `mongodb+srv://` needs (`querySrv ECONNREFUSED`). If you hit that, set

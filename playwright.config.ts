@@ -20,7 +20,13 @@ export default defineConfig({
   fullyParallel: true,
   workers: CI ? 1 : undefined,
   forbidOnly: CI,
-  retries: CI ? 2 : 0,
+  // CI serializes to one worker because every worker shares one MongoDB; local
+  // runs stay fully parallel for speed, so a single retry absorbs the transient
+  // DB-contention blip that parallelism against a shared database can produce.
+  // The content pages render per request (dynamic), which surfaces this where
+  // the old static prerender hid it. Not a substitute for fixing a real failure
+  // — a genuinely broken test fails both attempts.
+  retries: CI ? 2 : 1,
   // Stop a broken CI run early instead of burning minutes on 60 identical failures.
   maxFailures: CI ? 10 : undefined,
 

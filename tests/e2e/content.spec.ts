@@ -13,12 +13,14 @@ test.describe("seeded content", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Abdalla Mostafa" }),
     ).toBeVisible();
+    // Root-relative, not a bare fragment: the same markup renders on the
+    // service pages, where "#work" alone would point nowhere.
     await expect(
       page.getByRole("link", { name: /View my work/i }),
-    ).toHaveAttribute("href", "#work");
+    ).toHaveAttribute("href", "/#work");
     await expect(
       page.getByRole("link", { name: /Get in touch/i }),
-    ).toHaveAttribute("href", "#contact");
+    ).toHaveAttribute("href", "/#contact");
   });
 
   test("hero leads with the case-study metrics", async ({ page }) => {

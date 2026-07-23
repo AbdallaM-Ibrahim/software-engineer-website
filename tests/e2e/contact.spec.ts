@@ -35,10 +35,43 @@ test.describe("contact form submission", () => {
       name: "Jane Doe",
       email: "jane@company.com",
       message: "A message long enough to clear validation.",
+      // The new required field defaults to a project inquiry.
+      inquiryType: "project",
     });
     // The honeypot must ride along empty — a bot filling it is the only
     // way it should ever carry a value.
     expect(body.company).toBe("");
+  });
+
+  test("a service page CTA prefills the form via query params", async ({
+    page,
+  }) => {
+    await page.route("**/api/contact", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ ok: true, id: "test-email-id" }),
+      }),
+    );
+
+    // The service pages link here with the intent baked into the URL.
+    await page.goto("/?service=payment-integration&type=consultation#contact");
+
+    const request = page.waitForRequest(
+      (req) => req.url().includes("/api/contact") && req.method() === "POST",
+    );
+
+    await page.getByLabel("Name").fill("Jane Doe");
+    await page.getByLabel("Email").fill("jane@company.com");
+    await page
+      .getByLabel("Message")
+      .fill("A message long enough to clear validation.");
+    await page.getByRole("button", { name: /Send message/i }).click();
+
+    const body = (await request).postDataJSON();
+    // The consultation type and the chosen service ride along from the URL.
+    expect(body.inquiryType).toBe("consultation");
+    expect(body.service).toBe("payment-integration");
   });
 
   test("surfaces a server failure instead of claiming success", async ({

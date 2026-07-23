@@ -14,9 +14,12 @@ test.describe("smoke", () => {
   test("document metadata comes from the bio", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/Abdalla Mostafa/i);
+    // The description is CMS-driven (the profile tagline), with the hardcoded
+    // string as the fallback when the DB is unreachable. Both phrasings share
+    // this clause, so the assertion holds in either state.
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
-      /Senior Software Engineer/i,
+      /scalable web platforms/i,
     );
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
       "content",
