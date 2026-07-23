@@ -66,7 +66,8 @@ const specs: TemplateSpec[] = [
   {
     alias: CONTACT_NOTIFICATION_TEMPLATE,
     name: "Contact — notification",
-    subject: "New message from {{{VISITOR_NAME_TEXT}}}",
+    // Inquiry type in the subject so the inbox sorts itself.
+    subject: "{{{INQUIRY_TYPE_TEXT}}} from {{{VISITOR_NAME_TEXT}}}",
     htmlElement: (
       <ContactNotification
         {...({
@@ -75,6 +76,10 @@ const specs: TemplateSpec[] = [
           visitorMessage: "{{{VISITOR_MESSAGE}}}",
           submittedAt: "{{{SUBMITTED_AT}}}",
           siteUrl: SITE_URL,
+          inquiryType: "{{{INQUIRY_TYPE}}}",
+          service: "{{{SERVICE}}}",
+          phone: "{{{PHONE}}}",
+          preferredChannel: "{{{PREFERRED_CHANNEL}}}",
         } satisfies ContactNotificationProps)}
       />
     ),
@@ -86,6 +91,10 @@ const specs: TemplateSpec[] = [
           visitorMessage: "{{{VISITOR_MESSAGE_TEXT}}}",
           submittedAt: "{{{SUBMITTED_AT}}}",
           siteUrl: SITE_URL,
+          inquiryType: "{{{INQUIRY_TYPE_TEXT}}}",
+          service: "{{{SERVICE_TEXT}}}",
+          phone: "{{{PHONE_TEXT}}}",
+          preferredChannel: "{{{PREFERRED_CHANNEL_TEXT}}}",
         } satisfies ContactNotificationProps)}
       />
     ),
@@ -100,6 +109,20 @@ const specs: TemplateSpec[] = [
       { key: "VISITOR_MESSAGE_TEXT", type: "string" },
       // Server-generated, so there is nothing to escape and one variable does.
       { key: "SUBMITTED_AT", type: "string", fallbackValue: "" },
+      // Inquiry type is from a fixed set, but the label is composed server-side
+      // and still rendered into HTML, so it gets the two-variable treatment.
+      { key: "INQUIRY_TYPE", type: "string", fallbackValue: "New enquiry" },
+      {
+        key: "INQUIRY_TYPE_TEXT",
+        type: "string",
+        fallbackValue: "New enquiry",
+      },
+      { key: "SERVICE", type: "string", fallbackValue: "" },
+      { key: "SERVICE_TEXT", type: "string", fallbackValue: "" },
+      { key: "PHONE", type: "string", fallbackValue: "" },
+      { key: "PHONE_TEXT", type: "string", fallbackValue: "" },
+      { key: "PREFERRED_CHANNEL", type: "string", fallbackValue: "" },
+      { key: "PREFERRED_CHANNEL_TEXT", type: "string", fallbackValue: "" },
     ],
   },
   {

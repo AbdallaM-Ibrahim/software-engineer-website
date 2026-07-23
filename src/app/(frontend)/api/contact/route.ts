@@ -1,7 +1,13 @@
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 
-import { contactSchema } from "@/lib/contact-schema";
+import {
+  type ContactChannel,
+  type InquiryType,
+  contactSchema,
+} from "@/lib/contact-schema";
+import { getServices } from "@/lib/data";
+import { getPayloadClient } from "@/lib/payload";
 import {
   CONTACT_AUTO_REPLY_TEMPLATE,
   CONTACT_NOTIFICATION_TEMPLATE,
@@ -22,6 +28,22 @@ export const dynamic = "force-dynamic";
 const RATE_LIMIT = 3;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 
+// Human-readable labels for the notification. Kept in English on purpose: this
+// is the owner's inbox, not the visitor-facing site, so it does not follow the
+// page locale.
+const INQUIRY_LABELS: Record<InquiryType, string> = {
+  project: "Project inquiry",
+  consultation: "Consultation call",
+  job: "Job opportunity",
+  other: "New enquiry",
+};
+
+const CHANNEL_LABELS: Record<ContactChannel, string> = {
+  email: "Email",
+  whatsapp: "WhatsApp",
+  phone: "Phone",
+};
+
 // Best-effort only: per-process and lost on redeploy, and a serverless
 // deployment gives each instance its own copy. It exists to blunt a naive
 // flood, not as real abuse protection — put a WAF in front for that.
@@ -40,6 +62,42 @@ function clientIp(request: Request): string {
   return forwarded?.split(",")[0]?.trim() || "unknown";
 }
 
+/**
+ * Resolve the submitted service slug to a real service title, or null.
+ *
+ * A <select> value is still attacker-controlled: an unknown slug is dropped
+ * rather than echoed into the owner's inbox as if it were a real service.
+ */
+async function resolveServiceTitle(slug?: string): Promise<string | null> {
+  if (!slug) return null;
+  try {
+    const services = await getServices("en");
+    return services.find((s) => s.slug === slug)?.title ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Dead-letter a lost lead so a provider outage doesn't drop it silently. */
+async function recordFailure(
+  fields: Record<string, string | undefined>,
+  error: string,
+) {
+  try {
+    const payload = await getPayloadClient();
+    await payload.create({
+      collection: "contact-failures",
+      data: { ...fields, error, handled: false },
+      // The collection closes `create` to the API; the Local API needs the
+      // override to write on the server's behalf.
+      overrideAccess: true,
+    });
+  } catch (writeError) {
+    // Nothing left to fall back to — log and move on.
+    console.error("[contact] failed to record dead letter:", writeError);
+  }
+}
+
 export async function POST(request: Request) {
   let body: unknown;
   try {
@@ -56,7 +114,16 @@ export async function POST(request: Request) {
     );
   }
 
-  const { name, email, message, company } = parsed.data;
+  const {
+    name,
+    email,
+    message,
+    company,
+    inquiryType,
+    service,
+    phone,
+    preferredChannel,
+  } = parsed.data;
 
   // Honeypot: the field is hidden, so a value means a bot filled the form
   // blind. Answer 200 so it can't tell it was caught.
@@ -71,6 +138,11 @@ export async function POST(request: Request) {
     );
   }
 
+  const serviceTitle = await resolveServiceTitle(service);
+  const inquiryLabel = INQUIRY_LABELS[inquiryType];
+  const channelLabel = preferredChannel ? CHANNEL_LABELS[preferredChannel] : "";
+  const phoneValue = phone?.trim() ?? "";
+
   const resend = getSendingResend();
   const to = await resolveRecipient();
   const from = getFromAddress();
@@ -82,16 +154,17 @@ export async function POST(request: Request) {
   });
 
   // Collapses accidental double-submits inside Resend's 24h idempotency window
-  // without suppressing a genuinely different message.
+  // without suppressing a genuinely different message — the inquiry type is part
+  // of the key so two different asks from the same person don't collapse.
   const fingerprint = createHash("sha256")
-    .update(`${email}:${message}`)
+    .update(`${email}:${inquiryType}:${message}`)
     .digest("hex")
     .slice(0, 32);
 
   // Resend interpolates with triple mustache, which does not escape — so the
   // HTML body gets escaped values. The subject line and plain-text body are not
   // HTML, where escaping would instead surface literal `&lt;` and `<br />`, so
-  // they read the raw *_TEXT variables. See scripts/sync-email-templates.tsx.
+  // they read the raw `*_TEXT` variables. See scripts/sync-email-templates.tsx.
   const { data, error } = await resend.emails.send(
     {
       from,
@@ -108,6 +181,14 @@ export async function POST(request: Request) {
           VISITOR_MESSAGE: toHtmlParagraph(message),
           VISITOR_MESSAGE_TEXT: message,
           SUBMITTED_AT: `${submittedAt} UTC`,
+          INQUIRY_TYPE: escapeHtml(inquiryLabel),
+          INQUIRY_TYPE_TEXT: inquiryLabel,
+          SERVICE: escapeHtml(serviceTitle ?? ""),
+          SERVICE_TEXT: serviceTitle ?? "",
+          PHONE: escapeHtml(phoneValue),
+          PHONE_TEXT: phoneValue,
+          PREFERRED_CHANNEL: escapeHtml(channelLabel),
+          PREFERRED_CHANNEL_TEXT: channelLabel,
         },
       },
     },
@@ -117,6 +198,19 @@ export async function POST(request: Request) {
   // The Node SDK resolves with { data, error } instead of throwing.
   if (error) {
     console.error("[contact] notification failed:", error);
+    // Store the lead before answering, so a Resend outage never loses it.
+    await recordFailure(
+      {
+        name,
+        email,
+        message,
+        inquiryType: inquiryLabel,
+        service: serviceTitle ?? service ?? "",
+        phone: phoneValue,
+        preferredChannel: channelLabel,
+      },
+      error.message ?? "unknown send error",
+    );
     return NextResponse.json(
       { error: "Could not send your message. Please try again." },
       { status: 502 },

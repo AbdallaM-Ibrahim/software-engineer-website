@@ -27,6 +27,14 @@ export interface ContactNotificationProps {
   visitorMessage: string;
   submittedAt: string;
   siteUrl: string;
+  /** Human-readable inquiry type, e.g. "Project inquiry". */
+  inquiryType: string;
+  /** Service the visitor picked, or empty. */
+  service: string;
+  /** Optional phone/WhatsApp, escaped upstream. Empty when not given. */
+  phone: string;
+  /** Preferred reply channel, or empty. */
+  preferredChannel: string;
 }
 
 export function ContactNotification({
@@ -35,6 +43,10 @@ export function ContactNotification({
   visitorMessage,
   submittedAt,
   siteUrl,
+  inquiryType,
+  service,
+  phone,
+  preferredChannel,
 }: ContactNotificationProps) {
   return (
     <Html lang="en">
@@ -69,6 +81,35 @@ export function ContactNotification({
                 >
                   {visitorEmail}
                 </Link>
+              </Section>
+
+              <Section className="px-8 pt-2 pb-2">
+                <Row>
+                  <Column className="w-1/2 align-top">
+                    <Text className="text-muted m-0 mb-1 font-mono text-[10px] tracking-[1.6px] uppercase">
+                      About
+                    </Text>
+                    <Text className="text-ink m-0 text-[13px]">
+                      {inquiryType}
+                      {service ? ` · ${service}` : ""}
+                    </Text>
+                  </Column>
+                  <Column className="w-1/2 align-top">
+                    {/* Only meaningful when the visitor left a number. Rendered
+                        blank-safe: an empty phone collapses the label too. */}
+                    {phone ? (
+                      <>
+                        <Text className="text-muted m-0 mb-1 font-mono text-[10px] tracking-[1.6px] uppercase">
+                          Phone
+                          {preferredChannel ? ` · ${preferredChannel}` : ""}
+                        </Text>
+                        <Text className="text-ink m-0 text-[13px]">
+                          {phone}
+                        </Text>
+                      </>
+                    ) : null}
+                  </Column>
+                </Row>
               </Section>
 
               <Section className="px-8 py-4">
@@ -143,6 +184,10 @@ ContactNotification.PreviewProps = {
     "Hi Abdalla — we're rebuilding our checkout and payouts flow and need someone who has shipped this before.<br /><br />Budget is flexible for the right person. Are you taking on work in Q3?",
   submittedAt: "23 July 2026 at 15:42 UTC",
   siteUrl: "https://abdalla.futuresolve.net",
+  inquiryType: "Project inquiry",
+  service: "Payment Integration",
+  phone: "+20 112 846 8458",
+  preferredChannel: "WhatsApp",
 } satisfies ContactNotificationProps;
 
 export default ContactNotification;
