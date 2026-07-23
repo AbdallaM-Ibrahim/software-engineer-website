@@ -1,30 +1,56 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
+    /* Language and environment
+       target/lib match the Node and browser baseline Next 16 emits for. */
+    "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "useDefineForClassFields": true,
+
+    /* Modules and resolution
+       "bundler" resolution is what Next/Turbopack actually does — it allows
+       extensionless imports and honours package "exports" maps. */
     "module": "esnext",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@payload-config": ["./src/payload.config.ts"]
     },
-    "target": "ES2022",
-    "forceConsistentCasingInFileNames": true
+    "resolveJsonModule": true,
+    "allowJs": true,
+
+    /* Interop */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type checking
+       `strict` covers noImplicitAny, strictNullChecks, strictFunctionTypes,
+       strictBindCallApply, strictPropertyInitialization, noImplicitThis and
+       useUnknownInCatchVariables. The rest are opt-in and not implied by it. */
+    "strict": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    /* Unused locals/params are left to Biome (correctness/noUnusedVariables) so
+       an in-progress edit doesn't fail typecheck while you're still writing it. */
+
+    /* Emit
+       Next handles emit; tsc is typecheck-only here. isolatedModules is required
+       by the SWC/Turbopack single-file transform. */
+    "noEmit": true,
+    "isolatedModules": true,
+    "incremental": true,
+
+    /* Performance and editor
+       skipLibCheck keeps Payload's large generated .d.ts files from dominating
+       typecheck time. */
+    "skipLibCheck": true,
+    "plugins": [{ "name": "next" }]
   },
   "include": [
     "next-env.d.ts",
@@ -33,5 +59,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".next", "playwright-report", "test-results"]
 }

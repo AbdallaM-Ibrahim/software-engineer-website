@@ -183,9 +183,10 @@ const seed = async () => {
   }
 
   // --- Profile global ---
-  const aboutIntro = json.about
-    .split(/How I can help your business:/i)[0]
-    .trim();
+  // String.split always yields at least one element, but the type doesn't say so.
+  const aboutIntro = (
+    json.about.split(/How I can help your business:/i)[0] ?? json.about
+  ).trim();
   await payload.updateGlobal({
     slug: "profile",
     data: {
@@ -238,8 +239,7 @@ const seed = async () => {
     await withRetry(() => payload.delete({ collection, where: {} }));
   }
 
-  for (let i = 0; i < json.experience.length; i++) {
-    const e = json.experience[i];
+  for (const [i, e] of json.experience.entries()) {
     await withRetry(() =>
       payload.create({
         collection: "experience",
@@ -258,8 +258,7 @@ const seed = async () => {
   }
   payload.logger.info(`Created ${json.experience.length} experience entries`);
 
-  for (let i = 0; i < json.education.length; i++) {
-    const ed = json.education[i];
+  for (const [i, ed] of json.education.entries()) {
     await withRetry(() =>
       payload.create({
         collection: "education",
@@ -275,8 +274,7 @@ const seed = async () => {
   }
   payload.logger.info(`Created ${json.education.length} education entries`);
 
-  for (let i = 0; i < json.case_studies.length; i++) {
-    const c = json.case_studies[i];
+  for (const [i, c] of json.case_studies.entries()) {
     const meta = CASE_META[c.link];
     if (!meta) {
       payload.logger.warn(
