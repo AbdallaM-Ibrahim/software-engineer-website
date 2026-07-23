@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { toParagraphs } from "@/lib/format";
-import type { Profile } from "@/payload-types";
+import type { Profile, Service } from "@/payload-types";
 
 const ICONS = {
   code: Code2,
@@ -13,9 +13,14 @@ const ICONS = {
   data: BarChart3,
 } as const;
 
-export function About({ profile }: { profile: Profile }) {
+export function About({
+  profile,
+  services,
+}: {
+  profile: Profile;
+  services: Service[];
+}) {
   const paragraphs = toParagraphs(profile.about);
-  const services = profile.services ?? [];
 
   return (
     <section
@@ -42,7 +47,7 @@ export function About({ profile }: { profile: Profile }) {
             {services.map((service, i) => {
               const Icon = ICONS[service.icon ?? "code"] ?? Code2;
               return (
-                <Reveal key={service.id ?? i} delay={i * 0.05}>
+                <Reveal key={service.id} delay={i * 0.05}>
                   <Card className="h-full gap-3 py-5">
                     <CardContent className="space-y-2">
                       <div className="bg-primary/10 text-primary grid size-10 place-items-center rounded-lg">

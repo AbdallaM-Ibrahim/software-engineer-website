@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
-import type { Profile } from "@/payload-types";
+import type { Skill } from "@/payload-types";
 
-export function Skills({ profile }: { profile: Profile }) {
-  const soft = (profile.skills ?? []).map((s) => s.skill);
-  const tech = (profile.techStack ?? []).map((t) => t.name);
+export function Skills({ skills }: { skills: Skill[] }) {
+  const soft = skills.filter((s) => s.category === "soft").map((s) => s.name);
+  const tech = skills.filter((s) => s.category === "tech").map((s) => s.name);
 
   return (
     <section

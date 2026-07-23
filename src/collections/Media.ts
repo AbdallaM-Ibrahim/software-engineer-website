@@ -9,7 +9,9 @@ export const Media: CollectionConfig = {
     read: () => true,
   },
   admin: {
-    group: "Content",
+    // Its own group: uploads are a library the content links to, not a section
+    // of the page like Services or Experience.
+    group: "Library",
   },
   upload: {
     // Relative to the project root. Ignored when a cloud storage adapter is active.
