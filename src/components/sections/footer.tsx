@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+import { SocialIcon } from "@/components/social-icon";
+import { contactLinks } from "@/lib/contact-links";
 import type { Profile } from "@/payload-types";
 
 export function Footer({ profile }: { profile: Profile }) {
   const year = new Date().getFullYear();
-  const c = profile.contact ?? {};
+  const links = contactLinks(profile);
 
   return (
     <footer className="border-t px-4 py-10 sm:px-6 lg:px-8">
@@ -19,20 +20,19 @@ export function Footer({ profile }: { profile: Profile }) {
         </div>
 
         <div className="flex items-center gap-1">
-          {c.github ? (
-            <Button asChild variant="ghost" size="icon" aria-label="GitHub">
-              <a href={c.github} target="_blank" rel="noopener noreferrer">
-                <GitHubIcon className="size-5" />
+          {links.map((link) => (
+            <Button
+              key={link.id}
+              asChild
+              variant="ghost"
+              size="icon"
+              aria-label={link.label}
+            >
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                <SocialIcon platform={link.platform} className="size-5" />
               </a>
             </Button>
-          ) : null}
-          {c.linkedin ? (
-            <Button asChild variant="ghost" size="icon" aria-label="LinkedIn">
-              <a href={c.linkedin} target="_blank" rel="noopener noreferrer">
-                <LinkedInIcon className="size-5" />
-              </a>
-            </Button>
-          ) : null}
+          ))}
         </div>
 
         <p className="text-muted-foreground font-mono text-xs">

@@ -2,8 +2,9 @@ import { ArrowRight, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
-import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
 import { MetricStrip, type Metric } from "@/components/metric-strip";
+import { findLink, resolveWhatsapp } from "@/lib/contact-links";
 import type { Profile } from "@/payload-types";
 
 export function Hero({
@@ -13,8 +14,10 @@ export function Hero({
   profile: Profile;
   metrics: Metric[];
 }) {
-  const github = profile.contact?.github;
-  const linkedin = profile.contact?.linkedin;
+  // The hero carries only the two channels people actually open from a portfolio.
+  // Every other link lives in the Contact section rather than competing here.
+  const linkedin = findLink(profile, "linkedin")?.url;
+  const whatsapp = resolveWhatsapp(profile);
 
   return (
     <section
@@ -46,10 +49,15 @@ export function Hero({
               </a>
             </Button>
             <div className="ml-1 flex items-center gap-1">
-              {github ? (
-                <Button asChild variant="ghost" size="icon" aria-label="GitHub">
-                  <a href={github} target="_blank" rel="noopener noreferrer">
-                    <GitHubIcon className="size-5" />
+              {whatsapp ? (
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Chat on WhatsApp"
+                >
+                  <a href={whatsapp} target="_blank" rel="noopener noreferrer">
+                    <WhatsAppIcon className="size-5" />
                   </a>
                 </Button>
               ) : null}
