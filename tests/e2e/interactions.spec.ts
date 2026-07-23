@@ -64,9 +64,18 @@ test.describe("interactions", () => {
     await expect(page.getByText("Please enter a valid email.")).toBeVisible();
   });
 
-  test("valid submission shows the stub success toast and resets", async ({
+  test("valid submission shows the success toast and resets", async ({
     page,
   }) => {
+    // Stubbed so the suite never sends real mail through Resend.
+    await page.route("**/api/contact", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ ok: true, id: "test-email-id" }),
+      }),
+    );
+
     await page.getByLabel("Name").fill("Jane Doe");
     await page.getByLabel("Email").fill("jane@company.com");
     await page
@@ -74,9 +83,7 @@ test.describe("interactions", () => {
       .fill("This is a long enough message body.");
     await page.getByRole("button", { name: /Send message/i }).click();
 
-    await expect(
-      page.getByText("Thanks! Your message has been noted."),
-    ).toBeVisible();
+    await expect(page.getByText("Message sent.")).toBeVisible();
     await expect(page.getByLabel("Name")).toHaveValue("");
   });
 });

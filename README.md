@@ -32,6 +32,12 @@ Values live in `.env` (already present for local dev):
 | `MONGO_URL_DIRECT` | Optional non-SRV fallback for hosts where the SRV DNS lookup fails; takes precedence when set |
 | `MONGO_DB_NAME` | Database name (default `portfolio`) |
 | `PAYLOAD_SECRET` | Secret used by Payload to sign tokens |
+| `RESEND_API_KEY` | **Full access** Resend key. Used only by `pnpm email:sync` — template CRUD rejects a sending-only key with `401 restricted_api_key`. |
+| `RESEND_API_KEY_SEND` | Sending-only Resend key, used by `/api/contact` at runtime. Falls back to `RESEND_API_KEY` when unset. |
+| `RESEND_FROM_EMAIL` | `From` header, e.g. `Abdalla Mostafa <onboarding@resend.dev>` |
+| `CONTACT_TO_EMAIL` | Where contact submissions land. Falls back to `Profile.contact.email` in Payload, then to a hardcoded address. |
+| `CONTACT_AUTO_REPLY` | `true` enables the visitor auto-reply. Keep `false` without a verified domain. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL — used by the sitemap and baked into the email templates. |
 | `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE` | Optional — enable cloud media. Leave blank to keep uploads on local disk (`public/media`). |
 
 > **SRV note:** some Node/Windows setups can't perform the SRV DNS lookup that
@@ -114,9 +120,42 @@ These run through **tsx**, not the bare `payload` shim. Payload transpiles
 `pnpm seed` additionally passes `--env-file=.env`; tsx does not read `.env` on its
 own, and without it Payload aborts with *"missing secret key"*.
 
+## Contact form email (React Email + Resend Templates)
+
+The contact form posts to `/api/contact`, which sends through **Resend Templates**
+rather than inline HTML — so copy can be edited in the Resend dashboard without a
+redeploy.
+
+`emails/` holds the templates as React Email components (the authoring layer).
+`scripts/sync-email-templates.tsx` renders them to HTML and uploads + publishes
+them to Resend (the serving layer).
+
+```bash
+pnpm email                          # preview server on :3001 (next dev owns :3000)
+pnpm email:sync                     # render → upload → publish  (needs the full-access key)
+pnpm email:sync --emit ./out        # render to disk only, no network, no key
+```
+
+Edit a template → run `pnpm email:sync`. Skipping the sync changes nothing that
+gets sent: **drafts cannot send**, and the previously published version keeps
+going out until you publish again.
+
+**Variable contexts.** Resend interpolates with *triple* mustache (`{{{VAR}}}`),
+which substitutes raw and unescaped. Visitor input is therefore escaped for the
+HTML body, while the subject line and plain-text part read separate raw `*_TEXT`
+variables — escaping those would surface literal `&lt;` and `<br />` to the
+reader. Both sets are sent together from the route; see `src/lib/email.ts`.
+
+**Sandbox limit.** With no verified domain, `onboarding@resend.dev` only delivers
+to the Resend account owner. The owner notification works; the visitor auto-reply
+is gated behind `CONTACT_AUTO_REPLY` and 403s until you verify a domain. To enable
+it: add the domain in Resend, publish the DNS records, point `RESEND_FROM_EMAIL`
+at an address on it, then set `CONTACT_AUTO_REPLY=true`. No code change.
+
 ## Tests (Playwright)
 
-End-to-end tests live in `tests/e2e/`.
+End-to-end tests live in `tests/e2e/`. The contact specs stub `/api/contact`, so
+running the suite never sends real mail.
 
 ```bash
 pnpm test:e2e                      # all projects (desktop + mobile)

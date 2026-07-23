@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
-import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,37 +17,39 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-const contactSchema = z.object({
-  name: z.string().min(2, "Please enter your name."),
-  email: z.string().email("Please enter a valid email."),
-  message: z.string().min(10, "Message should be at least 10 characters."),
-});
-
-type ContactValues = z.infer<typeof contactSchema>;
+import { type ContactValues, contactSchema } from "@/lib/contact-schema";
 
 export function ContactForm() {
   const form = useForm<ContactValues>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { name: "", email: "", message: "" },
+    defaultValues: { name: "", email: "", message: "", company: "" },
   });
 
-  // Stub mutation — UI is fully functional but nothing is sent yet.
-  // Swap mutationFn for a POST to a real endpoint (e.g. a Payload custom
-  // endpoint or /api/contact) to make it live.
   const mutation = useMutation({
     mutationFn: async (values: ContactValues) => {
-      await new Promise((resolve) => setTimeout(resolve, 900));
-      return values;
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      if (!res.ok) {
+        // The route returns a safe, generic message; never surface raw
+        // provider errors to the visitor.
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error ?? "Request failed.");
+      }
+
+      return res.json();
     },
     onSuccess: () => {
-      toast.success("Thanks! Your message has been noted.", {
-        description: "This form is a demo — wiring to email is pending.",
+      toast.success("Message sent.", {
+        description: "Thanks for reaching out — I'll reply shortly.",
       });
       form.reset();
     },
-    onError: () => {
-      toast.error("Something went wrong. Please try again.");
+    onError: (error: Error) => {
+      toast.error(error.message || "Something went wrong. Please try again.");
     },
   });
 
@@ -59,6 +60,20 @@ export function ContactForm() {
         className="space-y-4"
         noValidate
       >
+        {/* Honeypot. Hidden from sighted users, taken out of the tab order and
+            hidden from assistive tech, so anything typed here is a bot. The
+            route silently discards those submissions. */}
+        <div className="hidden" aria-hidden="true">
+          <label htmlFor="contact-company">Company</label>
+          <input
+            id="contact-company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            {...form.register("company")}
+          />
+        </div>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}
