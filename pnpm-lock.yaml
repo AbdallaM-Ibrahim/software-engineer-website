@@ -14,6 +14,9 @@ importers:
       '@payloadcms/db-mongodb':
         specifier: 3.86.0
         version: 3.86.0(payload@3.86.0(graphql@16.14.2)(typescript@5.9.3))
+      '@payloadcms/email-resend':
+        specifier: 3.86.0
+        version: 3.86.0(payload@3.86.0(graphql@16.14.2)(typescript@5.9.3))
       '@payloadcms/next':
         specifier: 3.86.0
         version: 3.86.0(@types/react@19.2.17)(graphql@16.14.2)(monaco-editor@0.56.0)(next@16.2.10(@playwright/test@1.61.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(sass@1.77.4))(payload@3.86.0(graphql@16.14.2)(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
@@ -114,6 +117,9 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.2.3(@types/react@19.2.17)
+      lefthook:
+        specifier: ^2.1.10
+        version: 2.1.10
       tailwindcss:
         specifier: ^4
         version: 4.3.3
@@ -1143,6 +1149,12 @@ packages:
 
   '@payloadcms/db-mongodb@3.86.0':
     resolution: {integrity: sha512-UIpp7Ga71ckUf9QTPQ6PRr2hCCIshSThZtApDgFQmi/hrRUbn8hW/39PWxhthV1o6iahsTJD/SKubqAoKpM3tg==}
+    peerDependencies:
+      payload: 3.86.0
+
+  '@payloadcms/email-resend@3.86.0':
+    resolution: {integrity: sha512-hasyTbxeiHStVAAm+2pVvuT9xT/GI51UBphZm2+tMmlJXbQa8LyYPbpR+F0nx5Uam/nsXlFSuh21JQgX7ETfQw==}
+    engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
       payload: 3.86.0
 
@@ -2285,6 +2297,60 @@ packages:
 
   leac@0.6.0:
     resolution: {integrity: sha512-y+SqErxb8h7nE/fiEX07jsbuhrpO9lL8eca7/Y1nuWV2moNlXhyd59iDGcRf6moVyDMbmTNzL40SUyrFU/yDpg==}
+
+  lefthook-darwin-arm64@2.1.10:
+    resolution: {integrity: sha512-nw+X8wRNDoUUV6WSteyKBbcLySq+fsmZt5WV/s50ZJpysmsDKJOUMln6SllNfP+60dzUahAO7REco/2633BsLg==}
+    cpu: [arm64]
+    os: [darwin]
+
+  lefthook-darwin-x64@2.1.10:
+    resolution: {integrity: sha512-KQ/bHmvpkFdHMn4pZnUdTf+GuSC+aBBgBTxZT4GW+6cSf+qbErKZBhK7cH6BmILsvx43+VzEArvHYY7YOfRFOQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  lefthook-freebsd-arm64@2.1.10:
+    resolution: {integrity: sha512-8su6DwydP7+pv7kG0zCtjphqsw4ouOnfexRUErapy5GTxYBoUOhYz3RSHTSWNRsK6W4jva7FPUh2Lp5/PSn30w==}
+    cpu: [arm64]
+    os: [freebsd]
+
+  lefthook-freebsd-x64@2.1.10:
+    resolution: {integrity: sha512-GeAJEFxko3Lk+AsnS3NleAFrpyMLFUKOlgJvPKuU0xHwVEI/z+ZoCcmuO0BX+4CS0NLbZhC/YQAvBASqDvvVdQ==}
+    cpu: [x64]
+    os: [freebsd]
+
+  lefthook-linux-arm64@2.1.10:
+    resolution: {integrity: sha512-1sHTCmpTWjVMs+yKPBLRNT1kuuIr1yjietlk7rCB6wFPVOS6Ph3o2zPFH2AvW1UymHlqwyHXzBr9EtDpQ7j1mQ==}
+    cpu: [arm64]
+    os: [linux]
+
+  lefthook-linux-x64@2.1.10:
+    resolution: {integrity: sha512-z/VlRB3bh6mBvW3r1rwnJ5vP8z+Krx5gJzkZ4veDXh+6FlRTx8wtd3g3fllOv/yZMxkgmL3fQoFXv05Esa7vBQ==}
+    cpu: [x64]
+    os: [linux]
+
+  lefthook-openbsd-arm64@2.1.10:
+    resolution: {integrity: sha512-430zL8sSIKw5P0YXGG6PB+eAhHa06n0PXuaERaAQE4Ss3odfqwnl5Mq9hQmkEnOS1EGiQEKkd0UHv/i4PtMNIQ==}
+    cpu: [arm64]
+    os: [openbsd]
+
+  lefthook-openbsd-x64@2.1.10:
+    resolution: {integrity: sha512-bgkO8PphGZVDhQgCJ524aYYPI5491pVmCiLPGjBIo1AvOSlIyw4N1Y+1C3QfqwEmechzw+Aq16SNc8pqv6UuXg==}
+    cpu: [x64]
+    os: [openbsd]
+
+  lefthook-windows-arm64@2.1.10:
+    resolution: {integrity: sha512-5Q6etF0Fla2DDA4ilDySrdNgiR5+W7cJZwnZ69Je3kvWCaWm4wnkuc8FEdjp3kiL2x3ZXipdI00f5vpO8aWmog==}
+    cpu: [arm64]
+    os: [win32]
+
+  lefthook-windows-x64@2.1.10:
+    resolution: {integrity: sha512-c/XH8YZtylG4XaxzqFfXluvq2LXq2W/p54Bnzn3+Z7E5X2Fk3JlFJAibulMbIt2+w8T7UI/r97ok5GqE4kGaeA==}
+    cpu: [x64]
+    os: [win32]
+
+  lefthook@2.1.10:
+    resolution: {integrity: sha512-K7mM4WoqMwqfXYK11EHy+lSH1uW8XHni3Yn/bSqyerPkUPygGdf3xn18JoV5HyA06xuQL3ofGAOjG01QX9oJ4w==}
+    hasBin: true
 
   lexical@0.41.0:
     resolution: {integrity: sha512-pNIm5+n+hVnJHB9gYPDYsIO5Y59dNaDU9rJmPPsfqQhP2ojKFnUoPbcRnrI9FJLXB14sSumcY8LUw7Sq70TZqA==}
@@ -4338,6 +4404,10 @@ snapshots:
       - socks
       - supports-color
 
+  '@payloadcms/email-resend@3.86.0(payload@3.86.0(graphql@16.14.2)(typescript@5.9.3))':
+    dependencies:
+      payload: 3.86.0(graphql@16.14.2)(typescript@5.9.3)
+
   '@payloadcms/graphql@3.86.0(graphql@16.14.2)(payload@3.86.0(graphql@16.14.2)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       graphql: 16.14.2
@@ -5520,6 +5590,49 @@ snapshots:
   kleur@3.0.3: {}
 
   leac@0.6.0: {}
+
+  lefthook-darwin-arm64@2.1.10:
+    optional: true
+
+  lefthook-darwin-x64@2.1.10:
+    optional: true
+
+  lefthook-freebsd-arm64@2.1.10:
+    optional: true
+
+  lefthook-freebsd-x64@2.1.10:
+    optional: true
+
+  lefthook-linux-arm64@2.1.10:
+    optional: true
+
+  lefthook-linux-x64@2.1.10:
+    optional: true
+
+  lefthook-openbsd-arm64@2.1.10:
+    optional: true
+
+  lefthook-openbsd-x64@2.1.10:
+    optional: true
+
+  lefthook-windows-arm64@2.1.10:
+    optional: true
+
+  lefthook-windows-x64@2.1.10:
+    optional: true
+
+  lefthook@2.1.10:
+    optionalDependencies:
+      lefthook-darwin-arm64: 2.1.10
+      lefthook-darwin-x64: 2.1.10
+      lefthook-freebsd-arm64: 2.1.10
+      lefthook-freebsd-x64: 2.1.10
+      lefthook-linux-arm64: 2.1.10
+      lefthook-linux-x64: 2.1.10
+      lefthook-openbsd-arm64: 2.1.10
+      lefthook-openbsd-x64: 2.1.10
+      lefthook-windows-arm64: 2.1.10
+      lefthook-windows-x64: 2.1.10
 
   lexical@0.41.0: {}
 

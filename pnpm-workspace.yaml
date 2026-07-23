@@ -1,0 +1,13 @@
+# pnpm 10 reads settings from here, not from the "pnpm" field in package.json.
+# Keeping them in package.json makes pnpm warn and silently ignore them.
+
+# Only these packages may run install scripts. pnpm blocks build scripts by
+# default; each of these genuinely needs one (native binaries / postinstall).
+onlyBuiltDependencies:
+  - sharp
+  - esbuild
+  - unrs-resolver
+  - "@biomejs/biome"
+  # Downloads its platform binary in a postinstall; without this the `lefthook`
+  # CLI is missing and git hooks silently never install.
+  - lefthook
