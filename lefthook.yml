@@ -1,0 +1,34 @@
+# Git hooks. Installed automatically by the "prepare" script on pnpm install;
+# run `pnpm exec lefthook install` by hand if hooks ever stop firing.
+#
+# Skip hooks for one commit with LEFTHOOK=0, e.g.
+#   LEFTHOOK=0 git commit -m "wip"
+
+pre-commit:
+  parallel: true
+  jobs:
+    # Safe fixes only. Biome's --write applies the fixes it can make without
+    # changing behaviour; --unsafe is deliberately NOT used, so the hook can
+    # never silently rewrite logic. Whatever it fixes is re-staged, so the commit
+    # and the working tree can't disagree.
+    - name: biome
+      glob: "*.{js,jsx,ts,tsx,json,jsonc,css}"
+      run: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+
+    # Types are a whole-program property — checking only the staged files would
+    # miss breakage those files cause elsewhere, so this runs across the project.
+    - name: typecheck
+      glob: "*.{ts,tsx}"
+      run: pnpm exec tsc --noEmit
+
+commit-msg:
+  jobs:
+    - name: conventional-commit
+      run: node scripts/verify-commit-msg.mjs {1}
+
+pre-push:
+  jobs:
+    # The expensive gate. Kept off pre-commit so committing stays fast.
+    - name: build
+      run: pnpm build
