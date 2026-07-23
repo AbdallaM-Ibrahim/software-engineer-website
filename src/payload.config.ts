@@ -5,12 +5,10 @@ import { buildConfig } from "payload";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { resendAdapter } from "@payloadcms/email-resend";
 import { mcpPlugin } from "@payloadcms/plugin-mcp";
+import { seoPlugin } from "@payloadcms/plugin-seo";
 import { s3Storage } from "@payloadcms/storage-s3";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
-// NOTE: No rich-text fields are used, so no editor is configured. This keeps
-// @lexical out of the module graph (it has a circular-import bug under some
-// runtimes). Add `@payloadcms/richtext-lexical`'s lexicalEditor() here if a
-// richText field is ever introduced.
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
@@ -20,6 +18,7 @@ import { Experience } from "./collections/Experience";
 import { Education } from "./collections/Education";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Testimonials } from "./collections/Testimonials";
+import { ContactFailures } from "./collections/ContactFailures";
 import { Profile } from "./globals/Profile";
 
 const filename = fileURLToPath(import.meta.url);
@@ -59,7 +58,30 @@ const from = parseFromAddress(process.env.RESEND_FROM_EMAIL);
 // the same tsx/alias reason as parseFromAddress above.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
+// Public base URL of the R2 bucket (the r2.dev domain or a custom one). When
+// present, media documents get URLs that point straight at the CDN instead of
+// being proxied through Payload's own /api/media/file route — faster, cached,
+// and what src/lib/media.ts and next/image expect. Trailing slash stripped so
+// the join below never doubles up.
+const MEDIA_PUBLIC_URL = process.env.NEXT_PUBLIC_MEDIA_URL?.replace(/\/+$/, "");
+
 export default buildConfig({
+  // Service pages carry long-form copy, so a rich-text editor is required. This
+  // reverses an earlier decision to keep @lexical out of the module graph over
+  // a circular-import bug — if `pnpm build` ever fails inside @lexical, that is
+  // what regressed, not the page that happens to be compiling.
+  editor: lexicalEditor(),
+  // English is served unprefixed and Arabic under /ar. `fallback` means an
+  // untranslated Arabic field renders its English value rather than a blank —
+  // which is why /ar pages stay noindex until `translationReviewed` is ticked.
+  localization: {
+    locales: [
+      { code: "en", label: "English" },
+      { code: "ar", label: "العربية", rtl: true },
+    ],
+    defaultLocale: "en",
+    fallback: true,
+  },
   admin: {
     user: Users.slug,
     importMap: {
@@ -98,6 +120,7 @@ export default buildConfig({
     CaseStudies,
     Testimonials,
     Media,
+    ContactFailures,
     Users,
   ],
   globals: [Profile],
@@ -180,10 +203,58 @@ export default buildConfig({
         },
       },
     }),
+    // Adds a Meta tab (title, description, image, preview, length meters) to
+    // the documents that become their own indexable page, plus the Profile
+    // global which supplies the home page's. The fields are localized along
+    // with everything else, so each locale gets its own title and description.
+    seoPlugin({
+      collections: ["services"],
+      globals: ["profile"],
+      uploadsCollection: "media",
+      tabbedUI: true,
+      generateTitle: ({ doc }: { doc?: Record<string, unknown> }) =>
+        (doc?.title as string) ?? (doc?.headline as string) ?? "",
+      generateDescription: ({ doc }: { doc?: Record<string, unknown> }) =>
+        (doc?.teaser as string) ??
+        (doc?.description as string) ??
+        (doc?.about as string)?.split("\n")[0] ??
+        "",
+      generateURL: ({
+        doc,
+        locale,
+      }: {
+        doc?: Record<string, unknown>;
+        locale?: string;
+      }) => {
+        const prefix = locale && locale !== "en" ? `/${locale}` : "";
+        const slug = doc?.slug as string | undefined;
+        return slug
+          ? `${SITE_URL}${prefix}/services/${slug}`
+          : `${SITE_URL}${prefix || "/"}`;
+      },
+    }),
     ...(s3Enabled
       ? [
           s3Storage({
-            collections: { media: true },
+            collections: {
+              media: MEDIA_PUBLIC_URL
+                ? {
+                    // Serve the file straight from the public bucket URL rather
+                    // than streaming it through Payload. Media is already
+                    // `access.read: () => true`, so nothing is being exposed
+                    // that wasn't public.
+                    disablePayloadAccessControl: true,
+                    generateFileURL: ({
+                      filename,
+                      prefix,
+                    }: {
+                      filename: string;
+                      prefix?: string;
+                    }) =>
+                      `${MEDIA_PUBLIC_URL}/${prefix ? `${prefix}/` : ""}${filename}`,
+                  }
+                : true,
+            },
             bucket: process.env.S3_BUCKET as string,
             config: {
               endpoint: process.env.S3_ENDPOINT,

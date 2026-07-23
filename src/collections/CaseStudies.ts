@@ -1,5 +1,9 @@
 import type { CollectionConfig } from "payload";
 
+// Relative import: the Payload CLI loads this through tsx, which does not
+// resolve the `@/*` alias.
+import { revalidateHooks } from "../lib/revalidate";
+
 export const CaseStudies: CollectionConfig = {
   slug: "case-studies",
   labels: {
@@ -34,6 +38,7 @@ export const CaseStudies: CollectionConfig = {
     defaultColumns: ["title", "_status", "link", "order"],
     group: "Content",
   },
+  hooks: revalidateHooks("case-studies"),
   defaultSort: "order",
   fields: [
     {
@@ -49,6 +54,9 @@ export const CaseStudies: CollectionConfig = {
       name: "title",
       type: "text",
       required: true,
+      // The descriptor in brackets is prose, e.g. "(Global E-Commerce
+      // Platform)". The product name inside it is a brand and stays as it is.
+      localized: true,
     },
     {
       name: "shortName",
@@ -122,6 +130,7 @@ export const CaseStudies: CollectionConfig = {
         {
           name: "label",
           type: "text",
+          localized: true,
           admin: {
             description:
               "What the number measures, e.g. product imports / day.",
@@ -137,14 +146,17 @@ export const CaseStudies: CollectionConfig = {
         {
           name: "situation",
           type: "textarea",
+          localized: true,
         },
         {
           name: "task",
           type: "textarea",
+          localized: true,
         },
         {
           name: "action",
           type: "textarea",
+          localized: true,
           admin: {
             description: "One action per line. Lines are rendered as bullets.",
           },
@@ -152,6 +164,7 @@ export const CaseStudies: CollectionConfig = {
         {
           name: "result",
           type: "textarea",
+          localized: true,
           admin: {
             description: "One result per line. Lines are rendered as bullets.",
           },

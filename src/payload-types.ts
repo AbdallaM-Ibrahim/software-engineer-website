@@ -75,6 +75,7 @@ export interface Config {
     'case-studies': CaseStudy;
     testimonials: Testimonial;
     media: Media;
+    'contact-failures': ContactFailure;
     users: User;
     'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
@@ -91,6 +92,7 @@ export interface Config {
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'contact-failures': ContactFailuresSelect<false> | ContactFailuresSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -101,14 +103,14 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'ar') | ('en' | 'ar')[];
   globals: {
     profile: Profile;
   };
   globalsSelect: {
     profile: ProfileSelect<false> | ProfileSelect<true>;
   };
-  locale: null;
+  locale: 'en' | 'ar';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -155,6 +157,8 @@ export interface PayloadMcpApiKeyAuthOperations {
   };
 }
 /**
+ * Each service is a card on the home page and its own landing page at /services/<slug>.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
@@ -168,10 +172,154 @@ export interface Service {
    * Picks the glyph on the card.
    */
   icon: 'code' | 'automation' | 'payments' | 'data';
+  /**
+   * Until this is ticked, the Arabic page renders but is not indexed.
+   */
+  translationReviewed?: boolean | null;
   title: string;
+  /**
+   * URL path. Derived from the English title when left blank; changing it breaks existing links.
+   */
+  slug?: string | null;
+  /**
+   * One line for the home page card. Keep it different from the description below — the same text on two pages is a duplicate.
+   */
+  teaser?: string | null;
+  /**
+   * Lead paragraph on the service page, and the fallback meta description.
+   */
   description: string;
+  /**
+   * Plain-language category for structured data, e.g. "Payment gateway integration". Falls back to the title.
+   */
+  serviceType?: string | null;
+  /**
+   * Optional image at the top of the service page.
+   */
+  heroImage?: (string | null) | Media;
+  /**
+   * The page itself. Use real headings — they are what a search engine reads as the page's structure.
+   */
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Rendered as an FAQPage in structured data. Answer the questions buyers actually ask.
+   */
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Proof for this service. Also the internal links that connect the page to the rest of the site.
+   */
+  relatedCaseStudies?: (string | CaseStudy)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-studies".
+ */
+export interface CaseStudy {
+  id: string;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  title: string;
+  /**
+   * Product name on its own, without the descriptor in brackets — used on cards and in the hero metric strip.
+   */
+  shortName?: string | null;
+  /**
+   * Matches a screenshot in public/case-studies/<slug>.jpg, used when no thumbnail is uploaded.
+   */
+  slug?: string | null;
+  /**
+   * Live site URL.
+   */
+  link?: string | null;
+  /**
+   * Screenshot of the live site. Falls back to public/case-studies/<slug>.jpg, then to a gradient.
+   */
+  thumbnail?: (string | null) | Media;
+  /**
+   * The single number this project is remembered by. Shown on the card and in the hero strip.
+   */
+  metric?: {
+    /**
+     * Optional starting value, e.g. 200.
+     */
+    before?: string | null;
+    /**
+     * e.g. 13,000 or 60%.
+     */
+    value?: string | null;
+    direction?: ('up' | 'down') | null;
+    /**
+     * What the number measures, e.g. product imports / day.
+     */
+    label?: string | null;
+  };
+  star?: {
+    situation?: string | null;
+    task?: string | null;
+    /**
+     * One action per line. Lines are rendered as bullets.
+     */
+    action?: string | null;
+    /**
+     * One result per line. Lines are rendered as bullets.
+     */
+    result?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * How-I-work skills and the tech stack. Filter by category to see one or the other.
@@ -245,86 +393,6 @@ export interface Education {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "case-studies".
- */
-export interface CaseStudy {
-  id: string;
-  /**
-   * Lower numbers appear first.
-   */
-  order?: number | null;
-  title: string;
-  /**
-   * Product name on its own, without the descriptor in brackets — used on cards and in the hero metric strip.
-   */
-  shortName?: string | null;
-  /**
-   * Matches a screenshot in public/case-studies/<slug>.jpg, used when no thumbnail is uploaded.
-   */
-  slug?: string | null;
-  /**
-   * Live site URL.
-   */
-  link?: string | null;
-  /**
-   * Screenshot of the live site. Falls back to public/case-studies/<slug>.jpg, then to a gradient.
-   */
-  thumbnail?: (string | null) | Media;
-  /**
-   * The single number this project is remembered by. Shown on the card and in the hero strip.
-   */
-  metric?: {
-    /**
-     * Optional starting value, e.g. 200.
-     */
-    before?: string | null;
-    /**
-     * e.g. 13,000 or 60%.
-     */
-    value?: string | null;
-    direction?: ('up' | 'down') | null;
-    /**
-     * What the number measures, e.g. product imports / day.
-     */
-    label?: string | null;
-  };
-  star?: {
-    situation?: string | null;
-    task?: string | null;
-    /**
-     * One action per line. Lines are rendered as bullets.
-     */
-    action?: string | null;
-    /**
-     * One result per line. Lines are rendered as bullets.
-     */
-    result?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: string;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
  */
 export interface Testimonial {
@@ -341,6 +409,32 @@ export interface Testimonial {
    * Marks dummy content to replace later.
    */
   isPlaceholder?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Messages that could not be emailed. Reply by hand, then tick Handled.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-failures".
+ */
+export interface ContactFailure {
+  id: string;
+  /**
+   * Tick once you have replied.
+   */
+  handled?: boolean | null;
+  name?: string | null;
+  email?: string | null;
+  inquiryType?: string | null;
+  service?: string | null;
+  preferredChannel?: string | null;
+  phone?: string | null;
+  message?: string | null;
+  /**
+   * What the email provider returned.
+   */
+  error?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -544,6 +638,10 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
+        relationTo: 'contact-failures';
+        value: string | ContactFailure;
+      } | null)
+    | ({
         relationTo: 'users';
         value: string | User;
       } | null)
@@ -610,10 +708,32 @@ export interface PayloadMigration {
 export interface ServicesSelect<T extends boolean = true> {
   order?: T;
   icon?: T;
+  translationReviewed?: T;
   title?: T;
+  slug?: T;
+  teaser?: T;
   description?: T;
+  serviceType?: T;
+  heroImage?: T;
+  body?: T;
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  relatedCaseStudies?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -718,6 +838,23 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-failures_select".
+ */
+export interface ContactFailuresSelect<T extends boolean = true> {
+  handled?: T;
+  name?: T;
+  email?: T;
+  inquiryType?: T;
+  service?: T;
+  preferredChannel?: T;
+  phone?: T;
+  message?: T;
+  error?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -852,12 +989,20 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Profile {
   id: string;
+  /**
+   * Until this is ticked, the Arabic page renders but is not indexed.
+   */
+  translationReviewed?: boolean | null;
   name: string;
   age?: number | null;
   /**
    * Short role tagline, e.g. "Senior Software Engineer".
    */
   headline: string;
+  /**
+   * The sentence under your name in the hero, and the fallback meta description.
+   */
+  tagline?: string | null;
   /**
    * Hero photo. Falls back to a silhouette placeholder if empty.
    */
@@ -866,6 +1011,64 @@ export interface Profile {
    * Narrative bio. Blank lines separate paragraphs.
    */
   about: string;
+  /**
+   * Regions, hours and engagement types. Also what fills areaServed and knowsLanguage in the page's structured data, which is how a search engine learns you work in a place without a doorway page for each city.
+   */
+  availability?: {
+    /**
+     * Optional line above the details.
+     */
+    intro?: string | null;
+    /**
+     * Countries or regions you actually work in. Keep it honest — this is a claim, not a keyword list.
+     */
+    regions?:
+      | {
+          /**
+           * e.g. "United Arab Emirates".
+           */
+          name: string;
+          /**
+           * ISO country code, e.g. AE. Used in schema.
+           */
+          code?: string | null;
+          /**
+           * e.g. "on site quarterly".
+           */
+          note?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * e.g. "EET (UTC+2)".
+     */
+    timezone?: string | null;
+    /**
+     * e.g. "full overlap with the Gulf, 4h with US East".
+     */
+    overlapHours?: string | null;
+    /**
+     * What you are open to.
+     */
+    engagementTypes?: ('full-time' | 'contract' | 'project' | 'consultation')[] | null;
+    /**
+     * Feeds knowsLanguage in the Person structured data.
+     */
+    languages?:
+      | {
+          /**
+           * e.g. "Arabic".
+           */
+          name: string;
+          /**
+           * BCP 47 tag, e.g. ar. Used in schema.
+           */
+          code?: string | null;
+          proficiency?: ('native' | 'professional' | 'conversational') | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
   contact?: {
     email?: string | null;
     phone?: string | null;
@@ -910,6 +1113,14 @@ export interface Profile {
         }[]
       | null;
   };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -918,11 +1129,37 @@ export interface Profile {
  * via the `definition` "profile_select".
  */
 export interface ProfileSelect<T extends boolean = true> {
+  translationReviewed?: T;
   name?: T;
   age?: T;
   headline?: T;
+  tagline?: T;
   heroImage?: T;
   about?: T;
+  availability?:
+    | T
+    | {
+        intro?: T;
+        regions?:
+          | T
+          | {
+              name?: T;
+              code?: T;
+              note?: T;
+              id?: T;
+            };
+        timezone?: T;
+        overlapHours?: T;
+        engagementTypes?: T;
+        languages?:
+          | T
+          | {
+              name?: T;
+              code?: T;
+              proficiency?: T;
+              id?: T;
+            };
+      };
   contact?:
     | T
     | {
@@ -938,6 +1175,13 @@ export interface ProfileSelect<T extends boolean = true> {
               url?: T;
               id?: T;
             };
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;

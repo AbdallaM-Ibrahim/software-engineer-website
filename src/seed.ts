@@ -50,35 +50,63 @@ const toBullets = (text: string): string =>
     .filter(Boolean)
     .join("\n");
 
-// Manually curated service cards (extracted from the "How I can help" bio section).
+// Manually curated services. Each is a home-page card and its own landing page.
+// `teaser` is the short card line; `description` leads the landing page — keeping
+// them distinct avoids the same copy on two URLs. `serviceType` feeds structured
+// data. `relatedCaseStudySlugs` links the proof, and is resolved to document IDs
+// at seed time. A body is left to author in /admin (rich text).
 const SERVICES: {
   icon: "code" | "automation" | "payments" | "data";
+  slug: string;
   title: string;
+  serviceType: string;
+  teaser: string;
   description: string;
+  relatedCaseStudySlugs: string[];
 }[] = [
   {
-    icon: "code",
-    title: "Web Development",
+    icon: "payments",
+    slug: "payment-integration",
+    title: "Payment Integration",
+    serviceType: "Payment gateway integration",
+    teaser:
+      "Fast, reliable checkout — Stripe, Paymob, Apple Pay, Google Pay and PayPal.",
     description:
-      "I design and build websites that connect you directly to your customers and open new doors for sales.",
+      "I implement fast, reliable payment systems that encourage customer purchases and remove manual tracking — from card gateways to Apple Pay, Google Pay, PayPal and crypto, with the reconciliation that keeps the books honest.",
+    relatedCaseStudySlugs: ["easygo", "westbazaar"],
   },
   {
     icon: "automation",
+    slug: "process-automation",
     title: "Process Automation",
+    serviceType: "Business process automation",
+    teaser:
+      "Server solutions and internal tools that take repetitive work off your team.",
     description:
-      "I set up server solutions and internal tools that handle repetitive daily tasks, freeing up your time to focus on growth.",
+      "I set up server solutions and internal tools that handle repetitive daily work — imports, syncs, notifications, back-office flows — freeing your team to focus on growth instead of copy-paste.",
+    relatedCaseStudySlugs: ["westbazaar"],
   },
   {
-    icon: "payments",
-    title: "Payment Integration",
+    icon: "code",
+    slug: "web-development",
+    title: "Web Development",
+    serviceType: "Web application development",
+    teaser:
+      "Websites and platforms that connect you to customers and open new sales.",
     description:
-      "I implement fast, reliable payment systems that encourage customer purchases and eliminate the need for manual tracking.",
+      "I design and build web platforms that connect you directly to your customers and open new doors for sales — from marketing sites to full e-commerce and booking systems, built to scale.",
+    relatedCaseStudySlugs: ["westbazaar", "easygo", "jobsolv"],
   },
   {
     icon: "data",
+    slug: "data-driven-insights",
     title: "Data-Driven Insights",
+    serviceType: "Data analytics and reporting",
+    teaser:
+      "Systems that produce the data you need to make confident decisions.",
     description:
-      "With a background in Data Science, I ensure every system produces the data you need to make confident, informed business decisions.",
+      "With a background in Data Science, I make sure every system produces the data you need to make confident, informed business decisions — dashboards, reporting and the pipelines behind them.",
+    relatedCaseStudySlugs: ["jobsolv"],
   },
 ];
 
@@ -197,7 +225,29 @@ const seed = async () => {
       name: json.name,
       age: json.age,
       headline: "Senior Software Engineer",
+      tagline:
+        "I build scalable web platforms, process automation, and reliable payment systems that help businesses run smoother.",
       about: aboutIntro,
+      // "Where I work". Signals geography through areaServed/knowsLanguage in
+      // structured data rather than a doorway page per city.
+      availability: {
+        intro:
+          "I work with teams across the Middle East and remotely for the US and Europe.",
+        regions: [
+          { name: "Egypt", code: "EG", note: "based in Alexandria" },
+          { name: "United Arab Emirates", code: "AE" },
+          { name: "Saudi Arabia", code: "SA" },
+          { name: "United States", code: "US", note: "remote" },
+          { name: "Europe", code: "EU", note: "remote" },
+        ],
+        timezone: "EET (UTC+2)",
+        overlapHours: "full overlap with the Gulf, around 4h with US East",
+        engagementTypes: ["contract", "project", "consultation"],
+        languages: [
+          { name: "Arabic", code: "ar", proficiency: "native" },
+          { name: "English", code: "en", proficiency: "professional" },
+        ],
+      },
       contact: {
         email: json.contact.email,
         phone: json.contact.phone,
@@ -248,11 +298,59 @@ const seed = async () => {
     await withRetry(() => payload.delete({ collection, where: {} }));
   }
 
+  // Case studies are created before services so a service can link the ones
+  // that prove it. Their live-URL-keyed metadata carries the slug used here.
+  // MongoDB document ids are strings; the Payload generic widens them to
+  // string | number, so they are narrowed back here for the relationship field.
+  const caseStudyIdBySlug = new Map<string, string>();
+  for (const [i, c] of json.case_studies.entries()) {
+    const meta = CASE_META[c.link];
+    if (!meta) {
+      payload.logger.warn(
+        `No CASE_META entry for ${c.link} — seeding without metric or screenshot.`,
+      );
+    }
+    const created = await withRetry(() =>
+      payload.create({
+        collection: "case-studies",
+        data: {
+          // The collection has drafts enabled, so a create without this lands
+          // as a draft and never reaches the live page.
+          _status: "published",
+          order: i,
+          title: c.title,
+          shortName: meta?.shortName,
+          slug: meta?.slug,
+          link: c.link,
+          metric: meta?.metric,
+          star: {
+            situation: c.star_factors.situation.trim(),
+            task: c.star_factors.task.trim(),
+            action: toBullets(c.star_factors.action),
+            result: toBullets(c.star_factors.result),
+          },
+        },
+      }),
+    );
+    if (meta?.slug) caseStudyIdBySlug.set(meta.slug, String(created.id));
+  }
+  payload.logger.info(`Created ${json.case_studies.length} case studies`);
+
   for (const [i, service] of SERVICES.entries()) {
+    const { relatedCaseStudySlugs, ...fields } = service;
+    const relatedCaseStudies = relatedCaseStudySlugs
+      .map((slug) => caseStudyIdBySlug.get(slug))
+      .filter((id): id is string => id != null);
     await withRetry(() =>
       payload.create({
         collection: "services",
-        data: { ...service, order: i },
+        data: {
+          ...fields,
+          order: i,
+          relatedCaseStudies,
+          // Services have drafts enabled too — publish or the landing page 404s.
+          _status: "published",
+        },
       }),
     );
   }
@@ -315,37 +413,6 @@ const seed = async () => {
   }
   payload.logger.info(`Created ${json.education.length} education entries`);
 
-  for (const [i, c] of json.case_studies.entries()) {
-    const meta = CASE_META[c.link];
-    if (!meta) {
-      payload.logger.warn(
-        `No CASE_META entry for ${c.link} — seeding without metric or screenshot.`,
-      );
-    }
-    await withRetry(() =>
-      payload.create({
-        collection: "case-studies",
-        data: {
-          // The collection has drafts enabled, so a create without this lands
-          // as a draft and never reaches the live page.
-          _status: "published",
-          order: i,
-          title: c.title,
-          shortName: meta?.shortName,
-          slug: meta?.slug,
-          link: c.link,
-          metric: meta?.metric,
-          star: {
-            situation: c.star_factors.situation.trim(),
-            task: c.star_factors.task.trim(),
-            action: toBullets(c.star_factors.action),
-            result: toBullets(c.star_factors.result),
-          },
-        },
-      }),
-    );
-  }
-  payload.logger.info(`Created ${json.case_studies.length} case studies`);
   payload.logger.info("Skipped testimonials — add real ones in /admin");
 
   payload.logger.info("✅ Seed complete");

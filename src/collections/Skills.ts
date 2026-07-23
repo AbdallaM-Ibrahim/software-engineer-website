@@ -1,5 +1,9 @@
 import type { CollectionConfig } from "payload";
 
+// Relative import: the Payload CLI loads this through tsx, which does not
+// resolve the `@/*` alias.
+import { revalidateHooks } from "../lib/revalidate";
+
 // Soft skills and tech stack in one collection, split by `category`. A single
 // list is easier to browse than two near-identical ones: filter or search once,
 // and adding a tool is the same action wherever it belongs.
@@ -24,6 +28,7 @@ export const Skills: CollectionConfig = {
     description:
       "How-I-work skills and the tech stack. Filter by category to see one or the other.",
   },
+  hooks: revalidateHooks("skills"),
   defaultSort: "order",
   fields: [
     {
@@ -54,6 +59,10 @@ export const Skills: CollectionConfig = {
       type: "text",
       required: true,
       unique: true,
+      // NOT localized. `unique` is enforced across the whole collection, and a
+      // localized unique field makes that constraint mean something different
+      // per locale — a trap. Tool names ("Stripe") are the same in Arabic
+      // anyway; the soft-skill labels are the only casualty.
       admin: {
         description: 'Shown verbatim, e.g. "Stripe" or "Clear Communication".',
       },
