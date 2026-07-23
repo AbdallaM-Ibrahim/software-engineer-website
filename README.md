@@ -120,6 +120,24 @@ These run through **tsx**, not the bare `payload` shim. Payload transpiles
 `pnpm seed` additionally passes `--env-file=.env`; tsx does not read `.env` on its
 own, and without it Payload aborts with *"missing secret key"*.
 
+## Admin extras
+
+**Live preview** renders the real site in an iframe beside the editor, with
+mobile/tablet/desktop breakpoints. The site is server-rendered, so the bridge in
+`src/components/refresh-on-save.tsx` listens for the admin's save message and calls
+`router.refresh()` — no reload, no lost scroll position. It previews `NEXT_PUBLIC_SITE_URL`,
+so set that when previewing anything other than `http://localhost:3000`.
+
+**MCP** exposes the content at `/api/plugin-mcp/mcp` via `@payloadcms/plugin-mcp`.
+Access is gated by the *API Keys* collection the plugin adds under the MCP group in
+`/admin` — mint a key there first. Reads are open across content; writes are limited to
+create and update. No collection grants delete, and `users` and `media` are not exposed.
+
+**TypeScript plugin** — `@payloadcms/typescript-plugin` adds collection-slug and
+field-path completions. It is an editor language-service plugin only and does not affect
+`tsc`; VS Code / Cursor must be pointed at the workspace TypeScript version
+(*TypeScript: Select TypeScript Version*) before it loads. Upstream marks it experimental.
+
 ## Contact form email (React Email + Resend Templates)
 
 The contact form posts to `/api/contact`, which sends through **Resend Templates**
@@ -195,9 +213,24 @@ pnpm test:e2e:ui                   # interactive runner
 
 | Type | Where |
 | --- | --- |
-| Profile (name, headline, bio, services, skills, tech stack, contact) | Global |
+| Profile (name, headline, bio, contact details, contact links) | Global |
+| Services ("How I can help" cards) | Collection (orderable) |
+| Skills & tech stack | Collection (orderable, split by `category`: `soft` / `tech`) |
 | Experience / Education / Case Studies / Testimonials | Collections (orderable) |
 | Media (images) | Collection (local disk or S3-compatible) |
+
+**Contact links** are a repeatable array on Profile. A platform dropdown covers the
+popular sites and selects the icon; picking *Other* reveals a free-text name. The hero
+shows LinkedIn and a WhatsApp chat link only — the Contact section lists all of them
+beside the form.
+
+**WhatsApp** comes from the phone number when *This phone number is on WhatsApp* is
+ticked. Untick it to reveal a collapsed field for a separate number; leaving that field
+blank stores `null` rather than an empty string, so "no WhatsApp" is representable.
+
+**Case studies have draft and published states**, with autosave on the draft. A new
+case study is a draft until published, and the live page only ever reads published
+documents. Creating one programmatically needs `_status: "published"` — see `src/seed.ts`.
 
 Each case study also carries a **headline metric** (`before` / `value` / `direction` /
 `label`) and a `shortName`. The hero's metric strip is built from those, so editing a
