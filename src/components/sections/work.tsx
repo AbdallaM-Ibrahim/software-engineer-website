@@ -1,10 +1,19 @@
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { CaseStudyCard } from "@/components/sections/case-study-card";
+import { type Dictionary, caseStudyStrings } from "@/lib/i18n";
 import type { CaseStudy } from "@/payload-types";
 
-export function Work({ items }: { items: CaseStudy[] }) {
+export function Work({
+  items,
+  dict,
+}: {
+  items: CaseStudy[];
+  dict: Dictionary;
+}) {
   if (items.length === 0) return null;
+
+  const cardStrings = caseStudyStrings(dict);
 
   return (
     <section
@@ -13,16 +22,16 @@ export function Work({ items }: { items: CaseStudy[] }) {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="Work"
-          count={`${items.length} case ${items.length === 1 ? "study" : "studies"}`}
-          title="Selected case studies"
-          description="Real projects and the numbers they moved. Open any card for the full breakdown."
+          eyebrow={dict.work.eyebrow}
+          count={dict.work.count(items.length)}
+          title={dict.work.title}
+          description={dict.work.description}
         />
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((study, i) => (
             <Reveal key={study.id} delay={i * 0.06}>
-              <CaseStudyCard study={study} />
+              <CaseStudyCard study={study} t={cardStrings} />
             </Reveal>
           ))}
         </div>

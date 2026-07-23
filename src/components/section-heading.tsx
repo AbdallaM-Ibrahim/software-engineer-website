@@ -15,12 +15,16 @@ export function SectionHeading({
   title,
   description,
   className,
+  as: Tag = "h2",
 }: {
   eyebrow: string;
   count?: string;
   title: string;
   description?: string;
   className?: string;
+  /** A standalone page (services index) needs its title to be the page's H1;
+      a section on the home page stays an H2. */
+  as?: "h1" | "h2";
 }) {
   return (
     // The rule spans the full container so it reads as the section divider it
@@ -31,9 +35,9 @@ export function SectionHeading({
         {count ? <span className="mx-2 opacity-40">/</span> : null}
         {count}
       </p>
-      <h2 className="font-display mt-4 max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+      <Tag className="font-display mt-4 max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
         {title}
-      </h2>
+      </Tag>
       {description ? (
         <p className="text-muted-foreground mt-3 max-w-2xl text-base text-pretty">
           {description}

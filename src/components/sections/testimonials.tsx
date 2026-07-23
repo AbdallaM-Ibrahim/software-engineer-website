@@ -4,9 +4,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { initials } from "@/lib/format";
+import type { Dictionary } from "@/lib/i18n";
 import type { Testimonial } from "@/payload-types";
 
-export function Testimonials({ items }: { items: Testimonial[] }) {
+export function Testimonials({
+  items,
+  dict,
+}: {
+  items: Testimonial[];
+  dict: Dictionary;
+}) {
   // Placeholder quotes are never rendered. Fabricated social proof labelled
   // "placeholder" reads as an unfinished site and costs more trust than an
   // absent section, so this stays hidden until real testimonials exist.
@@ -20,9 +27,9 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="Testimonials"
-          count={`${real.length} ${real.length === 1 ? "quote" : "quotes"}`}
-          title="What clients say"
+          eyebrow={dict.testimonials.eyebrow}
+          count={dict.testimonials.count(real.length)}
+          title={dict.testimonials.title}
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">

@@ -5,14 +5,23 @@ import { Reveal } from "@/components/reveal";
 import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
 import { MetricStrip, type Metric } from "@/components/metric-strip";
 import { findLink, resolveWhatsapp } from "@/lib/contact-links";
+import type { Dictionary } from "@/lib/i18n";
+import { type Locale, sectionHref } from "@/lib/site";
 import type { Profile } from "@/payload-types";
+
+const FALLBACK_TAGLINE =
+  "I build scalable web platforms, process automation, and reliable payment systems that help businesses run smoother.";
 
 export function Hero({
   profile,
   metrics,
+  dict,
+  locale,
 }: {
   profile: Profile;
   metrics: Metric[];
+  dict: Dictionary;
+  locale: Locale;
 }) {
   // The hero carries only the two channels people actually open from a portfolio.
   // Every other link lives in the Contact section rather than competing here.
@@ -33,28 +42,28 @@ export function Hero({
             {profile.name}
           </h1>
           <p className="text-muted-foreground mt-6 max-w-xl text-lg text-pretty">
-            I build scalable web platforms, process automation, and reliable
-            payment systems that help businesses run smoother.
+            {profile.tagline || FALLBACK_TAGLINE}
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button asChild size="lg">
-              <a href="#work">
-                View my work <ArrowRight className="size-4" />
+              <a href={sectionHref("work", locale)}>
+                {dict.hero.viewWork}{" "}
+                <ArrowRight className="size-4 rtl:rotate-180" />
               </a>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <a href="#contact">
-                <Mail className="size-4" /> Get in touch
+              <a href={sectionHref("contact", locale)}>
+                <Mail className="size-4" /> {dict.hero.getInTouch}
               </a>
             </Button>
-            <div className="ml-1 flex items-center gap-1">
+            <div className="ms-1 flex items-center gap-1">
               {whatsapp ? (
                 <Button
                   asChild
                   variant="ghost"
                   size="icon"
-                  aria-label="Chat on WhatsApp"
+                  aria-label={dict.hero.whatsapp}
                 >
                   <a href={whatsapp} target="_blank" rel="noopener noreferrer">
                     <WhatsAppIcon className="size-5" />
@@ -66,7 +75,7 @@ export function Hero({
                   asChild
                   variant="ghost"
                   size="icon"
-                  aria-label="LinkedIn"
+                  aria-label={dict.hero.linkedin}
                 >
                   <a href={linkedin} target="_blank" rel="noopener noreferrer">
                     <LinkedInIcon className="size-5" />

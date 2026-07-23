@@ -14,7 +14,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toLines } from "@/lib/format";
+import type { CaseStudyStrings } from "@/lib/i18n";
+import { asMedia, mediaAlt } from "@/lib/media";
 import type { CaseStudy } from "@/payload-types";
+
+const THUMB_SIZES = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
 
 function StarBlock({
   label,
@@ -48,34 +52,37 @@ function StarBlock({
   );
 }
 
-export function CaseStudyCard({ study }: { study: CaseStudy }) {
-  const uploaded =
-    study.thumbnail && typeof study.thumbnail === "object"
-      ? study.thumbnail
-      : null;
+export function CaseStudyCard({
+  study,
+  t,
+}: {
+  study: CaseStudy;
+  // The whole Dictionary can't cross into a client component (its `count`
+  // functions aren't serializable), so the caller passes just these strings.
+  t: CaseStudyStrings;
+}) {
+  const uploaded = asMedia(study.thumbnail);
   // Screenshots captured from the live sites live in public/case-studies/.
   const staticShot = study.slug ? `/case-studies/${study.slug}.jpg` : null;
   const name = study.shortName || study.title;
   const metric = study.metric;
+  // Uploads and static screenshots both go through next/image now: the CMS
+  // host is declared in next.config's remotePatterns, so there is no longer a
+  // reason to fall back to a bare <img> that ships no dimensions and shifts the
+  // layout as it loads.
+  const image = uploaded?.url ?? staticShot;
+  const alt = uploaded ? mediaAlt(uploaded, name) : `${name} home page`;
 
   return (
     <Dialog>
       <Card className="group flex flex-col overflow-hidden py-0 transition-shadow hover:shadow-md">
         <div className="bg-muted relative aspect-[16/10] overflow-hidden border-b">
-          {uploaded?.url ? (
-            // biome-ignore lint/performance/noImgElement: CMS media host is unknown until S3 storage is configured, so next/image would need remotePatterns entries that don't exist yet. The static screenshots below do use next/image.
-            <img
-              src={uploaded.url}
-              alt={uploaded.alt ?? name}
-              loading="lazy"
-              className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-            />
-          ) : staticShot ? (
+          {image ? (
             <Image
-              src={staticShot}
-              alt={`${name} home page`}
+              src={image}
+              alt={alt}
               fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              sizes={THUMB_SIZES}
               className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
@@ -98,14 +105,19 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
                     <span className="text-muted-foreground">
                       {metric.before}
                     </span>
-                    <span className="text-primary mx-1.5" aria-hidden="true">
+                    {/* Mirrored in RTL: an arrow means "became", and in Arabic
+                        that reads right to left. */}
+                    <span
+                      className="text-primary mx-1.5 inline-block rtl:-scale-x-100"
+                      aria-hidden="true"
+                    >
                       →
                     </span>
                   </>
                 ) : null}
                 {metric.value}
                 {!metric.before && metric.direction ? (
-                  <span className="text-primary ml-1.5" aria-hidden="true">
+                  <span className="text-primary ms-1.5" aria-hidden="true">
                     {metric.direction === "up" ? "↑" : "↓"}
                   </span>
                 ) : null}
@@ -121,13 +133,14 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
           <div className="mt-auto flex items-center gap-2 pt-1">
             <DialogTrigger asChild>
               <Button size="sm" variant="secondary">
-                Case study <ArrowUpRight className="size-4" />
+                {t.openCaseStudy}{" "}
+                <ArrowUpRight className="size-4 rtl:-scale-x-100" />
               </Button>
             </DialogTrigger>
             {study.link ? (
               <Button asChild size="sm" variant="ghost">
                 <a href={study.link} target="_blank" rel="noopener noreferrer">
-                  Visit <ExternalLink className="size-3.5" />
+                  {t.visit} <ExternalLink className="size-3.5" />
                 </a>
               </Button>
             ) : null}
@@ -145,6 +158,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary inline-flex w-fit items-center gap-1 font-mono text-xs hover:underline"
+                dir="ltr"
               >
                 {study.link.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                 <ExternalLink className="size-3.5" />
@@ -156,10 +170,10 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         <div className="space-y-5">
           {/* Result leads: STAR order is how the work was done, not what the
               reader came for. */}
-          <StarBlock label="Result" text={study.star?.result} bullets />
-          <StarBlock label="Situation" text={study.star?.situation} />
-          <StarBlock label="Task" text={study.star?.task} />
-          <StarBlock label="Action" text={study.star?.action} bullets />
+          <StarBlock label={t.star.result} text={study.star?.result} bullets />
+          <StarBlock label={t.star.situation} text={study.star?.situation} />
+          <StarBlock label={t.star.task} text={study.star?.task} />
+          <StarBlock label={t.star.action} text={study.star?.action} bullets />
         </div>
       </DialogContent>
     </Dialog>

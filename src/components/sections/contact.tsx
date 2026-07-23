@@ -7,8 +7,9 @@ import { SectionHeading } from "@/components/section-heading";
 import { SocialIcon } from "@/components/social-icon";
 import { ContactForm } from "@/components/sections/contact-form";
 import { contactLinks, resolveWhatsapp } from "@/lib/contact-links";
+import type { Dictionary } from "@/lib/i18n";
 import { handleFrom } from "@/lib/social";
-import type { Profile } from "@/payload-types";
+import type { Profile, Service } from "@/payload-types";
 
 type Entry = {
   key: string;
@@ -19,7 +20,15 @@ type Entry = {
   external: boolean;
 };
 
-export function Contact({ profile }: { profile: Profile }) {
+export function Contact({
+  profile,
+  services,
+  dict,
+}: {
+  profile: Profile;
+  services: Service[];
+  dict: Dictionary;
+}) {
   const c = profile.contact ?? {};
   const whatsapp = resolveWhatsapp(profile);
 
@@ -29,7 +38,7 @@ export function Contact({ profile }: { profile: Profile }) {
     entries.push({
       key: "email",
       icon: <Mail className="size-5" />,
-      label: "Email",
+      label: dict.contact.email,
       value: c.email,
       href: `mailto:${c.email}`,
       external: false,
@@ -40,7 +49,7 @@ export function Contact({ profile }: { profile: Profile }) {
     entries.push({
       key: "phone",
       icon: <Phone className="size-5" />,
-      label: "Phone",
+      label: dict.contact.phone,
       value: c.phone,
       href: `tel:${c.phone}`,
       external: false,
@@ -53,8 +62,8 @@ export function Contact({ profile }: { profile: Profile }) {
     entries.push({
       key: "whatsapp",
       icon: <MessageCircle className="size-5" />,
-      label: "WhatsApp",
-      value: "Start a chat",
+      label: dict.contact.whatsapp,
+      value: dict.contact.startChat,
       href: whatsapp,
       external: true,
     });
@@ -81,9 +90,9 @@ export function Contact({ profile }: { profile: Profile }) {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="Contact"
-          title="Let's build something together"
-          description="Have a project or an idea? Email me directly, or send a message below."
+          eyebrow={dict.contact.eyebrow}
+          title={dict.contact.title}
+          description={dict.contact.description}
         />
 
         <div className="mt-10 grid items-start gap-8 lg:grid-cols-5">
@@ -120,7 +129,7 @@ export function Contact({ profile }: { profile: Profile }) {
           <Reveal delay={0.1} className="lg:col-span-3">
             <Card>
               <CardContent>
-                <ContactForm />
+                <ContactForm t={dict.form} services={services} />
               </CardContent>
             </Card>
           </Reveal>

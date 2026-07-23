@@ -1,9 +1,16 @@
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
+import type { Dictionary } from "@/lib/i18n";
 import type { Skill } from "@/payload-types";
 
-export function Skills({ skills }: { skills: Skill[] }) {
+export function Skills({
+  skills,
+  dict,
+}: {
+  skills: Skill[];
+  dict: Dictionary;
+}) {
   const soft = skills.filter((s) => s.category === "soft").map((s) => s.name);
   const tech = skills.filter((s) => s.category === "tech").map((s) => s.name);
 
@@ -14,10 +21,10 @@ export function Skills({ skills }: { skills: Skill[] }) {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="Skills"
-          count={`${tech.length} tools`}
-          title="What I bring to the table"
-          description="Engineering depth, and the working habits that keep projects on track."
+          eyebrow={dict.skills.eyebrow}
+          count={dict.skills.count(tech.length)}
+          title={dict.skills.title}
+          description={dict.skills.description}
         />
 
         {/* Previously two tabs, which hid half of this behind a click on a page
@@ -26,7 +33,7 @@ export function Skills({ skills }: { skills: Skill[] }) {
         <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,18rem)_1fr]">
           <Reveal>
             <h3 className="text-muted-foreground font-mono text-xs tracking-[0.14em] uppercase">
-              How I work
+              {dict.skills.howIWork}
             </h3>
             <ul className="mt-4 space-y-2.5">
               {soft.map((name) => (
@@ -40,7 +47,7 @@ export function Skills({ skills }: { skills: Skill[] }) {
 
           <Reveal delay={0.08}>
             <h3 className="text-muted-foreground font-mono text-xs tracking-[0.14em] uppercase">
-              Tech stack
+              {dict.skills.techStack}
             </h3>
             <div className="mt-4 flex flex-wrap gap-2">
               {tech.map((name) => (
