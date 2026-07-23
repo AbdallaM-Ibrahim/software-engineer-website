@@ -50,7 +50,12 @@
        skipLibCheck keeps Payload's large generated .d.ts files from dominating
        typecheck time. */
     "skipLibCheck": true,
-    "plugins": [{ "name": "next" }]
+    /* Editor-only language-service plugins — they add completions and
+       go-to-definition, and do not affect `tsc`. The Payload one resolves
+       collection slugs and field paths; it is marked experimental upstream.
+       VS Code / Cursor must be switched to the workspace TypeScript version
+       ("TypeScript: Select TypeScript Version") before it loads. */
+    "plugins": [{ "name": "next" }, { "name": "@payloadcms/typescript-plugin" }]
   },
   "include": [
     "next-env.d.ts",

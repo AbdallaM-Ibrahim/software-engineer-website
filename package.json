@@ -24,7 +24,9 @@
     "@hookform/resolvers": "^3.10.0",
     "@payloadcms/db-mongodb": "3.86.0",
     "@payloadcms/email-resend": "3.86.0",
+    "@payloadcms/live-preview-react": "3.86.0",
     "@payloadcms/next": "3.86.0",
+    "@payloadcms/plugin-mcp": "3.86.0",
     "@payloadcms/richtext-lexical": "3.86.0",
     "@payloadcms/storage-s3": "3.86.0",
     "@payloadcms/ui": "3.86.0",
@@ -53,6 +55,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.0",
+    "@payloadcms/typescript-plugin": "^3.86.0",
     "@playwright/test": "^1.61.1",
     "@react-email/ui": "^6.9.0",
     "@tailwindcss/postcss": "^4",
