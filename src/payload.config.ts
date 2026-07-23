@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 
 import { buildConfig } from "payload";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
+import { resendAdapter } from "@payloadcms/email-resend";
 import { s3Storage } from "@payloadcms/storage-s3";
 import sharp from "sharp";
 // NOTE: No rich-text fields are used, so no editor is configured. This keeps
@@ -25,6 +26,31 @@ const dirname = path.dirname(filename);
 // Works with any S3-compatible provider (AWS S3, Cloudflare R2, DigitalOcean
 // Spaces, MinIO, ...) via a custom endpoint. Until then, media stays on local disk.
 const s3Enabled = Boolean(process.env.S3_BUCKET && process.env.S3_ENDPOINT);
+
+// Payload sends its own account mail (password resets, verification). Without an
+// adapter it writes them to the console and warns on every boot. It reuses the
+// sending-scoped Resend key — the same one the contact route uses.
+//
+// NOTE: parsed inline rather than imported from src/lib/email.ts because this
+// file is also loaded by the Payload CLI through tsx, which does not resolve the
+// `@/*` tsconfig path alias.
+const emailApiKey =
+  process.env.RESEND_API_KEY_SEND || process.env.RESEND_API_KEY;
+
+/** `"Name <a@b.c>"` -> `{ name, address }`; a bare address also works. */
+function parseFromAddress(raw: string | undefined) {
+  const value = raw?.trim() ?? "";
+  const withName = value.match(/^(.*?)\s*<([^>]+)>$/);
+  if (withName?.[2]) {
+    return {
+      name: withName[1]?.trim() || "Portfolio",
+      address: withName[2],
+    };
+  }
+  return { name: "Portfolio", address: value || "onboarding@resend.dev" };
+}
+
+const from = parseFromAddress(process.env.RESEND_FROM_EMAIL);
 
 export default buildConfig({
   admin: {
@@ -52,6 +78,17 @@ export default buildConfig({
     },
   }),
   sharp,
+  // Falls back to Payload's console transport when no key is configured, which
+  // is the right behaviour for a fresh clone with an empty .env.
+  ...(emailApiKey
+    ? {
+        email: resendAdapter({
+          defaultFromAddress: from.address,
+          defaultFromName: from.name,
+          apiKey: emailApiKey,
+        }),
+      }
+    : {}),
   plugins: [
     ...(s3Enabled
       ? [
