@@ -130,7 +130,7 @@ export default buildConfig({
       }
     : {}),
   plugins: [
-    // Exposes the content as MCP resources at /api/plugin-mcp/mcp, so an MCP
+    // Exposes the content as MCP resources at /api/mcp, so an MCP
     // client can read and edit the portfolio.
     //
     // Reads are open across content; writes are limited to create/update. No
@@ -140,7 +140,10 @@ export default buildConfig({
     // are left off; they are off by default and should stay that way.
     //
     // Access is gated by the API keys collection the plugin adds — no key, no
-    // access. Mint one in the admin panel under MCP.
+    // access. Mint one in the admin panel under MCP. Two gotchas: the endpoint
+    // wants `Authorization: Bearer <key>` rather than Payload's usual
+    // `<slug> API-Key <key>` header, and every permission on a key starts
+    // unticked, so a fresh key lists zero tools until they are granted.
     mcpPlugin({
       collections: {
         services: {

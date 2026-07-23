@@ -66,6 +66,11 @@ build. Hooks install via the `prepare` script on `pnpm install`; re-sync with
   HTML bodies get escaped values; subject lines and plain-text bodies read the
   raw `*_TEXT` variables. Don't collapse the two — see
   `scripts/sync-email-templates.tsx`.
+- **The MCP endpoint (`POST /api/mcp`) authenticates with
+  `Authorization: Bearer <apiKey>`**, not Payload's `<slug> API-Key <key>` header —
+  the latter works everywhere else in Payload and still returns `401` here. Key
+  permissions are deny-by-default, so a new key lists zero tools until its operation
+  checkboxes are ticked.
 - **Line endings are LF**, pinned by `.gitattributes`. Biome fails on CRLF.
 - Generated files — `src/payload-types.ts`, `admin/importMap.js`,
   `next-env.d.ts` — are excluded from Biome and should not be hand-edited.

@@ -128,10 +128,21 @@ mobile/tablet/desktop breakpoints. The site is server-rendered, so the bridge in
 `router.refresh()` — no reload, no lost scroll position. It previews `NEXT_PUBLIC_SITE_URL`,
 so set that when previewing anything other than `http://localhost:3000`.
 
-**MCP** exposes the content at `/api/plugin-mcp/mcp` via `@payloadcms/plugin-mcp`.
-Access is gated by the *API Keys* collection the plugin adds under the MCP group in
-`/admin` — mint a key there first. Reads are open across content; writes are limited to
-create and update. No collection grants delete, and `users` and `media` are not exposed.
+**MCP** exposes the content at `/api/mcp` (POST) via `@payloadcms/plugin-mcp`.
+Mint a key under **MCP → API Keys** in `/admin` first. Two things are easy to get wrong:
+
+- **Auth is `Authorization: Bearer <apiKey>`** — *not* Payload's usual
+  `<collection-slug> API-Key <key>` header. The latter authenticates fine against the
+  REST API and still gets a `401` here.
+- **Permissions are deny-by-default.** Every operation checkbox on a key starts
+  unticked, so a freshly minted key exposes **zero** tools. Tick the operations you
+  want on that key; `tools/list` then returns exactly those.
+
+The config allows find/create/update across the content collections. No collection
+grants delete, and `users` and `media` are not exposed at all. Verified end to end:
+granting services + skills + case studies + profile yields `createServices`,
+`updateServices`, `findServices`, `findSkills`, `findCaseStudies`, `findProfile` and
+`updateProfile`, and an unauthenticated request gets `401`.
 
 **TypeScript plugin** — `@payloadcms/typescript-plugin` adds collection-slug and
 field-path completions. It is an editor language-service plugin only and does not affect
