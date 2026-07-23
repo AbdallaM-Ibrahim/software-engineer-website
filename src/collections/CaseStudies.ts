@@ -7,11 +7,31 @@ export const CaseStudies: CollectionConfig = {
     plural: "Case Studies",
   },
   access: {
-    read: () => true,
+    // Anonymous readers get published documents only. Without this override the
+    // public `read: () => true` would serve drafts to the live site too — Payload
+    // only filters drafts for users it considers unauthenticated *by access*, not
+    // automatically. `user` is null for the site's own Local API reads.
+    read: ({ req }) => {
+      if (req.user) return true;
+      return { _status: { equals: "published" } };
+    },
+  },
+  versions: {
+    drafts: {
+      // Autosave writes to the draft only — the published version is untouched
+      // until Publish is pressed, so this cannot leak half-written copy to the
+      // live page. 800ms debounce: frequent enough not to lose a paragraph,
+      // slow enough not to write on every keystroke.
+      autosave: { showSaveDraftButton: true, interval: 800 },
+      // Drafts skip required-field validation, otherwise autosave would reject
+      // every partially-filled document as you type it.
+      validate: false,
+    },
+    maxPerDoc: 20,
   },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "link", "order"],
+    defaultColumns: ["title", "_status", "link", "order"],
     group: "Content",
   },
   defaultSort: "order",
