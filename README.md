@@ -38,6 +38,7 @@ Values live in `.env` (already present for local dev):
 | `CONTACT_TO_EMAIL` | Where contact submissions land. Falls back to `Profile.contact.email` in Payload, then to a hardcoded address. |
 | `CONTACT_AUTO_REPLY` | `true` enables the visitor auto-reply. Keep `false` without a verified domain. |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL — used by the sitemap and baked into the email templates. |
+| `PAYLOAD_MCP_API_KEY` | Payload MCP key, minted in `/admin` under MCP → API Keys. Mirrored in the gitignored `.mcp.json`. |
 | `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE` | Optional — enable cloud media. Leave blank to keep uploads on local disk (`public/media`). |
 
 > **SRV note:** some Node/Windows setups can't perform the SRV DNS lookup that
@@ -137,6 +138,16 @@ Mint a key under **MCP → API Keys** in `/admin` first. Two things are easy to 
 - **Permissions are deny-by-default.** Every operation checkbox on a key starts
   unticked, so a freshly minted key exposes **zero** tools. Tick the operations you
   want on that key; `tools/list` then returns exactly those.
+
+To connect a local MCP client, copy the example and drop your key in:
+
+```bash
+cp .mcp.json.example .mcp.json   # then replace REPLACE_WITH_PAYLOAD_MCP_API_KEY
+```
+
+`.mcp.json` is gitignored because it holds a live key; `.mcp.json.example` is the
+committed shape. The same key also lives in `.env` as `PAYLOAD_MCP_API_KEY`. The site
+must be running (`pnpm dev`) for a client to reach the endpoint.
 
 The config allows find/create/update across the content collections. No collection
 grants delete, and `users` and `media` are not exposed at all. Verified end to end:

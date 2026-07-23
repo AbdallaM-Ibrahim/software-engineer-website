@@ -47,3 +47,6 @@ yarn-error.log*
 
 # playwright-mcp scratch
 /.playwright-mcp/
+
+# MCP client config — holds a live Payload API key. Commit .mcp.json.example instead.
+/.mcp.json
