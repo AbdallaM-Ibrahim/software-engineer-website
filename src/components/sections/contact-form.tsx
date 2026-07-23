@@ -95,9 +95,16 @@ export function ContactForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
+                  {/* Email inputs are a standing target for browser extensions
+                      (temp-mail services, password managers) that inject
+                      attributes and background-image styles before React
+                      hydrates — which React then reports as a hydration
+                      mismatch. Nothing here renders differently on server and
+                      client, so the warning is purely extension noise. */}
                   <Input
                     type="email"
                     placeholder="jane@company.com"
+                    suppressHydrationWarning
                     {...field}
                   />
                 </FormControl>
