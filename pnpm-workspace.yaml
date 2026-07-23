@@ -11,3 +11,17 @@ onlyBuiltDependencies:
   # Downloads its platform binary in a postinstall; without this the `lefthook`
   # CLI is missing and git hooks silently never install.
   - lefthook
+
+# sharp ships its native binary (and libvips) as per-platform optional packages
+# (@img/sharp-*). Resolving the lockfile on one OS only records that OS's
+# binary, so a frozen install on Vercel's linux-x64 runtime is left without one
+# and Payload crashes at boot with "Could not load the sharp module". Listing
+# the deploy target here makes the lockfile carry the linux-x64 binary too.
+# `current` keeps the local machine's binary.
+supportedArchitectures:
+  os:
+    - current
+    - linux
+  cpu:
+    - current
+    - x64
