@@ -1,5 +1,7 @@
 import {
   getProfile,
+  getServices,
+  getSkills,
   getExperience,
   getEducation,
   getCaseStudies,
@@ -15,6 +17,11 @@ import { Work } from "@/components/sections/work";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
+import { RefreshOnSave } from "@/components/refresh-on-save";
+
+// Where the admin panel posts live-preview messages from. Same origin as the
+// site itself, so this is also the value livePreview.url resolves to.
+const SERVER_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 // Content comes from MongoDB via Payload at request time.
 export const dynamic = "force-dynamic";
@@ -51,12 +58,15 @@ export default async function Home() {
     return <EmptyState />;
   }
 
-  const [experience, education, caseStudies, testimonials] = await Promise.all([
-    getExperience(),
-    getEducation(),
-    getCaseStudies(),
-    getTestimonials(),
-  ]);
+  const [services, skills, experience, education, caseStudies, testimonials] =
+    await Promise.all([
+      getServices(),
+      getSkills(),
+      getExperience(),
+      getEducation(),
+      getCaseStudies(),
+      getTestimonials(),
+    ]);
 
   // The hero leads with the outcomes these projects are remembered by, pulled
   // from the case studies themselves so editing one in /admin updates both.
@@ -74,14 +84,16 @@ export default async function Home() {
 
   return (
     <>
+      {/* No-op outside the admin's preview iframe. */}
+      <RefreshOnSave serverURL={SERVER_URL} />
       <Navbar
         name={profile.name}
         hasTestimonials={realTestimonials.length > 0}
       />
       <main className="flex-1">
         <Hero profile={profile} metrics={metrics} />
-        <About profile={profile} />
-        <Skills profile={profile} />
+        <About profile={profile} services={services} />
+        <Skills skills={skills} />
         <Experience items={experience} />
         <Education items={education} />
         <Work items={caseStudies} />

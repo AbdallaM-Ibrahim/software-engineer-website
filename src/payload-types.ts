@@ -64,15 +64,19 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    'payload-mcp-api-keys': PayloadMcpApiKeyAuthOperations;
   };
   blocks: {};
   collections: {
-    users: User;
-    media: Media;
+    services: Service;
+    skills: Skill;
     experience: Experience;
     education: Education;
     'case-studies': CaseStudy;
     testimonials: Testimonial;
+    media: Media;
+    users: User;
+    'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,12 +84,15 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    skills: SkillsSelect<false> | SkillsSelect<true>;
     experience: ExperienceSelect<false> | ExperienceSelect<true>;
     education: EducationSelect<false> | EducationSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -105,7 +112,7 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | PayloadMcpApiKey;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -129,50 +136,69 @@ export interface UserAuthOperations {
     password: string;
   };
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: string;
-  name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
+export interface PayloadMcpApiKeyAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "services".
  */
-export interface Media {
+export interface Service {
   id: string;
-  alt: string;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  /**
+   * Picks the glyph on the card.
+   */
+  icon: 'code' | 'automation' | 'payments' | 'data';
+  title: string;
+  description: string;
   updatedAt: string;
   createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+}
+/**
+ * How-I-work skills and the tech stack. Filter by category to see one or the other.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "skills".
+ */
+export interface Skill {
+  id: string;
+  /**
+   * Lower numbers appear first within a category.
+   */
+  order?: number | null;
+  /**
+   * Which block of the Skills section this appears in.
+   */
+  category: 'soft' | 'tech';
+  /**
+   * Shown verbatim, e.g. "Stripe" or "Clear Communication".
+   */
+  name: string;
+  /**
+   * Optional grouping, to keep a long tech list browsable.
+   */
+  area?: ('payments' | 'cloud' | 'data' | 'messaging' | 'search' | 'api') | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -276,6 +302,26 @@ export interface CaseStudy {
   };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -297,6 +343,153 @@ export interface Testimonial {
   isPlaceholder?: boolean | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: string;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
+}
+/**
+ * API keys control which collections, resources, tools, and prompts MCP clients can access
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-api-keys".
+ */
+export interface PayloadMcpApiKey {
+  id: string;
+  /**
+   * The user that the API key is associated with.
+   */
+  user: string | User;
+  /**
+   * A useful label for the API key.
+   */
+  label?: string | null;
+  /**
+   * The purpose of the API key.
+   */
+  description?: string | null;
+  services?: {
+    /**
+     * Allow clients to find services.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create services.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update services.
+     */
+    update?: boolean | null;
+  };
+  skills?: {
+    /**
+     * Allow clients to find skills.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create skills.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update skills.
+     */
+    update?: boolean | null;
+  };
+  experience?: {
+    /**
+     * Allow clients to find experience.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create experience.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update experience.
+     */
+    update?: boolean | null;
+  };
+  education?: {
+    /**
+     * Allow clients to find education.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create education.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update education.
+     */
+    update?: boolean | null;
+  };
+  caseStudies?: {
+    /**
+     * Allow clients to find case-studies.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create case-studies.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update case-studies.
+     */
+    update?: boolean | null;
+  };
+  testimonials?: {
+    /**
+     * Allow clients to find testimonials.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create testimonials.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update testimonials.
+     */
+    update?: boolean | null;
+  };
+  profile?: {
+    /**
+     * Allow clients to find profile global.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to update profile global.
+     */
+    update?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  collection: 'payload-mcp-api-keys';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -323,12 +516,12 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'users';
-        value: string | User;
+        relationTo: 'services';
+        value: string | Service;
       } | null)
     | ({
-        relationTo: 'media';
-        value: string | Media;
+        relationTo: 'skills';
+        value: string | Skill;
       } | null)
     | ({
         relationTo: 'experience';
@@ -345,12 +538,29 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'testimonials';
         value: string | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: string | User;
+      } | null)
+    | ({
+        relationTo: 'payload-mcp-api-keys';
+        value: string | PayloadMcpApiKey;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'payload-mcp-api-keys';
+        value: string | PayloadMcpApiKey;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -360,10 +570,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }
+    | {
+        relationTo: 'payload-mcp-api-keys';
+        value: string | PayloadMcpApiKey;
+      };
   key?: string | null;
   value?:
     | {
@@ -390,44 +605,27 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "services_select".
  */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
+export interface ServicesSelect<T extends boolean = true> {
+  order?: T;
+  icon?: T;
+  title?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
+ * via the `definition` "skills_select".
  */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
+export interface SkillsSelect<T extends boolean = true> {
+  order?: T;
+  category?: T;
+  name?: T;
+  area?: T;
   updatedAt?: T;
   createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -487,6 +685,7 @@ export interface CaseStudiesSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -501,6 +700,109 @@ export interface TestimonialsSelect<T extends boolean = true> {
   isPlaceholder?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-api-keys_select".
+ */
+export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
+  user?: T;
+  label?: T;
+  description?: T;
+  services?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  skills?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  experience?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  education?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  caseStudies?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  testimonials?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  profile?:
+    | T
+    | {
+        find?: T;
+        update?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -543,6 +845,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Identity, bio and contact details. Services, skills and case studies each live in their own collection.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "profile".
  */
@@ -562,37 +866,49 @@ export interface Profile {
    * Narrative bio. Blank lines separate paragraphs.
    */
   about: string;
-  /**
-   * Service cards shown in the About section.
-   */
-  services?:
-    | {
-        icon?: ('code' | 'automation' | 'payments' | 'data') | null;
-        title: string;
-        description: string;
-        id?: string | null;
-      }[]
-    | null;
-  skills?:
-    | {
-        skill: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Technologies / services used across projects.
-   */
-  techStack?:
-    | {
-        name: string;
-        id?: string | null;
-      }[]
-    | null;
   contact?: {
     email?: string | null;
     phone?: string | null;
-    linkedin?: string | null;
-    github?: string | null;
+    /**
+     * Ticked, the phone number above powers the WhatsApp chat link. Untick to use a different number.
+     */
+    phoneIsWhatsapp?: boolean | null;
+    /**
+     * International format, e.g. +20 112 846 8458. Blank means no WhatsApp link.
+     */
+    whatsapp?: string | null;
+    /**
+     * LinkedIn and WhatsApp also surface in the hero. Every link here is listed in the Contact section.
+     */
+    links?:
+      | {
+          /**
+           * Sets the icon and the default name.
+           */
+          platform:
+            | 'linkedin'
+            | 'github'
+            | 'whatsapp'
+            | 'x'
+            | 'instagram'
+            | 'facebook'
+            | 'youtube'
+            | 'telegram'
+            | 'stackoverflow'
+            | 'medium'
+            | 'website'
+            | 'other';
+          /**
+           * Name to show. Required for "Other".
+           */
+          label?: string | null;
+          /**
+           * Full URL including https://. For WhatsApp use a wa.me link.
+           */
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -607,33 +923,21 @@ export interface ProfileSelect<T extends boolean = true> {
   headline?: T;
   heroImage?: T;
   about?: T;
-  services?:
-    | T
-    | {
-        icon?: T;
-        title?: T;
-        description?: T;
-        id?: T;
-      };
-  skills?:
-    | T
-    | {
-        skill?: T;
-        id?: T;
-      };
-  techStack?:
-    | T
-    | {
-        name?: T;
-        id?: T;
-      };
   contact?:
     | T
     | {
         email?: T;
         phone?: T;
-        linkedin?: T;
-        github?: T;
+        phoneIsWhatsapp?: T;
+        whatsapp?: T;
+        links?:
+          | T
+          | {
+              platform?: T;
+              label?: T;
+              url?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

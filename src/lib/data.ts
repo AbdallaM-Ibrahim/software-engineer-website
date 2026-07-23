@@ -15,6 +15,38 @@ export async function getProfile() {
   }
 }
 
+export async function getServices() {
+  try {
+    const payload = await getPayloadClient();
+    const res = await payload.find({
+      collection: "services",
+      sort: "order",
+      limit: 100,
+      depth: 0,
+    });
+    return res.docs;
+  } catch {
+    return [];
+  }
+}
+
+export async function getSkills() {
+  try {
+    const payload = await getPayloadClient();
+    const res = await payload.find({
+      collection: "skills",
+      // Category first so the two blocks come back already partitioned; `order`
+      // then controls the sequence within each.
+      sort: ["category", "order"],
+      limit: 200,
+      depth: 0,
+    });
+    return res.docs;
+  } catch {
+    return [];
+  }
+}
+
 export async function getExperience() {
   try {
     const payload = await getPayloadClient();
@@ -53,6 +85,11 @@ export async function getCaseStudies() {
       sort: "order",
       limit: 100,
       depth: 1,
+      // Published only. The Local API runs with full access unless told
+      // otherwise, so overrideAccess:false is what makes the collection's
+      // draft filter actually apply here.
+      draft: false,
+      overrideAccess: false,
     });
     return res.docs;
   } catch {

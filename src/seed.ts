@@ -82,27 +82,31 @@ const SERVICES: {
   },
 ];
 
-// Curated from the experience descriptions in portofolio.json.
-const TECH_STACK = [
-  "REST APIs",
-  "Stripe",
-  "Paymob",
-  "Cregis",
-  "Apple Pay",
-  "Google Pay",
-  "PayPal",
-  "Typesense",
-  "AWS S3",
-  "AWS Lambda",
-  "Cloudflare R2",
-  "DigitalOcean Spaces",
-  "Google Maps API",
-  "Mailgun",
-  "MailerSend",
-  "Twilio",
-  "OpenAI",
-  "Message Queues",
-  "Machine Learning",
+// Curated from the experience descriptions in portofolio.json. `area` groups a
+// long list into something browsable in the admin.
+const TECH_STACK: {
+  name: string;
+  area: "payments" | "cloud" | "data" | "messaging" | "search" | "api";
+}[] = [
+  { name: "REST APIs", area: "api" },
+  { name: "Stripe", area: "payments" },
+  { name: "Paymob", area: "payments" },
+  { name: "Cregis", area: "payments" },
+  { name: "Apple Pay", area: "payments" },
+  { name: "Google Pay", area: "payments" },
+  { name: "PayPal", area: "payments" },
+  { name: "Typesense", area: "search" },
+  { name: "AWS S3", area: "cloud" },
+  { name: "AWS Lambda", area: "cloud" },
+  { name: "Cloudflare R2", area: "cloud" },
+  { name: "DigitalOcean Spaces", area: "cloud" },
+  { name: "Google Maps API", area: "api" },
+  { name: "Mailgun", area: "messaging" },
+  { name: "MailerSend", area: "messaging" },
+  { name: "Twilio", area: "messaging" },
+  { name: "OpenAI", area: "data" },
+  { name: "Message Queues", area: "api" },
+  { name: "Machine Learning", area: "data" },
 ];
 
 // No testimonials are seeded. Fabricated quotes labelled "placeholder" read as an
@@ -194,14 +198,17 @@ const seed = async () => {
       age: json.age,
       headline: "Senior Software Engineer",
       about: aboutIntro,
-      services: SERVICES,
-      skills: json.skills.map((skill) => ({ skill })),
-      techStack: TECH_STACK.map((name) => ({ name })),
       contact: {
         email: json.contact.email,
         phone: json.contact.phone,
-        linkedin: json.contact.social.linkedin,
-        github: json.contact.social.github,
+        // The one number in portofolio.json is a WhatsApp number, so the chat
+        // link comes straight off it and the separate field stays null.
+        phoneIsWhatsapp: true,
+        whatsapp: null,
+        links: [
+          { platform: "linkedin", url: json.contact.social.linkedin },
+          { platform: "github", url: json.contact.social.github },
+        ],
       },
     },
   });
@@ -230,6 +237,8 @@ const seed = async () => {
   // --- Collections: wipe + reseed for idempotency (serialized to avoid
   // concurrent catalog-change transaction conflicts) ---
   const collections = [
+    "services",
+    "skills",
     "experience",
     "education",
     "case-studies",
@@ -238,6 +247,38 @@ const seed = async () => {
   for (const collection of collections) {
     await withRetry(() => payload.delete({ collection, where: {} }));
   }
+
+  for (const [i, service] of SERVICES.entries()) {
+    await withRetry(() =>
+      payload.create({
+        collection: "services",
+        data: { ...service, order: i },
+      }),
+    );
+  }
+  payload.logger.info(`Created ${SERVICES.length} services`);
+
+  // Soft skills first, then the tech stack — `order` is per-category, and the
+  // Skills section renders the two blocks separately.
+  for (const [i, name] of json.skills.entries()) {
+    await withRetry(() =>
+      payload.create({
+        collection: "skills",
+        data: { name, category: "soft", order: i },
+      }),
+    );
+  }
+  for (const [i, { name, area }] of TECH_STACK.entries()) {
+    await withRetry(() =>
+      payload.create({
+        collection: "skills",
+        data: { name, category: "tech", area, order: i },
+      }),
+    );
+  }
+  payload.logger.info(
+    `Created ${json.skills.length + TECH_STACK.length} skills`,
+  );
 
   for (const [i, e] of json.experience.entries()) {
     await withRetry(() =>
@@ -285,6 +326,9 @@ const seed = async () => {
       payload.create({
         collection: "case-studies",
         data: {
+          // The collection has drafts enabled, so a create without this lands
+          // as a draft and never reaches the live page.
+          _status: "published",
           order: i,
           title: c.title,
           shortName: meta?.shortName,
