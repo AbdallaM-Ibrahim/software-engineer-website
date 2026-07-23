@@ -1,19 +1,31 @@
 // Small presentation helpers shared across sections.
 
-export function formatMonthYear(date?: string | null): string {
+// Arabic month names and numerals come from the same Intl call, so the date
+// format follows the page language without a second code path. `ar-EG` rather
+// than plain `ar` keeps Gregorian months, which is what a CV reader expects.
+const DATE_LOCALES: Record<string, string> = {
+  en: "en-US",
+  ar: "ar-EG",
+};
+
+export function formatMonthYear(date?: string | null, locale = "en"): string {
   if (!date) return "";
   const d = new Date(date);
   if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  return d.toLocaleDateString(DATE_LOCALES[locale] ?? "en-US", {
+    month: "short",
+    year: "numeric",
+  });
 }
 
 export function dateRange(
   from?: string | null,
   to?: string | null,
   isPresent?: boolean,
+  { locale = "en", presentLabel = "Present" } = {},
 ): string {
-  const start = formatMonthYear(from);
-  const end = isPresent ? "Present" : formatMonthYear(to);
+  const start = formatMonthYear(from, locale);
+  const end = isPresent ? presentLabel : formatMonthYear(to, locale);
   if (!start && !end) return "";
   return `${start} — ${end}`;
 }

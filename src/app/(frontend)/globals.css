@@ -96,13 +96,80 @@
     scroll-behavior: smooth;
   }
   /* The mono face exists here to carry data — dates, counts, metrics. Lining
-     tabular figures keep those columns aligned. */
+     tabular figures keep those columns aligned. Declared before the RTL
+     override below so the lower-specificity rule comes first. */
   .font-mono {
     font-variant-numeric: tabular-nums lining-nums;
+  }
+  /* Arabic pages load an Arabic face and use it everywhere, including for the
+     display and mono roles — Geist has no Arabic glyphs, and Instrument Sans
+     has none either, so without this every heading falls back to a different
+     system font than the body. */
+  [dir="rtl"] body,
+  [dir="rtl"] .font-display,
+  [dir="rtl"] .font-mono {
+    font-family: var(--font-arabic-sans), var(--font-sans), sans-serif;
   }
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
+  }
+
+  /* Styling for the rich-text body of a service page. Kept as a small scoped
+     stylesheet rather than the typography plugin — the output is a handful of
+     tags (headings, paragraphs, lists, links, quotes) and this keeps the
+     dependency out and the look consistent with the rest of the site. */
+  .rich-text {
+    color: var(--foreground);
+    line-height: 1.7;
+  }
+  .rich-text > * + * {
+    margin-top: 1.15rem;
+  }
+  .rich-text h2 {
+    font-family: var(--font-display), sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-top: 2.25rem;
+  }
+  .rich-text h3 {
+    font-family: var(--font-display), sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+  }
+  .rich-text p,
+  .rich-text li {
+    color: var(--muted-foreground);
+  }
+  .rich-text ul,
+  .rich-text ol {
+    padding-inline-start: 1.4rem;
+  }
+  .rich-text ul {
+    list-style: disc;
+  }
+  .rich-text ol {
+    list-style: decimal;
+  }
+  .rich-text li + li {
+    margin-top: 0.4rem;
+  }
+  .rich-text a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .rich-text strong {
+    color: var(--foreground);
+    font-weight: 600;
+  }
+  .rich-text blockquote {
+    border-inline-start: 3px solid var(--primary);
+    padding-inline-start: 1rem;
+    font-style: italic;
+    color: var(--foreground);
   }
 }
