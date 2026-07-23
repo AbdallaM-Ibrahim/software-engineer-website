@@ -1,0 +1,194 @@
+# Abdalla Mostafa — Portfolio
+
+Personal portfolio site for Abdalla Mostafa (Senior Software Engineer). A single-page
+Next.js frontend whose content is fully managed through a built-in **Payload CMS** admin,
+backed by **MongoDB**.
+
+Production host: **abdalla.futuresolve.net**
+
+## Stack
+
+- **Next.js 16** (App Router, React 19) + **TypeScript**
+- **Tailwind CSS v4** + **shadcn/ui** (Radix) — light/dark theme via `next-themes`
+- **Payload CMS 3.86** (admin at `/admin`, Local API for reads) on **MongoDB** (Mongoose)
+- **TanStack Query** (contact-form mutation), **react-hook-form** + **zod** (validation)
+- **framer-motion** (subtle reveals)
+- **pnpm** as package manager, **Biome** for lint + format, **Playwright** for e2e
+- S3-compatible media storage (AWS S3 / Cloudflare R2 / DigitalOcean Spaces / MinIO), local disk by default
+
+## Prerequisites
+
+- **pnpm** ≥ 10 (`corepack enable pnpm`, or `https://pnpm.io/installation`)
+- **Node.js** ≥ 20
+- A **MongoDB** database (MongoDB Atlas works out of the box)
+
+## Environment
+
+Values live in `.env` (already present for local dev):
+
+| Var | Purpose |
+| --- | --- |
+| `MONGO_URL` | MongoDB SRV connection string (used in production) |
+| `MONGO_URL_DIRECT` | Optional non-SRV fallback for hosts where the SRV DNS lookup fails; takes precedence when set |
+| `MONGO_DB_NAME` | Database name (default `portfolio`) |
+| `PAYLOAD_SECRET` | Secret used by Payload to sign tokens |
+| `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE` | Optional — enable cloud media. Leave blank to keep uploads on local disk (`public/media`). |
+
+> **SRV note:** some Node/Windows setups can't perform the SRV DNS lookup that
+> `mongodb+srv://` needs (`querySrv ECONNREFUSED`). If you hit that, set
+> `MONGO_URL_DIRECT` to a direct multi-host `mongodb://` string (see `.env`).
+
+> **Atlas IP allowlist:** a `tlsv1 alert internal error` / `SSL alert number 80` on the
+> TLS handshake (TCP to port 27017 succeeds, the handshake then dies) means your current
+> public IP is not on the cluster's **Network Access** list — not a credentials problem.
+> Add the IP in Atlas → Network Access. Home connections get a new IP regularly, so this
+> recurs; `curl https://api.ipify.org` shows the current one.
+
+## Install
+
+```bash
+pnpm install
+```
+
+`pnpm-lock.yaml` is committed — commit it with any dependency change.
+
+## Seed the database
+
+Imports `portofolio.json` into Payload (Profile global + Experience / Education /
+Case Studies) and creates the admin user. Idempotent: it wipes and rewrites those
+collections, so **content edited in `/admin` is lost if you re-run it**.
+
+No testimonials are seeded — the section stays hidden until real quotes are added
+in `/admin`.
+
+```bash
+pnpm seed
+```
+
+Default admin login (**change the password in production**):
+
+- Email: `admin@admin.com`
+- Password: `admin`
+
+## Develop
+
+```bash
+pnpm dev
+```
+
+- Site: http://localhost:3000
+- Admin: http://localhost:3000/admin
+
+## Build & run
+
+```bash
+pnpm build
+pnpm start
+```
+
+## Lint & format (Biome)
+
+Biome replaces ESLint + Prettier — one binary for both, configured in `biome.json`.
+
+```bash
+pnpm lint        # check lint + formatting
+pnpm lint:fix    # apply safe fixes
+pnpm format      # format only
+```
+
+Generated files (`src/payload-types.ts`, the admin `importMap.js`, `next-env.d.ts`)
+are excluded in `biome.json`.
+
+## Payload CLI
+
+```bash
+pnpm generate:types       # regenerate src/payload-types.ts after schema changes
+pnpm generate:importmap   # regenerate the admin import map
+```
+
+These run through **tsx**, not the bare `payload` shim. Payload transpiles
+`payload.config.ts` and then `require`s its relative imports (`./collections/Users`,
+…) — plain node can't resolve those `.ts` paths and fails with
+`Cannot find module './collections/Users'`. tsx's loader resolves them.
+
+`pnpm seed` additionally passes `--env-file=.env`; tsx does not read `.env` on its
+own, and without it Payload aborts with *"missing secret key"*.
+
+## Tests (Playwright)
+
+End-to-end tests live in `tests/e2e/`.
+
+```bash
+pnpm test:e2e                      # all projects (desktop + mobile)
+pnpm test:e2e --project=desktop
+pnpm test:e2e:ui                   # interactive runner
+```
+
+- The suite reuses the **Chrome already installed on this machine**
+  (`channel: "chrome"` in `playwright.config.ts`) rather than downloading Playwright's
+  bundled Chromium. Run `npx playwright install chromium` if you'd rather use the
+  bundled build and drop the `channel` option.
+- Tests run against a **production server** (`next start`) by default, so they aren't
+  at the mercy of dev-mode cold compiles. Set `PW_DEV=1` to point them at `next dev`
+  while iterating on components. Build first: `pnpm build`.
+- The config spawns the server through **node against next's own entry point**, not
+  through a package-manager script — a package manager isn't guaranteed to be on PATH
+  in the shell Playwright forks, and a failed spawn shows up only as
+  `ERR_CONNECTION_REFUSED` in every test rather than as a startup error.
+- `smoke.spec.ts` always runs. `content.spec.ts` and `interactions.spec.ts` **skip
+  themselves with an explicit reason** when Payload has no profile (unseeded or
+  unreachable DB), so a database outage reports as skipped rather than a false pass.
+- The seeded specs assert reveals actually reach `opacity: 1`. Content is rendered at
+  `opacity-0` until an IntersectionObserver fires, so "present in the DOM" is not the
+  same as "visible" — a `toContainText` check alone would miss it.
+
+## Deploy (Vercel)
+
+1. Push to a Git repo and import into Vercel.
+2. Set the environment variables above (use `MONGO_URL`, not the direct fallback — SRV
+   works on Vercel).
+3. For persistent media in a serverless environment, configure the S3-compatible vars
+   (local disk is ephemeral on Vercel).
+4. Point `abdalla.futuresolve.net` at the Vercel deployment.
+5. Run `pnpm seed` once against the production database (or add content via `/admin`).
+
+## Content model
+
+| Type | Where |
+| --- | --- |
+| Profile (name, headline, bio, services, skills, tech stack, contact) | Global |
+| Experience / Education / Case Studies / Testimonials | Collections (orderable) |
+| Media (images) | Collection (local disk or S3-compatible) |
+
+Each case study also carries a **headline metric** (`before` / `value` / `direction` /
+`label`) and a `shortName`. The hero's metric strip is built from those, so editing a
+case study in `/admin` updates the hero too.
+
+Card screenshots resolve in this order: the uploaded `thumbnail` → a static capture at
+`public/case-studies/<slug>.jpg` → the project name on a plain panel.
+
+## Project structure
+
+```
+src/
+  app/
+    (frontend)/        # public site (own root layout, globals.css)
+    (payload)/         # Payload admin + REST/GraphQL routes
+  collections/         # Users, Media, Experience, Education, CaseStudies, Testimonials
+  globals/             # Profile
+  components/
+    ui/                # shadcn primitives
+    sections/          # Navbar, Hero, About, Skills, Experience, Education, Work, Testimonials, Contact, Footer
+  lib/                 # Payload client, data access, formatters
+  payload.config.ts
+  seed.ts
+```
+
+## Notes
+
+- **No rich-text editor** is configured (all fields are plain text/textarea). This keeps
+  `@lexical` out of the module graph, which otherwise hit a circular-import bug. Add
+  `lexicalEditor()` back to `payload.config.ts` if you introduce a richText field.
+- The contact form is **UI-complete and validated but not wired to email** — it runs a
+  stubbed TanStack mutation and shows a success toast. Swap the `mutationFn` in
+  `src/components/sections/contact-form.tsx` for a real endpoint to make it live.

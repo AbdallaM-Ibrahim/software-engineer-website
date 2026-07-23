@@ -1,0 +1,78 @@
+{
+  "name": "Abdalla Mostafa",
+  "age": 26,
+  "about": "I'm Abdalla Mostafa, Senior Software Engineer. I have been fascinated by technology since I got my first computer in 2000. What started as simple curiosity quickly turned into a passion for building customized, efficient tools that solve real-world problems. \n\nToday, I bring that same enthusiasm to every project I take on. Over the last three years, I have helped deliver over 20 projects, focusing on creating seamless experiences that simplify how companies operate. I believe that technology should work for you—not the other way around. My goal is always to build systems that save time, provide clear data for better decision-making, and create a smoother experience for your customers.\n\nHow I can help your business:\n- Web Development:\nI design and build websites that connect you directly to your customers and open new doors for sales.\n- Process Automation:\nI set up server solutions and internal tools that handle repetitive daily tasks, freeing up your time to focus on growth. \n- Payment Integration: \nI implement fast, reliable payment systems that encourage customer purchases and eliminate the need for manual tracking.\n- Data-Driven Insights:\nWith a background in Data Science from the Faculty of Computers and Data Science, I don't just build systems; I ensure they produce the data you need to make confident, informed business decisions.\nI am always looking for new challenges that turn complex operations into simple, effective workflows. Let’s connect and see how we can streamline your business.",
+  "contact": {
+    "email": "abdalla@futuresolve.net",
+    "phone": "+201128468458",
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/abdalla--mostafa/",
+      "github": "https://www.github.com/abdallam-ibrahim"
+    }
+  },
+  "skills": [
+    "Problem Solving",
+    "Clear Communication",
+    "Feature Customization",
+    "Process Automation"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "swegit inc.",
+      "website": "https://www.swegit.io/",
+      "from": "2024-03-01",
+      "to": null,
+      "isPresent": true,
+      "description": "- Developing scalable and maintainable software in different business fields\n- Ownership per feature and across full applications\n- Collaborating with Stockholders in phases planning\n- Health collaborative teamwork\n- Setting-up appropriate architectural design and researching bottlenecks"
+    },
+    {
+      "title": "Backend Developer",
+      "company": "NextGen Softwares",
+      "website": "https://www.upwork.com/agencies/nextgensoftwares/",
+      "from": "2023-06-01",
+      "to": "2024-02-29",
+      "description": "- Implementing RestApi and Integrating various outside Services\n- including (but not only): Stripe, Paymob, Typesense, S3 Buckets, Cloudflare R2, DigitalOcean Spaces\n- Google Maps Api, AWS Lambda, Mailgun, MailSend, Twilio, OpenAi (Chat-GPT)\n- Collaborate in Team environment as Frontend, DevOps, Automation and QA Testing\n- Building Clean and Scalable solutions"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor in Computing and Data Science",
+      "institution": "Faculty of Computers and Data Science, Alexandria University",
+      "from": "2019-09-01",
+      "to": "2023-06-30"
+    }
+  ],
+  "case_studies": [
+    {
+      "title": "Westbazaar (Global E-Commerce Platform)",
+      "link": "https://www.westbazaar.com",
+      "star_factors": {
+        "situation": "Westbazaar is a global e-commerce platform designed to ship products worldwide, but its growth was severely restricted by a legacy codebase and a rigid, outdated UI/UX. Our inventory expansion was bottlenecked: we were capped at a total catalog of 70,000 items and could only process 200 new product imports per day.",
+        "task": "To unlock the platform's potential, I needed to modernize the system for massive scale. My goals were to drastically increase our daily product import capacity, overhaul the UI/UX for a seamless customer journey, and integrate cryptocurrency payments to better serve our international user base.",
+        "action": "- Scaled the Architecture: I overhauled the ingestion pipeline by implementing message queues and dynamic server workers, allowing the system to process data asynchronously.\n- Optimized Data Ingestion: I re-engineered how we handled 3rd-party API rate limits, maximizing our data pull efficiency without hitting throttling blocks.\n- Modernized the Experience: I championed the transition from a clunky interface to a modern, user-friendly UI/UX, removing friction from the buying process.\n- Expanded Payment Options: I integrated Cregis into the checkout flow to enable secure, seamless cryptocurrency transactions.",
+        "result": "- Exploded daily product imports from 200 up to 13,000 per day.\n- Expanded the active product catalog to over 400,000+ items.\n- Successfully doubled customer conversion, driving a 100% increase in monthly orders."
+      }
+    },
+    {
+      "title": "JobSolv (Intelligent Recruitment Platform)",
+      "link": "https://jobsolv.com/",
+      "star_factors": {
+        "situation": "JobSolv's recruitment workflow was bottlenecked by a highly inefficient, manual screening process. Recruiters were spending countless hours reviewing thousands of applications by hand. This heavy administrative burden created severe downstream effects: high candidate leakage, increasing churn rates, and ultimately, lost placement opportunities.",
+        "task": "The objective was to engineer a unified, automated platform that could handle the heavy lifting of the screening process. The goal was to eliminate the manual bottleneck and create a system capable of rapidly and accurately matching high-value candidates with high-paying job opportunities.",
+        "action": "- Engineered an ML-Driven Parser: I developed an intelligent applicant tracking parser that utilizes machine learning to automatically extract key skills and experience from incoming resumes.- Implemented Real-Time Scoring: I built a backend evaluation engine that instantly scores these parsed candidates against open job specifications the moment they apply.- Streamlined Recruiter Workflow: I designed the system to surface top-tier applicants immediately, explicitly highlighting the precise skill overlaps between the candidate's profile and the job requirements so recruiters could make split-second, informed decisions.",
+        "result": "- Slashed the overall recruitment cycle time by 60%.- Improved the precision of candidate placements, increasing match quality by 45%.\n- Eliminated thousands of hours of manual review, boosting the recruitment team's overall productivity by 80%."
+      }
+    },
+    {
+      "title": "EasyGo Holiday Homes (Property Rental Platform)",
+      "link": "https://easygoholidayhomes.com",
+      "star_factors": {
+        "situation": "EasyGo Holiday Homes, a property rental company preparing to launch their services in Dubai. While the website was functional, the overall user experience felt outdated and sluggish. It also had several pain points: the checkout process was restricted to just credit card payments, and user account management was handled entirely through clunky email threads, creating unnecessary friction for our customers.",
+        "task": "My goal was to completely modernize and streamline the platform. I was tasked with designing a seamless, end-to-end user journey—from the moment a user started browsing properties to selecting a service, making a secure payment, and eventually tracking their past and upcoming reservations in one place.",
+        "action": "- Interactive Map Browsing: I designed an intuitive, map-based user flow so clients could visually explore and select properties across Dubai.\n- Flexible Payment Gateways: I overhauled the checkout process by integrating modern, versatile payment options—including Apple Pay, Google Pay, PayPal, and payment links—making it incredibly easy for international travelers to book.\n- User Dashboard: I built out a comprehensive account section where users could easily manage and review their history of previous and upcoming reservations.\n- Content Strategy: I introduced an \"Articles\" section featuring content about the Dubai landscape and local attractions to engage users and build brand authority.",
+        "result": "- We achieved a massive 80% increase in user reservations by removing friction from the booking process.\n- The newly added articles section significantly improved the platform's SEO, driving more organic traffic to the site.\n- Because of the smoother, more intuitive experience, we saw a 20% increase in positive customer reviews."
+      }
+    }
+  ]
+}

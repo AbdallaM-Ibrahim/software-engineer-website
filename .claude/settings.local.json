@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l C:/Users/abdo/.claude/projects/F--projects-software-engineer-website/8bfa3142-361f-4506-b402-89ebc2e126ff.jsonl)",
+      "Bash(echo \"---bytes---\")",
+      "Bash(wc -c C:/Users/abdo/.claude/projects/F--projects-software-engineer-website/8bfa3142-361f-4506-b402-89ebc2e126ff.jsonl)"
+    ]
+  },
+  "prefersReducedMotion": true
+}
