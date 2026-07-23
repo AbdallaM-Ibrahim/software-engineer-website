@@ -1,0 +1,23 @@
+# Normalise line endings.
+#
+# Without this, `core.autocrlf=true` on Windows checks files out as CRLF while
+# Biome formats to LF, so `pnpm lint` fails on every file in the repo — including
+# on a clean tree. `eol=lf` overrides autocrlf, so the working copy matches what
+# is stored and what CI sees.
+* text=auto eol=lf
+
+# Generated — keep out of diffs and don't let anything rewrite them.
+pnpm-lock.yaml linguist-generated=true -diff
+src/payload-types.ts linguist-generated=true
+
+# Binary: never touch the bytes.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
