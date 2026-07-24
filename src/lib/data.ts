@@ -20,6 +20,20 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/site";
 //
 // `draft` bypasses the cache entirely — the admin's live-preview iframe must see
 // unpublished edits, which a cached response would hide.
+//
+// Two guards against stale cache:
+//   CACHE_VERSION is part of every key. A write made OUTSIDE the running server
+//   (a seed or translate script) can't fire the revalidate hook on the deployed
+//   instance, so its Data Cache — which Vercel persists across deployments —
+//   keeps serving the pre-write value. Bumping this abandons those poisoned
+//   entries; the new keys miss and read fresh.
+//
+//   `revalidate` gives every entry a time bound so the same out-of-band write
+//   self-heals within the window even without a bump. Normal edits through
+//   /admin still update instantly via the tag hook; this only backstops writes
+//   the server never saw.
+const CACHE_VERSION = "2";
+const CACHE_TTL_SECONDS = 3600;
 
 type Read<T> = (locale: Locale, draft: boolean) => Promise<T>;
 
@@ -27,9 +41,11 @@ function cachedRead<T>(key: string, tag: string, empty: T, read: Read<T>) {
   return async (locale: Locale = DEFAULT_LOCALE, draft = false): Promise<T> => {
     try {
       if (draft) return await read(locale, true);
-      return await unstable_cache(() => read(locale, false), [key, locale], {
-        tags: [tag],
-      })();
+      return await unstable_cache(
+        () => read(locale, false),
+        [CACHE_VERSION, key, locale],
+        { tags: [tag], revalidate: CACHE_TTL_SECONDS },
+      )();
     } catch {
       return empty;
     }
@@ -96,9 +112,11 @@ export async function getServiceBySlug(
 
   try {
     if (draft) return await read();
-    return await unstable_cache(read, ["service", slug, locale], {
-      tags: ["services"],
-    })();
+    return await unstable_cache(
+      read,
+      [CACHE_VERSION, "service", slug, locale],
+      { tags: ["services"], revalidate: CACHE_TTL_SECONDS },
+    )();
   } catch {
     return null;
   }
