@@ -2,9 +2,9 @@ import { ArrowRight, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
-import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
+import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { MetricStrip, type Metric } from "@/components/metric-strip";
-import { findLink, resolveWhatsapp } from "@/lib/contact-links";
+import { findLink } from "@/lib/contact-links";
 import type { Dictionary } from "@/lib/i18n";
 import { type Locale, sectionHref } from "@/lib/site";
 import type { Profile } from "@/payload-types";
@@ -23,10 +23,11 @@ export function Hero({
   dict: Dictionary;
   locale: Locale;
 }) {
-  // The hero carries only the two channels people actually open from a portfolio.
-  // Every other link lives in the Contact section rather than competing here.
+  // The hero carries the two professional profiles a reader clicks straight
+  // through to. Every other channel — email, WhatsApp, the rest — lives in the
+  // Contact section rather than competing here.
   const linkedin = findLink(profile, "linkedin")?.url;
-  const whatsapp = resolveWhatsapp(profile);
+  const github = findLink(profile, "github")?.url;
 
   return (
     <section
@@ -58,18 +59,6 @@ export function Hero({
               </a>
             </Button>
             <div className="ms-1 flex items-center gap-1">
-              {whatsapp ? (
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="icon"
-                  aria-label={dict.hero.whatsapp}
-                >
-                  <a href={whatsapp} target="_blank" rel="noopener noreferrer">
-                    <WhatsAppIcon className="size-5" />
-                  </a>
-                </Button>
-              ) : null}
               {linkedin ? (
                 <Button
                   asChild
@@ -79,6 +68,18 @@ export function Hero({
                 >
                   <a href={linkedin} target="_blank" rel="noopener noreferrer">
                     <LinkedInIcon className="size-5" />
+                  </a>
+                </Button>
+              ) : null}
+              {github ? (
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="icon"
+                  aria-label={dict.hero.github}
+                >
+                  <a href={github} target="_blank" rel="noopener noreferrer">
+                    <GitHubIcon className="size-5" />
                   </a>
                 </Button>
               ) : null}

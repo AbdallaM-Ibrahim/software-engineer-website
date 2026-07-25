@@ -9,33 +9,30 @@ test.describe("contact links", () => {
     await page.goto("/");
   });
 
-  test("hero shows LinkedIn and WhatsApp, and nothing else", async ({
-    page,
-  }) => {
+  test("hero shows LinkedIn and GitHub, and nothing else", async ({ page }) => {
     const hero = page.locator("#top");
 
     await expect(hero.getByRole("link", { name: "LinkedIn" })).toBeVisible();
-    await expect(
-      hero.getByRole("link", { name: "Chat on WhatsApp" }),
-    ).toBeVisible();
+    await expect(hero.getByRole("link", { name: "GitHub" })).toBeVisible();
 
-    // GitHub is in the links array but must not compete in the hero — it is
-    // listed in the Contact section instead.
-    await expect(hero.getByRole("link", { name: "GitHub" })).toHaveCount(0);
+    // WhatsApp is a contact channel, not a hero shortcut — it lives in the
+    // Contact section (merged into the phone card).
+    await expect(hero.getByRole("link", { name: /WhatsApp/i })).toHaveCount(0);
   });
 
-  test("hero WhatsApp link is a wa.me deep link built from the phone number", async ({
+  test("phone card WhatsApp badge is a wa.me deep link from the phone number", async ({
     page,
   }) => {
-    const chat = page.locator("#top").getByRole("link", {
-      name: "Chat on WhatsApp",
-    });
-
     // phoneIsWhatsapp is ticked, so the number itself becomes the chat link,
-    // stripped to digits — no "+", spaces or dashes.
-    await expect(chat).toHaveAttribute("href", /^https:\/\/wa\.me\/\d{7,}$/);
-    await expect(chat).toHaveAttribute("target", "_blank");
-    await expect(chat).toHaveAttribute("rel", /noopener/);
+    // stripped to digits — and it rides as a badge on the phone card rather
+    // than a card of its own.
+    const badge = page
+      .locator("#contact")
+      .getByRole("link", { name: "WhatsApp" });
+
+    await expect(badge).toHaveAttribute("href", /^https:\/\/wa\.me\/\d{7,}$/);
+    await expect(badge).toHaveAttribute("target", "_blank");
+    await expect(badge).toHaveAttribute("rel", /noopener/);
   });
 
   test("contact section lists every channel, hero ones included", async ({
@@ -51,22 +48,23 @@ test.describe("contact links", () => {
     await expect(contact.locator('a[href^="https://wa.me/"]')).toHaveCount(1);
   });
 
-  test("WhatsApp is one row, distinct from the phone row", async ({ page }) => {
+  test("same number: one phone card with a WhatsApp badge, no separate card", async ({
+    page,
+  }) => {
     const contact = page.locator("#contact");
 
-    // Tapping "Phone" starts a call; "WhatsApp" opens a chat. Same number,
-    // different intent, so both rows earn their place. Scoped to the link cards
-    // so the contact form's channel <select> options (also "Phone"/"WhatsApp")
-    // don't count as matches.
+    // Tapping the row calls; the badge on it opens WhatsApp — one card carries
+    // the number for both, since phoneIsWhatsapp is ticked.
     await expect(
       contact.locator('a[href^="tel:"]').getByText("Phone", { exact: true }),
     ).toBeVisible();
-    await expect(
-      contact
-        .locator('a[href^="https://wa.me/"]')
-        .getByText("WhatsApp", { exact: true }),
-    ).toBeVisible();
-    await expect(contact.getByText("Start a chat")).toBeVisible();
+    // Exactly one wa.me link (the badge), not a second card.
+    await expect(contact.locator('a[href^="https://wa.me/"]')).toHaveCount(1);
+    await expect(contact.getByRole("link", { name: "WhatsApp" })).toHaveCount(
+      1,
+    );
+    // The generic "start a chat" card is gone — the number lives on the phone card.
+    await expect(contact.getByText("Start a chat")).toHaveCount(0);
   });
 
   test("every contact link opens safely in a new tab", async ({ page }) => {

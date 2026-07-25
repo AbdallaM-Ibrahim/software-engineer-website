@@ -33,8 +33,8 @@ export type Dictionary = {
   hero: {
     viewWork: string;
     getInTouch: string;
-    whatsapp: string;
     linkedin: string;
+    github: string;
   };
   about: {
     eyebrow: string;
@@ -162,8 +162,8 @@ const en: Dictionary = {
   hero: {
     viewWork: "View my work",
     getInTouch: "Get in touch",
-    whatsapp: "Chat on WhatsApp",
     linkedin: "LinkedIn",
+    github: "GitHub",
   },
   about: {
     eyebrow: "About",
@@ -314,8 +314,8 @@ const ar: Dictionary = {
   hero: {
     viewWork: "استعرض أعمالي",
     getInTouch: "تواصل معي",
-    whatsapp: "تحدّث عبر واتساب",
     linkedin: "لينكدإن",
+    github: "جيت هاب",
   },
   about: {
     eyebrow: "نبذة",

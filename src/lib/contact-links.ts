@@ -1,4 +1,4 @@
-import { socialLabel, whatsappLink } from "@/lib/social";
+import { socialLabel, whatsappLink, whatsappNumberFromUrl } from "@/lib/social";
 import type { Profile } from "@/payload-types";
 
 export type ContactLink = {
@@ -8,27 +8,55 @@ export type ContactLink = {
   url: string;
 };
 
+export type WhatsappInfo = {
+  /** The wa.me chat URL. */
+  url: string;
+  /** Display number, when known. */
+  number: string | null;
+  /**
+   * True when the WhatsApp number is the phone number itself. The Contact
+   * section merges that case into the phone card rather than showing a second
+   * card for the same number.
+   */
+  fromPhone: boolean;
+};
+
 /**
- * The WhatsApp chat URL, or null when there isn't one.
+ * The WhatsApp chat details, or null when there isn't one.
  *
  * Source depends on the `phoneIsWhatsapp` switch: ticked, the phone number is
- * the WhatsApp number; unticked, the separate field is used — and that field
- * stores null when blank, so "no WhatsApp" is representable rather than implied
- * by an empty string.
+ * the WhatsApp number (`fromPhone`); unticked, the separate field is used — and
+ * that field stores null when blank, so "no WhatsApp" is representable rather
+ * than implied by an empty string.
  *
  * An explicit `whatsapp` platform link in the links array wins over both: if an
- * editor pasted a wa.me URL by hand, that is the more deliberate answer.
+ * editor pasted a wa.me URL by hand, that is the more deliberate answer, and it
+ * is treated as a distinct number (its own card).
  */
-export function resolveWhatsapp(profile: Profile): string | null {
+export function resolveWhatsappInfo(profile: Profile): WhatsappInfo | null {
   const contact = profile.contact ?? {};
 
   const explicit = (contact.links ?? []).find(
     (link) => link.platform === "whatsapp" && link.url,
   );
-  if (explicit?.url) return explicit.url;
+  if (explicit?.url) {
+    return {
+      url: explicit.url,
+      number: whatsappNumberFromUrl(explicit.url),
+      fromPhone: false,
+    };
+  }
 
-  const number = contact.phoneIsWhatsapp ? contact.phone : contact.whatsapp;
-  return whatsappLink(number);
+  const fromPhone = Boolean(contact.phoneIsWhatsapp);
+  const number = fromPhone ? contact.phone : contact.whatsapp;
+  const url = whatsappLink(number);
+  if (!url) return null;
+  return { url, number: number ?? null, fromPhone };
+}
+
+/** The WhatsApp chat URL, or null when there isn't one. */
+export function resolveWhatsapp(profile: Profile): string | null {
+  return resolveWhatsappInfo(profile)?.url ?? null;
 }
 
 /**

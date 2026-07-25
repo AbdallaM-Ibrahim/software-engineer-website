@@ -62,6 +62,12 @@ export function whatsappLink(phone: string | null | undefined): string | null {
   return `https://wa.me/${digits}`;
 }
 
+/** "https://wa.me/201128468458" -> "+201128468458". Null when there's no number. */
+export function whatsappNumberFromUrl(url: string): string | null {
+  const match = url.match(/wa\.me\/(\d{7,})/);
+  return match ? `+${match[1]}` : null;
+}
+
 /** "https://linkedin.com/in/foo/" -> "in/foo" — the readable tail of a URL. */
 export function handleFrom(url: string): string {
   return url
