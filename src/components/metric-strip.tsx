@@ -27,17 +27,20 @@ export function MetricStrip({
   return (
     <dl
       className={cn(
-        "border-foreground/15 grid border-t sm:grid-cols-3",
+        "border-foreground/15 grid border-t md:grid-cols-3",
         className,
       )}
     >
       {metrics.map((m, i) => (
+        // Three across only from md, and the large figure size only from lg: a
+        // "200 → 13,000" reading at 2.5rem does not fit a third of a 640–1023px
+        // viewport and the columns collide.
         <div
           key={`${m.value}-${i}`}
           className={cn(
-            "border-foreground/10 flex flex-col-reverse gap-1 border-b py-5 sm:border-b-0 sm:py-6",
-            i > 0 && "sm:border-s sm:ps-6",
-            i < metrics.length - 1 && "sm:pe-6",
+            "border-foreground/10 flex min-w-0 flex-col-reverse gap-1 border-b py-5 md:border-b-0 md:py-6",
+            i > 0 && "md:border-s md:ps-6",
+            i < metrics.length - 1 && "md:pe-6",
           )}
         >
           {/* Reversed visually so the figure leads while the label stays the
@@ -48,7 +51,7 @@ export function MetricStrip({
               <span className="block opacity-60">{m.source}</span>
             ) : null}
           </dt>
-          <dd className="font-mono text-3xl leading-none font-semibold sm:text-[2.5rem]">
+          <dd className="font-mono text-3xl leading-none font-semibold lg:text-[2.5rem]">
             {m.before ? (
               <>
                 <span className="text-muted-foreground">{m.before}</span>
