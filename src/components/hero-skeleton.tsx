@@ -8,10 +8,10 @@ export function HeroSkeleton() {
     <main>
       <section className="px-4 pt-28 pb-14 sm:px-6 sm:pt-36 sm:pb-16 lg:px-8">
         <div className="mx-auto max-w-6xl animate-pulse">
-          <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
+          <div className="grid items-center gap-10 md:grid-cols-[3fr_2fr]">
             <div className="max-w-3xl">
-              {/* mobile identity avatar (round, above the copy) */}
-              <div className="bg-muted mb-6 aspect-square w-20 rounded-full lg:hidden" />
+              {/* phone identity avatar (round, above the copy) */}
+              <div className="bg-muted mb-6 aspect-square w-20 rounded-full md:hidden" />
               {/* headline eyebrow */}
               <div className="bg-muted h-3.5 w-44 rounded" />
               {/* name */}
@@ -33,19 +33,21 @@ export function HeroSkeleton() {
               </div>
             </div>
 
-            {/* desktop portrait — square, beside the copy at lg and up */}
-            <div className="bg-muted hidden aspect-square w-64 rounded-2xl lg:block" />
+            {/* portrait — square, beside the copy from md up, centred in its column */}
+            <div className="hidden md:flex md:justify-center">
+              <div className="bg-muted aspect-square w-48 rounded-2xl lg:w-64" />
+            </div>
           </div>
 
           {/* metric strip */}
-          <div className="border-foreground/15 mt-14 grid border-t sm:mt-16 sm:grid-cols-3">
+          <div className="border-foreground/15 mt-14 grid border-t sm:mt-16 md:grid-cols-3">
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className="border-foreground/10 flex flex-col-reverse gap-2 border-b py-5 sm:border-b-0 sm:py-6"
+                className="border-foreground/10 flex flex-col-reverse gap-2 border-b py-5 md:border-b-0 md:py-6"
               >
                 <div className="bg-muted h-3 w-28 rounded" />
-                <div className="bg-muted h-9 w-32 rounded sm:h-10" />
+                <div className="bg-muted h-9 w-32 rounded lg:h-10" />
               </div>
             ))}
           </div>

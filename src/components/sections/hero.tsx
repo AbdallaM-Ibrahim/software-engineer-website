@@ -40,14 +40,17 @@ export function Hero({
       className="px-4 pt-28 pb-14 sm:px-6 sm:pt-36 sm:pb-16 lg:px-8"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
+        {/* Two tracks rather than `1fr auto`: the portrait gets a column of its
+            own so it sits centred in the right half instead of pinned to the
+            container edge. */}
+        <div className="grid items-center gap-10 md:grid-cols-[3fr_2fr]">
           <Reveal className="max-w-3xl">
             {photo && photoUrl ? (
-              // Mobile/tablet identity chip: a compact round avatar leads the
+              // Phone-only identity chip: a compact round avatar leads the
               // column so the face supports the name without dominating the
-              // fold. The larger square portrait beside the text takes over at
-              // lg, where there is room for it.
-              <div className="border-foreground/10 bg-muted relative mb-6 aspect-square w-20 overflow-hidden rounded-full border shadow-sm lg:hidden">
+              // fold. The square portrait beside the text takes over from md,
+              // where there is room for it.
+              <div className="border-foreground/10 bg-muted relative mb-6 aspect-square w-20 overflow-hidden rounded-full border shadow-sm md:hidden">
                 <Image
                   src={photoUrl}
                   alt={mediaAlt(photo, profile.name)}
@@ -114,16 +117,16 @@ export function Hero({
           </Reveal>
 
           {photo && photoUrl ? (
-            // Beside the text, lg and up only — where there is room for a full
-            // portrait. Below that the mobile avatar above the copy stands in.
-            <Reveal delay={0.08} className="hidden lg:block">
-              <div className="border-foreground/10 bg-muted relative aspect-square w-64 overflow-hidden rounded-2xl border shadow-sm">
+            // Beside the text from md up — tablet and desktop share this layout.
+            // Below md the round avatar above the copy stands in.
+            <Reveal delay={0.08} className="hidden md:flex md:justify-center">
+              <div className="border-foreground/10 bg-muted relative aspect-square w-48 overflow-hidden rounded-2xl border shadow-sm lg:w-64">
                 <Image
                   src={photoUrl}
                   alt={mediaAlt(photo, profile.name)}
                   fill
                   priority
-                  sizes="16rem"
+                  sizes="(min-width: 1024px) 16rem, 12rem"
                   className="object-cover"
                 />
               </div>
