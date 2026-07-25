@@ -42,6 +42,22 @@ export function Hero({
       <div className="mx-auto max-w-6xl">
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
           <Reveal className="max-w-3xl">
+            {photo && photoUrl ? (
+              // Mobile/tablet identity chip: a compact round avatar leads the
+              // column so the face supports the name without dominating the
+              // fold. The larger square portrait beside the text takes over at
+              // lg, where there is room for it.
+              <div className="border-foreground/10 bg-muted relative mb-6 aspect-square w-20 overflow-hidden rounded-full border shadow-sm lg:hidden">
+                <Image
+                  src={photoUrl}
+                  alt={mediaAlt(photo, profile.name)}
+                  fill
+                  priority
+                  sizes="5rem"
+                  className="object-cover"
+                />
+              </div>
+            ) : null}
             <p className="text-muted-foreground font-mono text-xs tracking-[0.14em] uppercase">
               {profile.headline}
             </p>
@@ -98,17 +114,16 @@ export function Hero({
           </Reveal>
 
           {photo && photoUrl ? (
-            <Reveal
-              delay={0.08}
-              className="order-first mx-auto lg:order-last lg:mx-0"
-            >
-              <div className="border-foreground/10 bg-muted relative aspect-square w-40 overflow-hidden rounded-2xl border shadow-sm sm:w-52 lg:w-64">
+            // Beside the text, lg and up only — where there is room for a full
+            // portrait. Below that the mobile avatar above the copy stands in.
+            <Reveal delay={0.08} className="hidden lg:block">
+              <div className="border-foreground/10 bg-muted relative aspect-square w-64 overflow-hidden rounded-2xl border shadow-sm">
                 <Image
                   src={photoUrl}
                   alt={mediaAlt(photo, profile.name)}
                   fill
                   priority
-                  sizes="(min-width: 1024px) 16rem, (min-width: 640px) 13rem, 10rem"
+                  sizes="16rem"
                   className="object-cover"
                 />
               </div>
