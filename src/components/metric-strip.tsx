@@ -36,8 +36,8 @@ export function MetricStrip({
           key={`${m.value}-${i}`}
           className={cn(
             "border-foreground/10 flex flex-col-reverse gap-1 border-b py-5 sm:border-b-0 sm:py-6",
-            i > 0 && "sm:border-l sm:pl-6",
-            i < metrics.length - 1 && "sm:pr-6",
+            i > 0 && "sm:border-s sm:ps-6",
+            i < metrics.length - 1 && "sm:pe-6",
           )}
         >
           {/* Reversed visually so the figure leads while the label stays the
