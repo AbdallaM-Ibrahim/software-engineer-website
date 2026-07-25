@@ -32,7 +32,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/site";
 //   self-heals within the window even without a bump. Normal edits through
 //   /admin still update instantly via the tag hook; this only backstops writes
 //   the server never saw.
-const CACHE_VERSION = "3";
+const CACHE_VERSION = "4";
 const CACHE_TTL_SECONDS = 3600;
 
 type Read<T> = (locale: Locale, draft: boolean) => Promise<T>;
