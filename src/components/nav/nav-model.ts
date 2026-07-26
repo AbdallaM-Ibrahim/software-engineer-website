@@ -14,6 +14,8 @@ import { type Locale, localePath, sectionHref } from "@/lib/site";
 export type NavItem = {
   key: string;
   label: string;
+  /** Lets the panel rule off jumps within this page from moves to another. */
+  kind: "section" | "route" | "cta";
   /** null renders as text rather than a link — there is nowhere to go. */
   href: string | null;
   ariaCurrent?: "page" | "location" | "true";
@@ -71,6 +73,7 @@ function servicesItem(
   return {
     key: "services",
     label: nav.services,
+    kind: "route",
     // On the hub there is nowhere to go. Rendering an href would offer a click
     // that navigates to the page you are already on; a bare span also drops out
     // of the tab order rather than being a control that does nothing.
@@ -94,6 +97,7 @@ function ctaItem(
   return {
     key: "contact",
     label: nav.contact,
+    kind: "cta",
     // A service page's conversion point is its own WhatsApp and email block, so
     // stay on the page. sectionHref is root-absolute and would navigate away.
     href: state === "detail" ? "#contact" : sectionHref("contact", locale),
@@ -115,6 +119,7 @@ export function buildBarItems({
   const section = (id: "about" | "work", label: string): NavItem => ({
     key: id,
     label,
+    kind: "section",
     href: sectionHref(id, locale),
     ariaCurrent: owner === id ? "location" : undefined,
     selected: owner === id,
@@ -154,6 +159,7 @@ export function buildMenuItems({
       items.push({
         key: section.id,
         label: nav[section.menu],
+        kind: "section",
         href: sectionHref(section.id, locale),
         ariaCurrent: marked ? "location" : undefined,
         selected: marked,
@@ -163,6 +169,7 @@ export function buildMenuItems({
     items.push({
       key: "home",
       label: nav.home,
+      kind: "route",
       href: localePath("/", locale),
       selected: false,
     });

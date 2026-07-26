@@ -46,7 +46,7 @@ export async function RootHtml({
         <noscript>
           <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
-        <Providers>
+        <Providers locale={locale}>
           <SkipLink label={dict.nav.skipToContent} />
           {/* No profile means an unseeded database, where the page below
               renders an empty state and a header would be a shell of nothing. */}
