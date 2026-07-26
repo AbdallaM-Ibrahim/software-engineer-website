@@ -29,12 +29,14 @@ commit-msg:
 
 pre-push:
   jobs:
-    # Pure-module tests: the section registry and the nav model. Milliseconds,
-    # no server and no browser, so it runs ahead of the build rather than
-    # waiting for it to fail.
-    - name: unit
-      run: pnpm test:unit
-
     # The expensive gate. Kept off pre-commit so committing stays fast.
     - name: build
       run: pnpm build
+
+    # Every test type, through one entry point — add new ones to `pnpm test`
+    # rather than here, so CI and this hook never drift apart.
+    #
+    # Runs after the build on purpose: Playwright's webServer starts the
+    # production server, which needs the build above.
+    - name: test
+      run: pnpm test

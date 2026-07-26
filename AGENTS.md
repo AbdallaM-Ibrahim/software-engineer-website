@@ -25,11 +25,15 @@ pnpm generate:types      # regenerate src/payload-types.ts after a schema change
 pnpm generate:importmap  # run after adding or moving a custom admin component
 pnpm email               # React Email preview server on :3001
 pnpm email:sync          # push email templates to Resend (needs the full-access key)
+pnpm test                # every test type — what CI and the pre-push hook run
 pnpm test:unit           # Vitest over the pure modules (no server, no browser)
 pnpm test:unit:watch     # ...in watch mode
 pnpm test:e2e            # Playwright against a production server
 PW_DEV=1 pnpm test:e2e   # ...against next dev instead
 ```
+
+`pnpm test` is the aggregate. Add a new kind of test to that script, not to
+`lefthook.yml` or a CI workflow, so every caller picks it up at once.
 
 ## Commit conventions
 

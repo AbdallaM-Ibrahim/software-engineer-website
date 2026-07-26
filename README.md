@@ -12,8 +12,9 @@ Production host: **abdalla.futuresolve.net**
 - **Tailwind CSS v4** + **shadcn/ui** (Radix) — light/dark theme via `next-themes`
 - **Payload CMS 3.86** (admin at `/admin`, Local API for reads) on **MongoDB** (Mongoose)
 - **TanStack Query** (contact-form mutation), **react-hook-form** + **zod** (validation)
-- **framer-motion** (subtle reveals)
-- **pnpm** as package manager, **Biome** for lint + format, **Playwright** for e2e
+- CSS transitions for motion (`src/components/reveal.tsx`) — no animation library
+- **pnpm** as package manager, **Biome** for lint + format, **Vitest** for unit
+  tests and **Playwright** for e2e
 - S3-compatible media storage (AWS S3 / Cloudflare R2 / DigitalOcean Spaces / MinIO), local disk by default
 
 ## Prerequisites
