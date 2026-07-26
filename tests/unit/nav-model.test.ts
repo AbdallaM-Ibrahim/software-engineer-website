@@ -175,7 +175,21 @@ describe("the mobile panel", () => {
   }
 
   test("lists the full index on the home page, then Services", () => {
-    expect(menu("/").map((item) => item.key)).toEqual([...present, "services"]);
+    // Contact is absent on purpose: the panel renders the call to action above
+    // this list, so a row for it would be the same destination twice.
+    expect(menu("/").map((item) => item.key)).toEqual([
+      "about",
+      "skills",
+      "experience",
+      "education",
+      "work",
+      "testimonials",
+      "services",
+    ]);
+  });
+
+  test("omits the contact section, which the call to action already covers", () => {
+    expect(menu("/").map((item) => item.key)).not.toContain("contact");
   });
 
   test("drops sections that are not in the DOM", () => {

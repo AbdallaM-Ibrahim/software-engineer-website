@@ -1,22 +1,8 @@
 "use client";
 
 import { useScrollSpy } from "@/hooks/use-scroll-spy";
-import type { Heading } from "@/lib/headings";
+import { type Heading, hasRail } from "@/lib/headings";
 import { cn } from "@/lib/utils";
-
-/**
- * Below this, a sticky rail is more furniture than help, so the contents stay
- * a disclosure at every width.
- */
-const RAIL_MIN_HEADINGS = 3;
-
-export function hasToc(headings: Heading[]): boolean {
-  return headings.length > 0;
-}
-
-export function hasRail(headings: Heading[]): boolean {
-  return headings.length >= RAIL_MIN_HEADINGS;
-}
 
 /**
  * In-page contents for a service page.

@@ -20,10 +20,11 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
 import { Footer } from "@/components/sections/footer";
 import { CaseStudyCard } from "@/components/sections/case-study-card";
-import { ServiceToc, hasRail } from "@/components/sections/service-toc";
+import { ServiceToc } from "@/components/sections/service-toc";
 import {
   type Heading,
   extractHeadings,
+  hasRail,
   lexicalText,
   uniqueHeadingId,
 } from "@/lib/headings";

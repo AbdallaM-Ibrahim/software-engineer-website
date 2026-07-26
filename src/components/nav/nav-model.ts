@@ -37,6 +37,9 @@ export type NavContext = {
 
 type ServicesState = "hub" | "detail" | "away";
 
+/** The section the call to action leads to. */
+const CTA_SECTION = "contact";
+
 function servicesState(pathname: string, locale: Locale): ServicesState {
   const hub = localePath("/services", locale);
   if (pathname === hub) return "hub";
@@ -93,14 +96,15 @@ function ctaItem(
   state: ServicesState,
   activeSection: string | null,
 ): NavItem {
-  const marked = activeSection === "contact";
+  const marked = activeSection === CTA_SECTION;
   return {
-    key: "contact",
+    key: CTA_SECTION,
     label: nav.contact,
     kind: "cta",
     // A service page's conversion point is its own WhatsApp and email block, so
     // stay on the page. sectionHref is root-absolute and would navigate away.
-    href: state === "detail" ? "#contact" : sectionHref("contact", locale),
+    href:
+      state === "detail" ? `#${CTA_SECTION}` : sectionHref(CTA_SECTION, locale),
     ariaCurrent: marked ? "location" : undefined,
     selected: marked,
   };
@@ -153,6 +157,9 @@ export function buildMenuItems({
   if (isHomePath(pathname, locale)) {
     for (const section of MENU_SECTIONS) {
       if (!present.includes(section.id)) continue;
+      // The panel renders the call to action above this list, so listing the
+      // contact section here too would be the same destination twice.
+      if (section.id === CTA_SECTION) continue;
       // Marked on the exact section, not on its owner: the panel lists them
       // individually, so owner-matching would light up several rows at once.
       const marked = activeSection === section.id;

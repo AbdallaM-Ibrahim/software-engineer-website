@@ -16,6 +16,23 @@ type LexicalNode = {
 
 export type Heading = { id: string; text: string };
 
+/**
+ * Below this many headings a sticky rail is more furniture than help, so the
+ * contents stay a disclosure at every width.
+ */
+export const RAIL_MIN_HEADINGS = 3;
+
+/**
+ * Whether a service page earns the sticky rail.
+ *
+ * Lives here rather than beside the component because the server page needs it
+ * to choose its grid, and a "use client" module's functions cannot be called
+ * from the server — only rendered as components.
+ */
+export function hasRail(headings: Heading[]): boolean {
+  return headings.length >= RAIL_MIN_HEADINGS;
+}
+
 /** Plain text of a node subtree — a heading can hold several formatted runs. */
 export function lexicalText(node: LexicalNode): string {
   if (typeof node.text === "string") return node.text;
