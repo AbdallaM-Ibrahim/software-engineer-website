@@ -25,6 +25,8 @@ pnpm generate:types      # regenerate src/payload-types.ts after a schema change
 pnpm generate:importmap  # run after adding or moving a custom admin component
 pnpm email               # React Email preview server on :3001
 pnpm email:sync          # push email templates to Resend (needs the full-access key)
+pnpm test:unit           # Vitest over the pure modules (no server, no browser)
+pnpm test:unit:watch     # ...in watch mode
 pnpm test:e2e            # Playwright against a production server
 PW_DEV=1 pnpm test:e2e   # ...against next dev instead
 ```
@@ -101,7 +103,19 @@ build. Hooks install via the `prepare` script on `pnpm install`; re-sync with
 
 ## Testing
 
-Playwright specs live in `tests/e2e/`. They are read-only against the CMS and
-run fully parallel; contact-form specs stub `/api/contact`, so the suite never
-sends real mail. Specs skip themselves with a reason when the database is
-unseeded rather than reporting a false pass.
+Two runners, split by file suffix so neither globs the other's files:
+
+- **Vitest owns `tests/unit/**/*.test.ts`** — pure modules only, `environment:
+  "node"`, no DOM. This is where routing rules and registry invariants are
+  pinned, because asserting them through a browser is slow and flake-prone.
+- **Playwright owns `tests/e2e/**/*.spec.ts`** — anything that needs a page.
+
+Prefer neither where an invariant can be encoded in a type or a data shape:
+`src/lib/sections.ts` makes non-contiguous section ownership unrepresentable
+rather than merely asserted, and `tsc` catches a bad nav label key. A test tells
+you after the fact; a type stops it being written.
+
+Playwright specs are read-only against the CMS and run fully parallel;
+contact-form specs stub `/api/contact`, so the suite never sends real mail. Specs
+skip themselves with a reason when the database is unseeded rather than reporting
+a false pass.

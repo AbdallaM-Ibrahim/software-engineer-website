@@ -29,6 +29,12 @@ commit-msg:
 
 pre-push:
   jobs:
+    # Pure-module tests: the section registry and the nav model. Milliseconds,
+    # no server and no browser, so it runs ahead of the build rather than
+    # waiting for it to fail.
+    - name: unit
+      run: pnpm test:unit
+
     # The expensive gate. Kept off pre-commit so committing stays fast.
     - name: build
       run: pnpm build
