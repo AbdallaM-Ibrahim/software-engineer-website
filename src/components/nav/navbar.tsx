@@ -77,12 +77,12 @@ export function Navbar({
             className="ms-2"
           />
           <LocaleSwitcher locale={locale} label={switchLabel} />
-          <ThemeToggle />
+          <ThemeToggle label={nav.toggleTheme} />
         </div>
 
         <div className="flex items-center gap-1 md:hidden">
           <LocaleSwitcher locale={locale} label={switchLabel} />
-          <ThemeToggle />
+          <ThemeToggle label={nav.toggleTheme} />
           <NavMenu
             name={name}
             openLabel={nav.openMenu}
