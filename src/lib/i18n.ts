@@ -29,6 +29,12 @@ export type Dictionary = {
     services: string;
     openMenu: string;
     backToTop: string;
+    /** Accessible name for the <nav> landmark itself. */
+    primary: string;
+    skipToContent: string;
+    toggleTheme: string;
+    /** Accessible name for the breadcrumb trail on a service page. */
+    breadcrumb: string;
   };
   hero: {
     viewWork: string;
@@ -104,6 +110,8 @@ export type Dictionary = {
     ctaWhatsapp: string;
     ctaEmail: string;
     breadcrumbHome: string;
+    /** Heading for the in-page table of contents. */
+    onThisPage: string;
   };
   contact: {
     eyebrow: string;
@@ -158,6 +166,11 @@ const en: Dictionary = {
     services: "Services",
     openMenu: "Open menu",
     backToTop: "Back to top",
+    primary: "Primary",
+    skipToContent: "Skip to content",
+    // Asserted verbatim by tests/e2e/interactions.spec.ts — keep it exact.
+    toggleTheme: "Toggle theme",
+    breadcrumb: "Breadcrumb",
   },
   hero: {
     viewWork: "View my work",
@@ -243,6 +256,7 @@ const en: Dictionary = {
     ctaWhatsapp: "Message on WhatsApp",
     ctaEmail: "Send an email",
     breadcrumbHome: "Home",
+    onThisPage: "On this page",
   },
   contact: {
     eyebrow: "Contact",
@@ -310,6 +324,10 @@ const ar: Dictionary = {
     services: "الخدمات",
     openMenu: "فتح القائمة",
     backToTop: "العودة إلى الأعلى",
+    primary: "التنقل الرئيسي",
+    skipToContent: "تخطَّ إلى المحتوى",
+    toggleTheme: "تبديل المظهر",
+    breadcrumb: "مسار التنقل",
   },
   hero: {
     viewWork: "استعرض أعمالي",
@@ -401,6 +419,7 @@ const ar: Dictionary = {
     ctaWhatsapp: "راسلني على واتساب",
     ctaEmail: "أرسل بريدًا إلكترونيًا",
     breadcrumbHome: "الرئيسية",
+    onThisPage: "في هذه الصفحة",
   },
   contact: {
     eyebrow: "تواصل",
