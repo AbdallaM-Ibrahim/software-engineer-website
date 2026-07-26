@@ -17,7 +17,7 @@ import { findLink, resolveWhatsapp } from "@/lib/contact-links";
 import { WhatsAppIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
-import { Navbar } from "@/components/sections/navbar";
+import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/sections/footer";
 import { CaseStudyCard } from "@/components/sections/case-study-card";
 import { RichText } from "@payloadcms/richtext-lexical/react";

@@ -14,7 +14,7 @@ import { type Locale, localePath } from "@/lib/site";
 import { Card, CardContent } from "@/components/ui/card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
-import { Navbar } from "@/components/sections/navbar";
+import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/sections/footer";
 import { EmptyState } from "@/components/pages/empty-state";
 

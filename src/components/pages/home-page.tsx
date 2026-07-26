@@ -17,7 +17,7 @@ import {
   buildWebSite,
 } from "@/lib/schema";
 import type { Locale } from "@/lib/site";
-import { Navbar } from "@/components/sections/navbar";
+import { Navbar } from "@/components/nav/navbar";
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { Skills } from "@/components/sections/skills";
@@ -76,8 +76,6 @@ export async function HomePage({
       source: c.shortName,
     }));
 
-  const realTestimonials = testimonials.filter((t) => !t.isPlaceholder);
-
   const graph = buildGraph([
     buildPerson({ profile, skills, experience, education, locale }),
     buildWebSite(profile, locale),
@@ -95,7 +93,6 @@ export async function HomePage({
         nav={dict.nav}
         switchLabel={dict.common.switchLanguage}
         locale={locale}
-        hasTestimonials={realTestimonials.length > 0}
       />
       <main className="flex-1">
         <Hero profile={profile} metrics={metrics} dict={dict} locale={locale} />
