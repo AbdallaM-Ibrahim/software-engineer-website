@@ -4,6 +4,8 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
+import { useScrollSpy } from "@/hooks/use-scroll-spy";
+import { useScrolled } from "@/hooks/use-scrolled";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -44,8 +46,7 @@ export function Navbar({
   const home = localePath("/", locale);
   const onHome = pathname === home;
 
-  const [scrolled, setScrolled] = React.useState(false);
-  const [active, setActive] = React.useState<string | null>(null);
+  const scrolled = useScrolled();
 
   const sections = React.useMemo(() => {
     const ids = ["about", "skills", "experience", "work"];
@@ -53,6 +54,8 @@ export function Navbar({
     ids.push("contact");
     return ids;
   }, [hasTestimonials]);
+
+  const active = useScrollSpy({ ids: sections, enabled: onHome });
 
   const links: NavLink[] = onHome
     ? [
@@ -99,54 +102,6 @@ export function Navbar({
         { href: localePath("/services", locale), label: nav.services },
         { href: sectionHref("contact", locale), label: nav.contact },
       ];
-
-  React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Scroll-spy. One IntersectionObserver across all sections rather than a
-  // scroll handler measuring each one — the browser does the work off the main
-  // thread, so this costs nothing per frame.
-  React.useEffect(() => {
-    if (!onHome) {
-      setActive(null);
-      return;
-    }
-
-    const elements = sections
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (elements.length === 0) return;
-
-    const visible = new Map<string, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            visible.set(entry.target.id, entry.intersectionRatio);
-          } else {
-            visible.delete(entry.target.id);
-          }
-        }
-        // Whichever tracked section currently occupies the most of the viewport
-        // wins, so a short section scrolling past a tall one doesn't steal it.
-        const best = [...visible.entries()].sort((a, b) => b[1] - a[1])[0];
-        setActive(best ? best[0] : null);
-      },
-      {
-        // Ignores the fixed header at the top and the tail of the viewport, so
-        // "active" means "the section you are reading".
-        rootMargin: "-20% 0px -60% 0px",
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-      },
-    );
-
-    for (const element of elements) observer.observe(element);
-    return () => observer.disconnect();
-  }, [onHome, sections]);
 
   return (
     <header
