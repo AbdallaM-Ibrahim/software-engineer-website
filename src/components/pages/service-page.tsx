@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight, ChevronRight, Mail } from "lucide-react";
 
 import { getProfile, getServiceBySlug } from "@/lib/data";
@@ -79,21 +80,21 @@ export async function ServicePage({
       <main
         id="main"
         tabIndex={-1}
-        className="flex-1 px-4 pt-28 pb-16 focus:outline-none sm:px-6 sm:pt-32 lg:px-8"
+        className="flex-1 px-4 pt-24 pb-16 focus:outline-none sm:px-6 sm:pt-28 lg:px-8"
       >
         <article className="mx-auto max-w-3xl">
           {/* Breadcrumb trail, matching the BreadcrumbList in the schema so what
               a reader sees and what a crawler reads are the same path. */}
           <nav
-            aria-label="Breadcrumb"
+            aria-label={dict.nav.breadcrumb}
             className="text-muted-foreground flex items-center gap-1.5 font-mono text-xs"
           >
-            <a
+            <Link
               href={localePath("/services", locale)}
               className="hover:text-foreground"
             >
               {dict.services.eyebrow}
-            </a>
+            </Link>
             <ChevronRight className="size-3.5 rtl:rotate-180" />
             <span className="text-foreground">{service.title}</span>
           </nav>
@@ -163,7 +164,12 @@ export async function ServicePage({
           {/* Inline WhatsApp + email, no form: the fastest path for Gulf/Egypt
               visitors, where WhatsApp is the default channel. The home-page form
               is one click away through the nav for anyone who prefers it. */}
-          <section className="bg-muted/40 mt-14 rounded-xl border p-6 sm:p-8">
+          {/* The nav's call to action scrolls here rather than leaving for the
+              home form — this is the conversion point on a service page. */}
+          <section
+            id="contact"
+            className="bg-muted/40 mt-14 scroll-mt-20 rounded-xl border p-6 sm:p-8"
+          >
             <h2 className="font-display text-xl font-bold">
               {dict.services.ctaTitle}
             </h2>

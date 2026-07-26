@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ArrowRight,
   BarChart3,
@@ -62,7 +63,7 @@ export async function ServicesIndexPage({
       <main
         id="main"
         tabIndex={-1}
-        className="flex-1 px-4 pt-28 pb-16 focus:outline-none sm:px-6 sm:pt-32 lg:px-8"
+        className="flex-1 px-4 pt-24 pb-16 focus:outline-none sm:px-6 sm:pt-28 lg:px-8"
       >
         <div className="mx-auto max-w-6xl">
           <SectionHeading
@@ -81,7 +82,7 @@ export async function ServicesIndexPage({
                 : "#";
               return (
                 <Reveal key={service.id} delay={i * 0.05}>
-                  <a href={href} className="group block h-full">
+                  <Link href={href} className="group block h-full">
                     <Card className="h-full transition-colors group-hover:border-primary/50">
                       <CardContent className="flex h-full flex-col gap-3">
                         <div className="bg-primary/10 text-primary grid size-11 place-items-center rounded-lg">
@@ -99,7 +100,7 @@ export async function ServicesIndexPage({
                         </p>
                       </CardContent>
                     </Card>
-                  </a>
+                  </Link>
                 </Reveal>
               );
             })}
