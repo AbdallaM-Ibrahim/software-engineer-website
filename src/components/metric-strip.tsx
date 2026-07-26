@@ -55,7 +55,12 @@ export function MetricStrip({
             {m.before ? (
               <>
                 <span className="text-muted-foreground">{m.before}</span>
-                <span className="text-primary mx-1.5" aria-hidden="true">
+                {/* Flipped under rtl: the row reads right-to-left there, so an
+                    arrow left as-is points back at the starting figure. */}
+                <span
+                  className="text-primary mx-1.5 inline-block rtl:rotate-180"
+                  aria-hidden="true"
+                >
                   →
                 </span>
                 <span className="sr-only">increased to</span>

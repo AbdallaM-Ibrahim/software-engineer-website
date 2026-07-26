@@ -60,11 +60,15 @@ export function Experience({
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 hover:underline"
                     >
-                      {job.company}
+                      {/* <bdi> isolates the Latin company name from the
+                          surrounding Arabic: without it the bidi algorithm
+                          drags a trailing "." to the wrong end, printing
+                          ".swegit inc" on /ar. */}
+                      <bdi>{job.company}</bdi>
                       <ExternalLink className="size-3.5" />
                     </a>
                   ) : (
-                    <span>{job.company}</span>
+                    <bdi>{job.company}</bdi>
                   )}
                 </div>
                 {bullets.length > 0 ? (

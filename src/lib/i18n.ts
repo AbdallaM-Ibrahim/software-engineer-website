@@ -314,8 +314,9 @@ const ar: Dictionary = {
   hero: {
     viewWork: "استعرض أعمالي",
     getInTouch: "تواصل معي",
-    linkedin: "لينكدإن",
-    github: "جيت هاب",
+    // Brand names stay in Latin script, the way Arabic copy writes them.
+    linkedin: "LinkedIn",
+    github: "GitHub",
   },
   about: {
     eyebrow: "نبذة",
@@ -344,11 +345,11 @@ const ar: Dictionary = {
       n === 1 ? "شهادة واحدة" : n === 2 ? "شهادتان" : `${n} شهادات`,
   },
   whereIWork: {
-    eyebrow: "التوفّر",
+    eyebrow: "التوافر",
     title: "أين أعمل",
     regions: "المناطق",
     hours: "ساعات العمل",
-    openTo: "منفتح على",
+    openTo: "متاح لـ",
     languages: "اللغات",
     engagement: {
       "full-time": "دوام كامل",
