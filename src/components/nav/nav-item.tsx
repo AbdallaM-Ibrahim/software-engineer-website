@@ -30,9 +30,38 @@ export function NavItem({
     // header that is transparent on top of the hero.
     "focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px]",
     variant === "bar" ? "px-3 py-2" : "hover:bg-accent px-3 py-2.5",
+    // Teal is what globals.css reserves for interactive state, and the previous
+    // muted-to-foreground shift was close to invisible.
     item.selected
-      ? "text-foreground"
+      ? "text-primary"
       : "text-muted-foreground hover:text-foreground",
+  );
+
+  // Bold is wider than medium, so switching weight would reflow the whole row.
+  // A hidden bold copy stacked in the same grid cell holds the width open, and
+  // aria-hidden keeps it out of the accessible name.
+  const label = (
+    <span
+      className={cn(
+        "grid",
+        variant === "bar" ? "justify-items-center" : "justify-items-start",
+      )}
+    >
+      <span
+        aria-hidden
+        className="invisible col-start-1 row-start-1 font-semibold"
+      >
+        {item.label}
+      </span>
+      <span
+        className={cn(
+          "col-start-1 row-start-1",
+          item.selected && "font-semibold",
+        )}
+      >
+        {item.label}
+      </span>
+    </span>
   );
 
   // No href means this is the page you are already on. Rendering a link would
@@ -45,7 +74,7 @@ export function NavItem({
   if (item.href === null) {
     return (
       <span aria-current={item.ariaCurrent} className={classes}>
-        {item.label}
+        {label}
       </span>
     );
   }
@@ -57,7 +86,7 @@ export function NavItem({
       className={classes}
       onClick={onClick}
     >
-      {item.label}
+      {label}
     </NavAnchor>
   );
 }

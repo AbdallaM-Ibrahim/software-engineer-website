@@ -65,7 +65,14 @@ export function Navbar({
         aria-label={nav.primary}
         className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8"
       >
-        <NavBrand name={name} href={localePath("/", locale)} />
+        {/* On the home page the wordmark scrolls to the top rather than
+            reloading the page you are already on. That also gives nav.backToTop
+            — translated in both locales and rendered nowhere — a use. */}
+        <NavBrand
+          name={name}
+          href={onHome ? "#top" : localePath("/", locale)}
+          label={onHome ? nav.backToTop : name}
+        />
 
         <div className="hidden items-center gap-1 md:flex">
           {links.map((item) => (
