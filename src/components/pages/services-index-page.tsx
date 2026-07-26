@@ -59,7 +59,11 @@ export async function ServicesIndexPage({
   return (
     <>
       <JsonLd data={graph} />
-      <main className="flex-1 px-4 pt-28 pb-16 sm:px-6 sm:pt-32 lg:px-8">
+      <main
+        id="main"
+        tabIndex={-1}
+        className="flex-1 px-4 pt-28 pb-16 focus:outline-none sm:px-6 sm:pt-32 lg:px-8"
+      >
         <div className="mx-auto max-w-6xl">
           <SectionHeading
             as="h1"

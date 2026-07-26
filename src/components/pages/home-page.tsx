@@ -87,7 +87,7 @@ export async function HomePage({
       {/* No-op outside the admin's preview iframe. */}
       <RefreshOnSave serverURL={SERVER_URL} />
       <JsonLd data={graph} />
-      <main className="flex-1">
+      <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
         <Hero profile={profile} metrics={metrics} dict={dict} locale={locale} />
         <About
           profile={profile}

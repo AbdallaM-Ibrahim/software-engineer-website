@@ -76,7 +76,11 @@ export async function ServicePage({
   return (
     <>
       <JsonLd data={graph} />
-      <main className="flex-1 px-4 pt-28 pb-16 sm:px-6 sm:pt-32 lg:px-8">
+      <main
+        id="main"
+        tabIndex={-1}
+        className="flex-1 px-4 pt-28 pb-16 focus:outline-none sm:px-6 sm:pt-32 lg:px-8"
+      >
         <article className="mx-auto max-w-3xl">
           {/* Breadcrumb trail, matching the BreadcrumbList in the schema so what
               a reader sees and what a crawler reads are the same path. */}

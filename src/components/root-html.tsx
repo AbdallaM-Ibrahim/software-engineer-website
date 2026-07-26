@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/nav/navbar";
 import { Providers } from "@/components/providers";
+import { SkipLink } from "@/components/skip-link";
 import { getProfile } from "@/lib/data";
 import { ARABIC_FONT_VARIABLES, LATIN_FONT_VARIABLES } from "@/lib/fonts";
 import { getDictionary } from "@/lib/i18n";
@@ -46,6 +47,7 @@ export async function RootHtml({
           <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
         <Providers>
+          <SkipLink label={dict.nav.skipToContent} />
           {/* No profile means an unseeded database, where the page below
               renders an empty state and a header would be a shell of nothing. */}
           {profile ? (

@@ -18,7 +18,11 @@ export default function FrontendError({
   }, [error]);
 
   return (
-    <main className="grid min-h-screen place-items-center px-6 text-center">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="grid min-h-screen place-items-center px-6 text-center focus:outline-none"
+    >
       <div className="max-w-md space-y-4">
         <h1 className="text-2xl font-bold">Something went wrong</h1>
         <p className="text-muted-foreground">

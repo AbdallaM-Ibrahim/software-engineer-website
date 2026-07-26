@@ -13,7 +13,11 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="grid min-h-screen place-items-center px-6 text-center">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="grid min-h-screen place-items-center px-6 text-center focus:outline-none"
+    >
       <div className="max-w-md space-y-4">
         <p className="text-muted-foreground font-mono text-xs tracking-[0.14em] uppercase">
           404

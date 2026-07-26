@@ -5,7 +5,7 @@
 // layout, so both locales share this one skeleton.
 export function HeroSkeleton() {
   return (
-    <main>
+    <main id="main" tabIndex={-1} className="focus:outline-none">
       <section className="px-4 pt-28 pb-14 sm:px-6 sm:pt-36 sm:pb-16 lg:px-8">
         <div className="mx-auto max-w-6xl animate-pulse">
           <div className="grid items-center gap-10 md:grid-cols-[3fr_2fr]">

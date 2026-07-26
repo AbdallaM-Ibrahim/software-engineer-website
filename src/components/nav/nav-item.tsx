@@ -25,6 +25,10 @@ export function NavItem({
 }) {
   const classes = cn(
     "rounded-md text-sm font-medium transition-colors",
+    // The site's focus convention, from ui/button.tsx. The nav links carried
+    // none, so keyboard users fell back to the browser default outline over a
+    // header that is transparent on top of the hero.
+    "focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px]",
     variant === "bar" ? "px-3 py-2" : "hover:bg-accent px-3 py-2.5",
     item.selected
       ? "text-foreground"
