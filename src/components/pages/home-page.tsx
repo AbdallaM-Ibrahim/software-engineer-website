@@ -17,7 +17,6 @@ import {
   buildWebSite,
 } from "@/lib/schema";
 import type { Locale } from "@/lib/site";
-import { Navbar } from "@/components/nav/navbar";
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { Skills } from "@/components/sections/skills";
@@ -88,12 +87,6 @@ export async function HomePage({
       {/* No-op outside the admin's preview iframe. */}
       <RefreshOnSave serverURL={SERVER_URL} />
       <JsonLd data={graph} />
-      <Navbar
-        name={profile.name}
-        nav={dict.nav}
-        switchLabel={dict.common.switchLanguage}
-        locale={locale}
-      />
       <main className="flex-1">
         <Hero profile={profile} metrics={metrics} dict={dict} locale={locale} />
         <About

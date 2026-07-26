@@ -14,7 +14,6 @@ import { type Locale, localePath } from "@/lib/site";
 import { Card, CardContent } from "@/components/ui/card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
-import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/sections/footer";
 import { EmptyState } from "@/components/pages/empty-state";
 
@@ -60,12 +59,6 @@ export async function ServicesIndexPage({
   return (
     <>
       <JsonLd data={graph} />
-      <Navbar
-        name={profile.name}
-        nav={dict.nav}
-        switchLabel={dict.common.switchLanguage}
-        locale={locale}
-      />
       <main className="flex-1 px-4 pt-28 pb-16 sm:px-6 sm:pt-32 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <SectionHeading

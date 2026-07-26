@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { NavAnchor } from "./nav-anchor";
 import type { NavItem as NavItemData } from "./nav-model";
 
 /**
@@ -46,13 +47,13 @@ export function NavItem({
   }
 
   return (
-    <a
+    <NavAnchor
       href={item.href}
       aria-current={item.ariaCurrent}
       className={classes}
       onClick={onClick}
     >
       {item.label}
-    </a>
+    </NavAnchor>
   );
 }

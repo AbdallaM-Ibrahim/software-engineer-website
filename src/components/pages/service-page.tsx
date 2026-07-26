@@ -17,7 +17,6 @@ import { findLink, resolveWhatsapp } from "@/lib/contact-links";
 import { WhatsAppIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
-import { Navbar } from "@/components/nav/navbar";
 import { Footer } from "@/components/sections/footer";
 import { CaseStudyCard } from "@/components/sections/case-study-card";
 import { RichText } from "@payloadcms/richtext-lexical/react";
@@ -77,14 +76,6 @@ export async function ServicePage({
   return (
     <>
       <JsonLd data={graph} />
-      {profile ? (
-        <Navbar
-          name={profile.name}
-          nav={dict.nav}
-          switchLabel={dict.common.switchLanguage}
-          locale={locale}
-        />
-      ) : null}
       <main className="flex-1 px-4 pt-28 pb-16 sm:px-6 sm:pt-32 lg:px-8">
         <article className="mx-auto max-w-3xl">
           {/* Breadcrumb trail, matching the BreadcrumbList in the schema so what

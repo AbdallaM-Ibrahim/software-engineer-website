@@ -1,5 +1,8 @@
+import { Navbar } from "@/components/nav/navbar";
 import { Providers } from "@/components/providers";
+import { getProfile } from "@/lib/data";
 import { ARABIC_FONT_VARIABLES, LATIN_FONT_VARIABLES } from "@/lib/fonts";
+import { getDictionary } from "@/lib/i18n";
 import { type Locale, isRtl } from "@/lib/site";
 
 /**
@@ -9,8 +12,15 @@ import { type Locale, isRtl } from "@/lib/site";
  * because `lang` and `dir` have to be on the server-rendered <html> element —
  * a crawler reading an Arabic page must not be told it is English. That is only
  * possible in a root layout, so there are two, and this is the body they share.
+ *
+ * The nav lives here rather than in each page. With client navigation it would
+ * otherwise remount on every route change, resetting its scroll state and
+ * flashing a transparent header. Mounting it in the layout also gives it to the
+ * error, not-found and loading pages, which previously rendered with no nav at
+ * all. getProfile is cached and tagged, so sharing it with the page below costs
+ * no extra read.
  */
-export function RootHtml({
+export async function RootHtml({
   locale,
   children,
 }: {
@@ -18,6 +28,8 @@ export function RootHtml({
   children: React.ReactNode;
 }) {
   const rtl = isRtl(locale);
+  const dict = getDictionary(locale);
+  const profile = await getProfile(locale);
 
   return (
     <html
@@ -33,7 +45,19 @@ export function RootHtml({
         <noscript>
           <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* No profile means an unseeded database, where the page below
+              renders an empty state and a header would be a shell of nothing. */}
+          {profile ? (
+            <Navbar
+              name={profile.name}
+              nav={dict.nav}
+              switchLabel={dict.common.switchLanguage}
+              locale={locale}
+            />
+          ) : null}
+          {children}
+        </Providers>
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { NavAnchor } from "./nav-anchor";
 import type { NavItem as NavItemData } from "./nav-model";
 
 /**
@@ -41,13 +42,13 @@ export function NavCta({
       )}
     >
       {/* The model always gives the call to action somewhere to go. */}
-      <a
+      <NavAnchor
         href={item.href ?? "#contact"}
         aria-current={item.ariaCurrent}
         onClick={onClick}
       >
         {item.label}
-      </a>
+      </NavAnchor>
     </Button>
   );
 }
