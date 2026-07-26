@@ -109,12 +109,87 @@ test.describe("navigation", () => {
 
     await page.getByRole("button", { name: "Open menu" }).click();
 
-    const sheet = page.getByRole("dialog");
-    await expect(sheet).toBeVisible();
+    // The panel is a popover now rather than a sheet, but role="dialog" is an
+    // ARIA contract both satisfy, so this is not a primitive detail.
+    const panel = page.getByRole("dialog");
+    await expect(panel).toBeVisible();
     for (const label of ["About", "Skills", "Experience", "Work", "Contact"]) {
       await expect(
-        sheet.getByRole("link", { name: label, exact: true }),
+        panel.getByRole("link", { name: label, exact: true }),
       ).toBeVisible();
     }
+  });
+});
+
+test.describe("nav state", () => {
+  test.beforeEach(async ({ seeded }) => {
+    test.skip(!seeded, NEEDS_SEED);
+  });
+
+  test("the skip link is the first thing a keyboard reaches", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.keyboard.press("Tab");
+
+    const skip = page.getByRole("link", { name: "Skip to content" });
+    await expect(skip).toBeFocused();
+
+    await skip.press("Enter");
+    await expect(page.locator("#main")).toBeFocused();
+  });
+
+  test("the active mark never blanks between sections", async ({
+    page,
+  }, info) => {
+    test.skip(info.project.name !== "desktop", "desktop-only navigation");
+    await page.goto("/");
+
+    // Education and Availability sit between Experience and Work. They were
+    // tracked by nothing, so the mark vanished while they were being read.
+    for (const id of ["education", "availability"]) {
+      const section = page.locator(`#${id}`);
+      if ((await section.count()) === 0) continue;
+
+      await section.evaluate((element) =>
+        element.scrollIntoView({ block: "center" }),
+      );
+      await expect(page.locator("header [aria-current]")).toHaveCount(1);
+    }
+  });
+
+  test("Services is marked and inert on the hub", async ({ page }, info) => {
+    test.skip(info.project.name !== "desktop", "desktop-only navigation");
+    await page.goto("/services");
+
+    const header = page.locator("header");
+    await expect(header.locator('[aria-current="page"]')).toHaveCount(1);
+    // Not a link: a click would navigate to the page you are already on.
+    await expect(
+      header.getByRole("link", { name: "Services", exact: true }),
+    ).toHaveCount(0);
+  });
+
+  test("Services links up to the hub from a detail page", async ({
+    page,
+  }, info) => {
+    test.skip(info.project.name !== "desktop", "desktop-only navigation");
+    await page.goto("/services");
+    await page.locator("main a[href*='/services/']").first().click();
+    await expect(page).toHaveURL(/\/services\/.+/);
+
+    const header = page.locator("header");
+    const services = header.getByRole("link", {
+      name: "Services",
+      exact: true,
+    });
+    await expect(services).toHaveAttribute("href", "/services");
+    await expect(services).toHaveAttribute("aria-current", "true");
+
+    // The call to action stays on the page: this page's own WhatsApp and email
+    // block is the conversion point, not the home form.
+    await expect(
+      header.getByRole("link", { name: "Contact", exact: true }),
+    ).toHaveAttribute("href", "#contact");
   });
 });
