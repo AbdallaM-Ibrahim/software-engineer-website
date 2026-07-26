@@ -11,8 +11,11 @@ export function Skills({
   skills: Skill[];
   dict: Dictionary;
 }) {
-  const soft = skills.filter((s) => s.category === "soft").map((s) => s.name);
-  const tech = skills.filter((s) => s.category === "tech").map((s) => s.name);
+  // `label` is the translated display name where one exists — soft skills in
+  // Arabic. Tool names have none and fall back to the canonical `name`.
+  const display = (s: Skill) => s.label || s.name;
+  const soft = skills.filter((s) => s.category === "soft").map(display);
+  const tech = skills.filter((s) => s.category === "tech").map(display);
 
   return (
     <section

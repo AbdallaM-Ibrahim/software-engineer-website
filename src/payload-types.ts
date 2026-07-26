@@ -342,6 +342,10 @@ export interface Skill {
    */
   name: string;
   /**
+   * Optional display name for this locale. Leave empty to show the name as-is (correct for tool names); fill it for soft skills in Arabic.
+   */
+  label?: string | null;
+  /**
    * Optional grouping, to keep a long tech list browsable.
    */
   area?: ('payments' | 'cloud' | 'data' | 'messaging' | 'search' | 'api') | null;
@@ -743,6 +747,7 @@ export interface SkillsSelect<T extends boolean = true> {
   order?: T;
   category?: T;
   name?: T;
+  label?: T;
   area?: T;
   updatedAt?: T;
   createdAt?: T;

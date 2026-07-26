@@ -61,10 +61,23 @@ export const Skills: CollectionConfig = {
       unique: true,
       // NOT localized. `unique` is enforced across the whole collection, and a
       // localized unique field makes that constraint mean something different
-      // per locale — a trap. Tool names ("Stripe") are the same in Arabic
-      // anyway; the soft-skill labels are the only casualty.
+      // per locale — a trap. This stays the one canonical key per skill; the
+      // `label` below is what carries a translation.
       admin: {
         description: 'Shown verbatim, e.g. "Stripe" or "Clear Communication".',
+      },
+    },
+    {
+      name: "label",
+      type: "text",
+      localized: true,
+      // The translated display name. Left empty for tool names — "Stripe" is
+      // written the same in Arabic — and filled for soft skills, which read as
+      // untranslated English on /ar otherwise. The frontend prefers it when
+      // present and falls back to `name`.
+      admin: {
+        description:
+          "Optional display name for this locale. Leave empty to show the name as-is (correct for tool names); fill it for soft skills in Arabic.",
       },
     },
     {
