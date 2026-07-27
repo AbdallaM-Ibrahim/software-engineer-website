@@ -10,8 +10,47 @@ Biome · Playwright · pnpm.
 
 Two route groups: `src/app/(frontend)` is the public site, `src/app/(payload)`
 is the admin panel and Payload's own REST/GraphQL routes. The site is a single
-page assembled from sections in `src/components/sections`, reading Payload
-through the Local API in `src/lib/data.ts` (no HTTP round-trip).
+page assembled from sections, reading Payload through the Local API (no HTTP
+round-trip).
+
+## Architecture
+
+The codebase is organised **by feature, not by technical layer**. Four layers,
+and imports may only point **downward**:
+
+```
+src/app/        routes only — segment config, thin delegation, no logic
+src/views/      page composition
+src/features/   vertical slices
+src/shared/     cross-cutting kernel, no domain knowledge
+```
+
+A feature is one directory with four segments, and **the segment is the public
+surface**:
+
+```
+src/features/<name>/
+  cms/      Payload collection/global + admin widgets. Relative imports only.
+  model/    Pure domain: types, zod schemas, JSON-LD builders, cache tags.
+            No React, no Payload client.
+  server/   Data readers. Every file starts `import "server-only"`.
+  ui/       React components, server and client.
+```
+
+Import `@/features/work/ui`, never `@/features/work/ui/case-study-card`. Within
+a feature, use relative imports. There is deliberately **no feature-root
+`index.ts`**: segment barrels are what stop a client component importing
+`/model` and dragging `/server`'s Mongo graph in behind it.
+
+The eight features are `profile`, `resume` (skills + experience + education),
+`work` (case studies + testimonials), `services`, `contact`, `navigation`,
+`seo` and `theming`. `work` owns testimonials because `NAV_GROUPS` already
+gives the `work` nav link that contiguous run — the feature boundary follows
+the boundary the product already has.
+
+These rules are **enforced by Biome**, not by memory: see the
+`noRestrictedImports` overrides in `biome.json`. Breaking a layer boundary is a
+lint error, including the `@/*`-in-Payload-CLI trap described below.
 
 ## Commands
 
@@ -99,6 +138,20 @@ build. Hooks install via the `prepare` script on `pnpm install`; re-sync with
   the latter works everywhere else in Payload and still returns `401` here. Key
   permissions are deny-by-default, so a new key lists zero tools until its operation
   checkboxes are ticked.
+- **Never put `//` comments in `biome.json`.** Biome accepts the file without
+  complaint and then **silently drops every override that follows the comment**.
+  There is no parse error and no warning — `pnpm lint` just stops enforcing the
+  architecture rules and reports green. This was verified by bisection: with the
+  comments in place the boundary rules produced 0 diagnostics against files that
+  plainly violated them; stripping the comments produced them all. Explanations
+  belong in this file instead.
+- **Biome overrides *replace* rule options, they do not merge them.** When two
+  overrides both match a file, the last one wins outright for that rule — the
+  earlier one's `patterns` are discarded, not combined. So every override that
+  sets `noRestrictedImports` must repeat *all* the patterns that should apply to
+  the files it matches. This is why the deep-import pattern is restated in the
+  `src/views/**`, `src/features/**` and `src/shared/**` overrides rather than
+  being left to the broad `src/**` one.
 - **Line endings are LF**, pinned by `.gitattributes`. Biome fails on CRLF.
 - Generated files — `src/payload-types.ts`, `admin/importMap.js`,
   `next-env.d.ts` — are excluded from Biome and should not be hand-edited.

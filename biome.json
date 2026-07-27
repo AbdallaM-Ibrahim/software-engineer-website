@@ -101,10 +101,133 @@
       }
     },
     {
-      "includes": ["scripts/**", "src/seed.ts", "tests/**"],
+      "includes": ["scripts/**", "src/seed.ts", "tests/**", "src/**/*.test.ts"],
       "linter": {
         "rules": {
           "suspicious": { "noConsole": "off" }
+        }
+      }
+    },
+
+    {
+      "includes": ["src/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/*/*/**"],
+                    "message": "Reaching into a feature's internals. Import a segment barrel instead: @/features/<name>/{model,server,ui}. Within a feature, use a relative import."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/views/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/*/*/**"],
+                    "message": "Reaching into a feature's internals. Import a segment barrel instead: @/features/<name>/{model,server,ui}. Within a feature, use a relative import."
+                  },
+                  {
+                    "group": ["@/app/**"],
+                    "message": "Nothing may import from src/app. Routes are the top of the graph."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/features/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/*/*/**"],
+                    "message": "Reaching into a feature's internals. Import a segment barrel instead: @/features/<name>/{model,server,ui}. Within a feature, use a relative import."
+                  },
+                  {
+                    "group": ["@/views/**", "@/app/**"],
+                    "message": "Features may not import views or routes. Take what you need as a prop, or move the shared piece down into a feature."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/shared/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/*/*/**"],
+                    "message": "Reaching into a feature's internals. Import a segment barrel instead: @/features/<name>/{model,server,ui}. Within a feature, use a relative import."
+                  },
+                  {
+                    "group": ["@/features/**", "@/views/**", "@/app/**"],
+                    "message": "src/shared is the kernel: it may not know about features, views or routes. Move this into the feature that needs it."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/payload.config.ts",
+        "src/collections/**",
+        "src/globals/**",
+        "src/fields/**",
+        "src/features/*/cms/**",
+        "src/features/*/model/tags.ts",
+        "src/shared/cms/collections/**",
+        "src/shared/cms/fields/**",
+        "src/shared/cms/revalidate.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/**"],
+                    "message": "The Payload CLI loads this file through tsx, which does not resolve the `@/*` alias. Use a relative import."
+                  }
+                ]
+              }
+            }
+          }
         }
       }
     }

@@ -53,6 +53,7 @@
     "react-email": "^6.9.0",
     "react-hook-form": "^7.54.2",
     "resend": "^6.18.0",
+    "server-only": "^0.0.1",
     "sharp": "0.34.5",
     "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.1",
