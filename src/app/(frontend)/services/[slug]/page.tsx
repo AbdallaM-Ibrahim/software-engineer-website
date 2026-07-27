@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { ServicePage } from "@/components/pages/service-page";
 import { buildServiceMetadata } from "@/lib/metadata";
-import { isDraftMode } from "@/lib/draft";
+import { isDraftMode } from "@/shared/cms/draft";
 
 // Rendered on demand, with data from the cache. No generateStaticParams: that
 // would prebuild every slug at build time, which needs a database the build

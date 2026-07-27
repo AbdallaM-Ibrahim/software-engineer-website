@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight, ChevronRight, Mail } from "lucide-react";
 
 import { getProfile, getServiceBySlug } from "@/lib/data";
-import { caseStudyStrings, getDictionary } from "@/lib/i18n";
+import { caseStudyStrings, getDictionary } from "@/shared/i18n";
 import { JsonLd } from "@/components/json-ld";
 import {
   buildBreadcrumbs,
@@ -12,12 +12,12 @@ import {
   buildGraph,
   buildService,
 } from "@/lib/schema";
-import { mediaAlt, mediaSize, mediaUrl } from "@/lib/media";
-import { type Locale, localePath } from "@/lib/site";
+import { mediaAlt, mediaSize, mediaUrl } from "@/shared/cms/media";
+import { type Locale, localePath } from "@/shared/site";
 import { findLink, resolveWhatsapp } from "@/lib/contact-links";
-import { WhatsAppIcon } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { Reveal } from "@/components/reveal";
+import { WhatsAppIcon } from "@/shared/ui/icons";
+import { Button } from "@/shared/ui/button";
+import { Reveal } from "@/shared/ui/reveal";
 import { Footer } from "@/components/sections/footer";
 import { CaseStudyCard } from "@/components/sections/case-study-card";
 import { ServiceToc } from "@/components/sections/service-toc";
@@ -28,7 +28,7 @@ import {
   lexicalText,
   uniqueHeadingId,
 } from "@/lib/headings";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import {
   type JSXConvertersFunction,
   RichText,

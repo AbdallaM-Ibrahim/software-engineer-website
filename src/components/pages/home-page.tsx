@@ -7,7 +7,7 @@ import {
   getCaseStudies,
   getTestimonials,
 } from "@/lib/data";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary } from "@/shared/i18n";
 import { JsonLd } from "@/components/json-ld";
 import {
   buildBreadcrumbs,
@@ -16,7 +16,7 @@ import {
   buildProfilePage,
   buildWebSite,
 } from "@/lib/schema";
-import type { Locale } from "@/lib/site";
+import type { Locale } from "@/shared/site";
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { Skills } from "@/components/sections/skills";

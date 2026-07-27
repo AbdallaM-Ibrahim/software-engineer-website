@@ -8,13 +8,13 @@ import {
 } from "lucide-react";
 
 import { getProfile, getServices } from "@/lib/data";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary } from "@/shared/i18n";
 import { JsonLd } from "@/components/json-ld";
 import { buildBreadcrumbs, buildGraph } from "@/lib/schema";
-import { type Locale, localePath } from "@/lib/site";
-import { Card, CardContent } from "@/components/ui/card";
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
+import { type Locale, localePath } from "@/shared/site";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
 import { Footer } from "@/components/sections/footer";
 import { EmptyState } from "@/components/pages/empty-state";
 

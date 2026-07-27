@@ -5,8 +5,8 @@ import { DirectionProvider } from "@radix-ui/react-direction";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { Toaster } from "@/components/ui/sonner";
-import { type Locale, isRtl } from "@/lib/site";
+import { Toaster } from "@/shared/ui/sonner";
+import { type Locale, isRtl } from "@/shared/site";
 
 export function Providers({
   locale,

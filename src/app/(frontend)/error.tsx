@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 
 // Route-group error boundary. The page reads MongoDB at request time, so an
 // outage or a bad query surfaces here instead of a blank framework error page.

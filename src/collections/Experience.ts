@@ -2,7 +2,7 @@ import type { CollectionConfig } from "payload";
 
 // Relative import: the Payload CLI loads this through tsx, which does not
 // resolve the `@/*` alias.
-import { revalidateHooks } from "../lib/revalidate";
+import { revalidateHooks } from "../shared/cms/revalidate";
 
 export const Experience: CollectionConfig = {
   slug: "experience",

@@ -3,9 +3,9 @@
 import { usePathname } from "next/navigation";
 import { Languages } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { DEFAULT_LOCALE, type Locale } from "@/lib/site";
+import { Button } from "@/shared/ui/button";
+import { cn } from "@/shared/lib/utils";
+import { DEFAULT_LOCALE, type Locale } from "@/shared/site";
 
 /**
  * Switches between the English and Arabic versions of the current page.

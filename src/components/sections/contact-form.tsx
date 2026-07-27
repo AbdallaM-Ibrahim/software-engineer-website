@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   Form,
   FormControl,
@@ -15,10 +15,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { NativeSelect } from "@/components/ui/native-select";
-import { Textarea } from "@/components/ui/textarea";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { NativeSelect } from "@/shared/ui/native-select";
+import { Textarea } from "@/shared/ui/textarea";
 import {
   CONTACT_CHANNELS,
   INQUIRY_TYPES,
@@ -26,7 +26,7 @@ import {
   type InquiryType,
   contactSchema,
 } from "@/lib/contact-schema";
-import type { FormStrings } from "@/lib/i18n";
+import type { FormStrings } from "@/shared/i18n";
 import type { Service } from "@/payload-types";
 
 /** Reads ?service= and ?type= so a service page's CTA carries intent through. */

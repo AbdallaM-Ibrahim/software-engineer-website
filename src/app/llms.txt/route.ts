@@ -1,5 +1,5 @@
 import { getCaseStudies, getProfile, getServices } from "@/lib/data";
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl } from "@/shared/site";
 
 // A plain-text brief for the AI assistants that increasingly answer "who should
 // I hire for X". Generated from the CMS so it never drifts from the site.

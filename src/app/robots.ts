@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/shared/site";
 
 // AI assistants increasingly answer "who should I hire for X" directly, and the
 // whole point of this site is being found. So the crawlers behind those answers

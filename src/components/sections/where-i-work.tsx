@@ -1,8 +1,8 @@
 import { Clock, Globe, Handshake, Languages } from "lucide-react";
 
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import type { Dictionary } from "@/lib/i18n";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
+import type { Dictionary } from "@/shared/i18n";
 import type { Profile } from "@/payload-types";
 
 type Availability = NonNullable<Profile["availability"]>;

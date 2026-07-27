@@ -1,10 +1,10 @@
 import { ExternalLink } from "lucide-react";
 
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import { dateRange, toLines } from "@/lib/format";
-import type { Dictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/site";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
+import { dateRange, toLines } from "@/shared/lib/format";
+import type { Dictionary } from "@/shared/i18n";
+import type { Locale } from "@/shared/site";
 import type { Experience as ExperienceType } from "@/payload-types";
 
 export function Experience({

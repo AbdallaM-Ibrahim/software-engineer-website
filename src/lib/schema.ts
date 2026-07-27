@@ -1,6 +1,6 @@
 import { contactLinks } from "@/lib/contact-links";
-import { mediaUrl } from "@/lib/media";
-import { type Locale, absoluteUrl } from "@/lib/site";
+import { mediaUrl } from "@/shared/cms/media";
+import { type Locale, absoluteUrl } from "@/shared/site";
 import type {
   CaseStudy,
   Education,

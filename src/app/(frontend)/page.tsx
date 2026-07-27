@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { HomePage } from "@/components/pages/home-page";
 import { buildHomeMetadata } from "@/lib/metadata";
-import { isDraftMode } from "@/lib/draft";
+import { isDraftMode } from "@/shared/cms/draft";
 
 // Rendered per request, but the DB reads come from the tagged data cache
 // (src/lib/data.ts), so a visit costs no database round-trip once warm. Dynamic

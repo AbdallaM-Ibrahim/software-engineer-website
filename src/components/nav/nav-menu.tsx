@@ -3,12 +3,8 @@
 import * as React from "react";
 import { Menu } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Button } from "@/shared/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { MENU_IDS } from "@/lib/sections";
 import { NavCta } from "./nav-cta";
 import { NavItem } from "./nav-item";

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 
 // A 404 that returns 200-looking content is a soft 404 in Search Console. Next
 // sends the right status; this adds the meta robots directive so a crawler that

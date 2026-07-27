@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/shared/ui/button";
+import { Card } from "@/shared/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -12,10 +12,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { toLines } from "@/lib/format";
-import type { CaseStudyStrings } from "@/lib/i18n";
-import { asMedia, mediaAlt } from "@/lib/media";
+} from "@/shared/ui/dialog";
+import { toLines } from "@/shared/lib/format";
+import type { CaseStudyStrings } from "@/shared/i18n";
+import { asMedia, mediaAlt } from "@/shared/cms/media";
 import type { CaseStudy } from "@/payload-types";
 
 const THUMB_SIZES = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";

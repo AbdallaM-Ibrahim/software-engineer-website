@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { SocialIcon } from "@/components/social-icon";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { contactLinks } from "@/lib/contact-links";
-import type { Dictionary } from "@/lib/i18n";
-import { type Locale, sectionHref } from "@/lib/site";
+import type { Dictionary } from "@/shared/i18n";
+import { type Locale, sectionHref } from "@/shared/site";
 import type { Profile } from "@/payload-types";
 
 export function Footer({

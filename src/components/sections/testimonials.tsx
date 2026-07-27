@@ -1,10 +1,10 @@
 import { Quote } from "lucide-react";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import { initials } from "@/lib/format";
-import type { Dictionary } from "@/lib/i18n";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
+import { initials } from "@/shared/lib/format";
+import type { Dictionary } from "@/shared/i18n";
 import type { Testimonial } from "@/payload-types";
 
 export function Testimonials({

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { getProfile, getServiceBySlug } from "@/lib/data";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary } from "@/shared/i18n";
 import {
   DEFAULT_LOCALE,
   type Locale,
@@ -9,7 +9,7 @@ import {
   SITE_URL,
   absoluteUrl,
   alternatesFor,
-} from "@/lib/site";
+} from "@/shared/site";
 
 /**
  * Layout-level defaults shared by every page in a locale: the metadata base,

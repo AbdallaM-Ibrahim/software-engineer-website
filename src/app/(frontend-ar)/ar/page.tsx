@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { HomePage } from "@/components/pages/home-page";
 import { buildHomeMetadata } from "@/lib/metadata";
-import { isDraftMode } from "@/lib/draft";
+import { isDraftMode } from "@/shared/cms/draft";
 
 // Dynamic, with data served from the cache — see the English home page.
 export const dynamic = "force-dynamic";

@@ -1,8 +1,8 @@
 "use client";
 
-import { useScrollSpy } from "@/hooks/use-scroll-spy";
+import { useScrollSpy } from "@/shared/ui/use-scroll-spy";
 import { type Heading, hasRail } from "@/lib/headings";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 /**
  * In-page contents for a service page.

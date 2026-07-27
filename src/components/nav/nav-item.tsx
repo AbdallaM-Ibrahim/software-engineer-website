@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { NavAnchor } from "./nav-anchor";
 import type { NavItem as NavItemData } from "./nav-model";
 

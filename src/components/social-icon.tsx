@@ -12,7 +12,7 @@ import {
   WhatsAppIcon,
   XIcon,
   YouTubeIcon,
-} from "@/components/icons";
+} from "@/shared/ui/icons";
 import type { SocialPlatform } from "@/lib/social";
 
 type IconComponent = React.ComponentType<{

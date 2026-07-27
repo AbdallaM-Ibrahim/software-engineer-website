@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { Reveal } from "@/components/reveal";
+import { cn } from "@/shared/lib/utils";
+import { Reveal } from "@/shared/ui/reveal";
 
 /**
  * Left-aligned section header.

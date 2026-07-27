@@ -5,8 +5,8 @@ import {
   buildMenuItems,
   heroOwnsCta,
 } from "@/components/nav/nav-model";
-import { getDictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/site";
+import { getDictionary } from "@/shared/i18n";
+import type { Locale } from "@/shared/site";
 
 // Real dictionaries rather than a fixture, so a renamed key fails here too.
 const en = getDictionary("en").nav;

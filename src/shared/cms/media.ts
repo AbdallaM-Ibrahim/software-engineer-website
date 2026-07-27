@@ -1,4 +1,4 @@
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/shared/site";
 import type { Media } from "@/payload-types";
 
 /**

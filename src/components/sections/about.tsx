@@ -6,12 +6,12 @@ import {
   Workflow,
 } from "lucide-react";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import { toParagraphs } from "@/lib/format";
-import type { Dictionary } from "@/lib/i18n";
-import { type Locale, localePath } from "@/lib/site";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
+import { toParagraphs } from "@/shared/lib/format";
+import type { Dictionary } from "@/shared/i18n";
+import { type Locale, localePath } from "@/shared/site";
 import type { Profile, Service } from "@/payload-types";
 
 const ICONS = {

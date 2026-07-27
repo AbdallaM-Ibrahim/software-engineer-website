@@ -1,14 +1,14 @@
 import { Mail, Phone } from "lucide-react";
 import type * as React from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
+import { Card, CardContent } from "@/shared/ui/card";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
 import { SocialIcon } from "@/components/social-icon";
-import { WhatsAppIcon } from "@/components/icons";
+import { WhatsAppIcon } from "@/shared/ui/icons";
 import { ContactForm } from "@/components/sections/contact-form";
 import { contactLinks, resolveWhatsappInfo } from "@/lib/contact-links";
-import type { Dictionary } from "@/lib/i18n";
+import type { Dictionary } from "@/shared/i18n";
 import { handleFrom } from "@/lib/social";
 import type { Profile, Service } from "@/payload-types";
 

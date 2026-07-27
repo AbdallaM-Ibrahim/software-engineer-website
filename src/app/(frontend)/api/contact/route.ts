@@ -7,7 +7,7 @@ import {
   contactSchema,
 } from "@/lib/contact-schema";
 import { getServices } from "@/lib/data";
-import { getPayloadClient } from "@/lib/payload";
+import { getPayloadClient } from "@/shared/cms/payload";
 import {
   CONTACT_AUTO_REPLY_TEMPLATE,
   CONTACT_NOTIFICATION_TEMPLATE,

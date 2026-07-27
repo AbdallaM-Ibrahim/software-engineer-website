@@ -2,7 +2,7 @@ import type { CollectionConfig } from "payload";
 
 // Relative import: the Payload CLI loads this through tsx, which does not
 // resolve the `@/*` alias.
-import { revalidateHooks } from "../lib/revalidate";
+import { revalidateHooks } from "../shared/cms/revalidate";
 
 // Soft skills and tech stack in one collection, split by `category`. A single
 // list is easier to browse than two near-identical ones: filter or search once,

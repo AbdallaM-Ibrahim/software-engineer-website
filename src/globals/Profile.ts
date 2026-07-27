@@ -3,7 +3,7 @@ import type { GlobalConfig } from "payload";
 // Relative imports, not `@/lib/social`: the Payload CLI loads this config
 // through tsx, which does not resolve the `@/*` tsconfig path alias.
 import { SOCIAL_PLATFORM_OPTIONS } from "../lib/social";
-import { revalidateGlobalHooks } from "../lib/revalidate";
+import { revalidateGlobalHooks } from "../shared/cms/revalidate";
 import { translationReviewed } from "../fields/translation-reviewed";
 
 /**

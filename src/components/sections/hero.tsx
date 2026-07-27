@@ -1,14 +1,14 @@
 import Image from "next/image";
 import { ArrowRight, Mail } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Reveal } from "@/components/reveal";
-import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+import { Button } from "@/shared/ui/button";
+import { Reveal } from "@/shared/ui/reveal";
+import { GitHubIcon, LinkedInIcon } from "@/shared/ui/icons";
 import { MetricStrip, type Metric } from "@/components/metric-strip";
 import { findLink } from "@/lib/contact-links";
-import type { Dictionary } from "@/lib/i18n";
-import { asMedia, mediaAlt } from "@/lib/media";
-import { type Locale, sectionHref } from "@/lib/site";
+import type { Dictionary } from "@/shared/i18n";
+import { asMedia, mediaAlt } from "@/shared/cms/media";
+import { type Locale, sectionHref } from "@/shared/site";
 import type { Profile } from "@/payload-types";
 
 const FALLBACK_TAGLINE =

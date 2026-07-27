@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "@/shared/ui/button";
+import { cn } from "@/shared/lib/utils";
 import { NavAnchor } from "./nav-anchor";
 import type { NavItem as NavItemData } from "./nav-model";
 

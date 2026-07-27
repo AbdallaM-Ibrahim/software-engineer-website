@@ -1,6 +1,6 @@
-import type { NavStrings } from "@/lib/i18n";
+import type { NavStrings } from "@/shared/i18n";
 import { MENU_SECTIONS, ownerOf } from "@/lib/sections";
-import { type Locale, localePath, sectionHref } from "@/lib/site";
+import { type Locale, localePath, sectionHref } from "@/shared/site";
 
 /**
  * What is in the nav, where each item points, and which one is selected.

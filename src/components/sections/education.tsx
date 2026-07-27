@@ -1,8 +1,8 @@
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import { dateRange } from "@/lib/format";
-import type { Dictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/site";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
+import { dateRange } from "@/shared/lib/format";
+import type { Dictionary } from "@/shared/i18n";
+import type { Locale } from "@/shared/site";
 import type { Education as EducationType } from "@/payload-types";
 
 export function Education({

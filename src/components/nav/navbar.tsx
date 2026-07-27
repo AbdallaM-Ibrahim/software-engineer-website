@@ -4,12 +4,12 @@ import { usePathname } from "next/navigation";
 
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { useScrollSpy } from "@/hooks/use-scroll-spy";
-import { useScrolled } from "@/hooks/use-scrolled";
-import type { NavStrings } from "@/lib/i18n";
+import { useScrollSpy } from "@/shared/ui/use-scroll-spy";
+import { useScrolled } from "@/shared/ui/use-scrolled";
+import type { NavStrings } from "@/shared/i18n";
 import { SPY_IDS } from "@/lib/sections";
-import { type Locale, localePath } from "@/lib/site";
-import { cn } from "@/lib/utils";
+import { type Locale, localePath } from "@/shared/site";
+import { cn } from "@/shared/lib/utils";
 import { NavBrand } from "./nav-brand";
 import { NavCta } from "./nav-cta";
 import { NavItem } from "./nav-item";

@@ -2,7 +2,7 @@ import type { CollectionConfig } from "payload";
 
 // Relative imports: the Payload CLI loads this through tsx, which does not
 // resolve the `@/*` alias.
-import { revalidateHooks } from "../lib/revalidate";
+import { revalidateHooks } from "../shared/cms/revalidate";
 import { translationReviewed } from "../fields/translation-reviewed";
 
 /** "Payment Integration" -> "payment-integration". */

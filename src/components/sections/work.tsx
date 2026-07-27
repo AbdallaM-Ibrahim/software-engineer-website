@@ -1,7 +1,7 @@
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
 import { CaseStudyCard } from "@/components/sections/case-study-card";
-import { type Dictionary, caseStudyStrings } from "@/lib/i18n";
+import { type Dictionary, caseStudyStrings } from "@/shared/i18n";
 import type { CaseStudy } from "@/payload-types";
 
 export function Work({

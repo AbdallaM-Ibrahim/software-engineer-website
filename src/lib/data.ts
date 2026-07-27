@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 
-import { getPayloadClient } from "@/lib/payload";
-import { DEFAULT_LOCALE, type Locale } from "@/lib/site";
+import { getPayloadClient } from "@/shared/cms/payload";
+import { DEFAULT_LOCALE, type Locale } from "@/shared/site";
 
 // Server-side data access for the portfolio frontend. Each helper reads through
 // the Payload Local API (no HTTP round-trip) and tolerates an unseeded /

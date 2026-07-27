@@ -6,7 +6,7 @@ import {
   type Locale,
   absoluteUrl,
   languageAlternates,
-} from "@/lib/site";
+} from "@/shared/site";
 
 // The home page and the case studies live at one URL — the studies are a dialog
 // on the home page, not separate documents, so they are deliberately not listed.

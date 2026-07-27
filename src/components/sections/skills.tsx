@@ -1,7 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import type { Dictionary } from "@/lib/i18n";
+import { Badge } from "@/shared/ui/badge";
+import { Reveal } from "@/shared/ui/reveal";
+import { SectionHeading } from "@/shared/ui/section-heading";
+import type { Dictionary } from "@/shared/i18n";
 import type { Skill } from "@/payload-types";
 
 export function Skills({

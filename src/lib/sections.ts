@@ -1,4 +1,4 @@
-import type { NavStrings } from "@/lib/i18n";
+import type { NavStrings } from "@/shared/i18n";
 
 /**
  * The home page's sections, and which nav link each one marks.

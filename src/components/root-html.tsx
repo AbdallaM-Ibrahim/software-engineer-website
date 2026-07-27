@@ -3,8 +3,8 @@ import { Providers } from "@/components/providers";
 import { SkipLink } from "@/components/skip-link";
 import { getProfile } from "@/lib/data";
 import { ARABIC_FONT_VARIABLES, LATIN_FONT_VARIABLES } from "@/lib/fonts";
-import { getDictionary } from "@/lib/i18n";
-import { type Locale, isRtl } from "@/lib/site";
+import { getDictionary } from "@/shared/i18n";
+import { type Locale, isRtl } from "@/shared/site";
 
 /**
  * The <html> shell, shared by both root layouts.
