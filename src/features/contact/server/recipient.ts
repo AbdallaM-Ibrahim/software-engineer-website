@@ -19,7 +19,7 @@ export async function resolveRecipient(): Promise<string> {
   if (fromEnv) return fromEnv;
 
   try {
-    const { getProfile } = await import("@/lib/data");
+    const { getProfile } = await import("@/features/profile/server");
     const profile = await getProfile();
     const fromProfile = profile?.contact?.email?.trim();
     if (fromProfile) return fromProfile;

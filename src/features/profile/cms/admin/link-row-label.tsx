@@ -2,8 +2,8 @@
 
 import { useRowLabel } from "@payloadcms/ui";
 
-import { SocialIcon } from "@/components/social-icon";
-import { handleFrom, socialLabel } from "@/lib/social";
+import { SocialIcon } from "../../ui/social-icon";
+import { handleFrom, socialLabel } from "../../model/social";
 
 type LinkRow = {
   platform?: string | null;

@@ -2,19 +2,20 @@ import type { CollectionConfig } from "payload";
 
 // Relative import: the Payload CLI loads this through tsx, which does not
 // resolve the `@/*` alias.
-import { revalidateHooks } from "../shared/cms/revalidate";
+import { revalidateHooks } from "../../../shared/cms/revalidate";
+import { EDUCATION_TAG } from "../model/tags";
 
-export const Experience: CollectionConfig = {
-  slug: "experience",
+export const Education: CollectionConfig = {
+  slug: "education",
   access: {
     read: () => true,
   },
   admin: {
-    useAsTitle: "title",
-    defaultColumns: ["title", "company", "from", "isPresent"],
+    useAsTitle: "degree",
+    defaultColumns: ["degree", "institution", "from", "to"],
     group: "Content",
   },
-  hooks: revalidateHooks("experience"),
+  hooks: revalidateHooks(EDUCATION_TAG),
   defaultSort: "order",
   fields: [
     {
@@ -27,24 +28,18 @@ export const Experience: CollectionConfig = {
       },
     },
     {
-      name: "title",
+      name: "degree",
       type: "text",
       required: true,
-      // Job titles are read differently in each language. Company names are
-      // proper nouns and stay shared.
       localized: true,
     },
     {
-      name: "company",
+      name: "institution",
       type: "text",
       required: true,
-    },
-    {
-      name: "website",
-      type: "text",
-      admin: {
-        description: "Company website URL.",
-      },
+      // Universities publish their own Arabic name, so this is translated
+      // rather than transliterated.
+      localized: true,
     },
     {
       name: "from",
@@ -55,26 +50,10 @@ export const Experience: CollectionConfig = {
       },
     },
     {
-      name: "isPresent",
-      type: "checkbox",
-      defaultValue: false,
-      label: "Current role",
-    },
-    {
       name: "to",
       type: "date",
       admin: {
         date: { pickerAppearance: "monthOnly", displayFormat: "MMM yyyy" },
-        condition: (data) => !data?.isPresent,
-      },
-    },
-    {
-      name: "description",
-      type: "textarea",
-      localized: true,
-      admin: {
-        description:
-          "One responsibility per line. Lines are rendered as bullets.",
       },
     },
   ],

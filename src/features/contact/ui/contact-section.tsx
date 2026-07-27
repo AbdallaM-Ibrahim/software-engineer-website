@@ -4,12 +4,12 @@ import type * as React from "react";
 import { Card, CardContent } from "@/shared/ui/card";
 import { Reveal } from "@/shared/ui/reveal";
 import { SectionHeading } from "@/shared/ui/section-heading";
-import { SocialIcon } from "@/components/social-icon";
+import { SocialIcon } from "@/features/profile/ui";
 import { WhatsAppIcon } from "@/shared/ui/icons";
 import { ContactForm } from "./contact-form";
-import { contactLinks, resolveWhatsappInfo } from "@/lib/contact-links";
+import { contactLinks, resolveWhatsappInfo } from "@/features/profile/model";
 import type { Dictionary } from "@/shared/i18n";
-import { handleFrom } from "@/lib/social";
+import { handleFrom } from "@/features/profile/model";
 import type { Profile, Service } from "@/payload-types";
 
 type Entry = {

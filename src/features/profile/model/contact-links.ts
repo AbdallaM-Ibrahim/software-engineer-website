@@ -1,4 +1,4 @@
-import { socialLabel, whatsappLink, whatsappNumberFromUrl } from "@/lib/social";
+import { socialLabel, whatsappLink, whatsappNumberFromUrl } from "./social";
 import type { Profile } from "@/payload-types";
 
 export type ContactLink = {

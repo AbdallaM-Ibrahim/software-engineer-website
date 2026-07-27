@@ -1,12 +1,12 @@
+import { getServices } from "@/lib/data";
+import { getProfile } from "@/features/profile/server";
 import {
-  getProfile,
-  getServices,
-  getSkills,
-  getExperience,
   getEducation,
-  getCaseStudies,
-  getTestimonials,
-} from "@/lib/data";
+  getExperience,
+  getSkills,
+} from "@/features/resume/server";
+import { getCaseStudies, getTestimonials } from "@/features/work/server";
+import { caseStudyMetrics } from "@/features/work/model";
 import { getDictionary } from "@/shared/i18n";
 import { JsonLd } from "@/components/json-ld";
 import {
@@ -17,16 +17,10 @@ import {
   buildWebSite,
 } from "@/lib/schema";
 import type { Locale } from "@/shared/site";
-import { Hero } from "@/components/sections/hero";
-import { About } from "@/components/sections/about";
-import { Skills } from "@/components/sections/skills";
-import { Experience } from "@/components/sections/experience";
-import { Education } from "@/components/sections/education";
-import { WhereIWork } from "@/components/sections/where-i-work";
-import { Work } from "@/components/sections/work";
-import { Testimonials } from "@/components/sections/testimonials";
+import { About, Footer, Hero, WhereIWork } from "@/features/profile/ui";
+import { Education, Experience, Skills } from "@/features/resume/ui";
+import { Testimonials, Work } from "@/features/work/ui";
 import { Contact } from "@/features/contact/ui";
-import { Footer } from "@/components/sections/footer";
 import { RefreshOnSave } from "@/components/refresh-on-save";
 import { EmptyState } from "@/components/pages/empty-state";
 
@@ -63,17 +57,7 @@ export async function HomePage({
       getTestimonials(locale, draft),
     ]);
 
-  // The hero leads with the outcomes these projects are remembered by, pulled
-  // from the case studies themselves so editing one in /admin updates both.
-  const metrics = caseStudies
-    .filter((c) => c.metric?.value)
-    .map((c) => ({
-      before: c.metric?.before,
-      value: c.metric!.value!,
-      direction: c.metric?.direction,
-      label: c.metric?.label,
-      source: c.shortName,
-    }));
+  const metrics = caseStudyMetrics(caseStudies);
 
   const graph = buildGraph([
     buildPerson({ profile, skills, experience, education, locale }),

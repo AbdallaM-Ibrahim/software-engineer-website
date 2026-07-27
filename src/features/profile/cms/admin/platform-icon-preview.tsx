@@ -2,8 +2,8 @@
 
 import { useFormFields } from "@payloadcms/ui";
 
-import { SocialIcon } from "@/components/social-icon";
-import { socialLabel } from "@/lib/social";
+import { SocialIcon } from "../../ui/social-icon";
+import { socialLabel } from "../../model/social";
 
 /**
  * Live glyph preview sitting beside the platform select, so an editor can see

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { getProfile, getServices } from "@/lib/data";
+import { getServices } from "@/lib/data";
+import { getProfile } from "@/features/profile/server";
 import {
   DEFAULT_LOCALE,
   type Locale,

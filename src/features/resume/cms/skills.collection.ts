@@ -2,7 +2,8 @@ import type { CollectionConfig } from "payload";
 
 // Relative import: the Payload CLI loads this through tsx, which does not
 // resolve the `@/*` alias.
-import { revalidateHooks } from "../shared/cms/revalidate";
+import { revalidateHooks } from "../../../shared/cms/revalidate";
+import { SKILLS_TAG } from "../model/tags";
 
 // Soft skills and tech stack in one collection, split by `category`. A single
 // list is easier to browse than two near-identical ones: filter or search once,
@@ -28,7 +29,7 @@ export const Skills: CollectionConfig = {
     description:
       "How-I-work skills and the tech stack. Filter by category to see one or the other.",
   },
-  hooks: revalidateHooks("skills"),
+  hooks: revalidateHooks(SKILLS_TAG),
   defaultSort: "order",
   fields: [
     {

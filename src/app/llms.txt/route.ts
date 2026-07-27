@@ -1,4 +1,6 @@
-import { getCaseStudies, getProfile, getServices } from "@/lib/data";
+import { getServices } from "@/lib/data";
+import { getProfile } from "@/features/profile/server";
+import { getCaseStudies } from "@/features/work/server";
 import { absoluteUrl } from "@/shared/site";
 
 // A plain-text brief for the AI assistants that increasingly answer "who should

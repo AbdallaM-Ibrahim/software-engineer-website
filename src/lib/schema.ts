@@ -1,4 +1,4 @@
-import { contactLinks } from "@/lib/contact-links";
+import { contactLinks } from "@/features/profile/model";
 import { mediaUrl } from "@/shared/cms/media";
 import { type Locale, absoluteUrl } from "@/shared/site";
 import type {

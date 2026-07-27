@@ -10,16 +10,16 @@ import { s3Storage } from "@payloadcms/storage-s3";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
 
-import { Users } from "./collections/Users";
-import { Media } from "./collections/Media";
+import { Users } from "./shared/cms/collections/users.collection";
+import { Media } from "./shared/cms/collections/media.collection";
 import { Services } from "./collections/Services";
-import { Skills } from "./collections/Skills";
-import { Experience } from "./collections/Experience";
-import { Education } from "./collections/Education";
-import { CaseStudies } from "./collections/CaseStudies";
-import { Testimonials } from "./collections/Testimonials";
+import { Skills } from "./features/resume/cms/skills.collection";
+import { Experience } from "./features/resume/cms/experience.collection";
+import { Education } from "./features/resume/cms/education.collection";
+import { CaseStudies } from "./features/work/cms/case-studies.collection";
+import { Testimonials } from "./features/work/cms/testimonials.collection";
 import { ContactFailures } from "./features/contact/cms/contact-failures.collection";
-import { Profile } from "./globals/Profile";
+import { Profile } from "./features/profile/cms/profile.global";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

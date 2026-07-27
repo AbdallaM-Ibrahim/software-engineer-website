@@ -2,9 +2,10 @@ import type { GlobalConfig } from "payload";
 
 // Relative imports, not `@/lib/social`: the Payload CLI loads this config
 // through tsx, which does not resolve the `@/*` tsconfig path alias.
-import { SOCIAL_PLATFORM_OPTIONS } from "../lib/social";
-import { revalidateGlobalHooks } from "../shared/cms/revalidate";
-import { translationReviewed } from "../fields/translation-reviewed";
+import { SOCIAL_PLATFORM_OPTIONS } from "../model/social";
+import { revalidateGlobalHooks } from "../../../shared/cms/revalidate";
+import { PROFILE_TAG } from "../model/tags";
+import { translationReviewed } from "../../../shared/cms/fields/translation-reviewed";
 
 /**
  * Store blank text as null rather than "".
@@ -32,7 +33,7 @@ export const Profile: GlobalConfig = {
     description:
       "Identity, bio and contact details. Services, skills and case studies each live in their own collection.",
   },
-  hooks: revalidateGlobalHooks("profile"),
+  hooks: revalidateGlobalHooks(PROFILE_TAG),
   fields: [
     translationReviewed,
     {
@@ -291,7 +292,8 @@ export const Profile: GlobalConfig = {
             components: {
               // Default collapsed label is "Link 01", which makes a list of
               // links unreadable without opening each one.
-              RowLabel: "/components/admin/link-row-label#LinkRowLabel",
+              RowLabel:
+                "/features/profile/cms/admin/link-row-label#LinkRowLabel",
             },
           },
           fields: [
@@ -316,7 +318,7 @@ export const Profile: GlobalConfig = {
                     width: "16%",
                     components: {
                       Field:
-                        "/components/admin/platform-icon-preview#PlatformIconPreview",
+                        "/features/profile/cms/admin/platform-icon-preview#PlatformIconPreview",
                     },
                   },
                 },

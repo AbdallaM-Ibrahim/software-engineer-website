@@ -2,7 +2,8 @@ import type { CollectionConfig } from "payload";
 
 // Relative import: the Payload CLI loads this through tsx, which does not
 // resolve the `@/*` alias.
-import { revalidateHooks } from "../shared/cms/revalidate";
+import { revalidateHooks } from "../../../shared/cms/revalidate";
+import { TESTIMONIALS_TAG } from "../model/tags";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
@@ -14,7 +15,7 @@ export const Testimonials: CollectionConfig = {
     defaultColumns: ["author", "role", "company", "order"],
     group: "Content",
   },
-  hooks: revalidateHooks("testimonials"),
+  hooks: revalidateHooks(TESTIMONIALS_TAG),
   defaultSort: "order",
   fields: [
     {

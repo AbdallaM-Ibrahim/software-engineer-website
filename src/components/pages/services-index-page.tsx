@@ -7,7 +7,8 @@ import {
   Workflow,
 } from "lucide-react";
 
-import { getProfile, getServices } from "@/lib/data";
+import { getServices } from "@/lib/data";
+import { getProfile } from "@/features/profile/server";
 import { getDictionary } from "@/shared/i18n";
 import { JsonLd } from "@/components/json-ld";
 import { buildBreadcrumbs, buildGraph } from "@/lib/schema";
@@ -15,7 +16,7 @@ import { type Locale, localePath } from "@/shared/site";
 import { Card, CardContent } from "@/shared/ui/card";
 import { Reveal } from "@/shared/ui/reveal";
 import { SectionHeading } from "@/shared/ui/section-heading";
-import { Footer } from "@/components/sections/footer";
+import { Footer } from "@/features/profile/ui";
 import { EmptyState } from "@/components/pages/empty-state";
 
 const ICONS = {

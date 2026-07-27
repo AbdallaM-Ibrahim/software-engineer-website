@@ -1,1 +1,1 @@
-export { HeroSkeleton as default } from "@/components/hero-skeleton";
+export { HeroSkeleton as default } from "@/features/profile/ui";

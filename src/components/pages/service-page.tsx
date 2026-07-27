@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ChevronRight, Mail } from "lucide-react";
 
-import { getProfile, getServiceBySlug } from "@/lib/data";
+import { getServiceBySlug } from "@/lib/data";
+import { getProfile } from "@/features/profile/server";
 import { caseStudyStrings, getDictionary } from "@/shared/i18n";
 import { JsonLd } from "@/components/json-ld";
 import {
@@ -14,12 +15,12 @@ import {
 } from "@/lib/schema";
 import { mediaAlt, mediaSize, mediaUrl } from "@/shared/cms/media";
 import { type Locale, localePath } from "@/shared/site";
-import { findLink, resolveWhatsapp } from "@/lib/contact-links";
+import { findLink, resolveWhatsapp } from "@/features/profile/model";
 import { WhatsAppIcon } from "@/shared/ui/icons";
 import { Button } from "@/shared/ui/button";
 import { Reveal } from "@/shared/ui/reveal";
-import { Footer } from "@/components/sections/footer";
-import { CaseStudyCard } from "@/components/sections/case-study-card";
+import { Footer } from "@/features/profile/ui";
+import { CaseStudyCard } from "@/features/work/ui";
 import { ServiceToc } from "@/components/sections/service-toc";
 import {
   type Heading,

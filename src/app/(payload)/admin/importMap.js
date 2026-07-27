@@ -26,8 +26,8 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
-import { PlatformIconPreview as PlatformIconPreview_a09ac37edea50f932102adc37f3c81df } from '../../../components/admin/platform-icon-preview'
-import { LinkRowLabel as LinkRowLabel_9d45aa50486f4182c895211ad1311227 } from '../../../components/admin/link-row-label'
+import { PlatformIconPreview as PlatformIconPreview_539cecc122ca23bce2fc9fc12c5e78d2 } from '../../../features/profile/cms/admin/platform-icon-preview'
+import { LinkRowLabel as LinkRowLabel_591d14e91ebfb6d36dfdac211d233a0e } from '../../../features/profile/cms/admin/link-row-label'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
@@ -61,8 +61,8 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  "/components/admin/platform-icon-preview#PlatformIconPreview": PlatformIconPreview_a09ac37edea50f932102adc37f3c81df,
-  "/components/admin/link-row-label#LinkRowLabel": LinkRowLabel_9d45aa50486f4182c895211ad1311227,
+  "/features/profile/cms/admin/platform-icon-preview#PlatformIconPreview": PlatformIconPreview_539cecc122ca23bce2fc9fc12c5e78d2,
+  "/features/profile/cms/admin/link-row-label#LinkRowLabel": LinkRowLabel_591d14e91ebfb6d36dfdac211d233a0e,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

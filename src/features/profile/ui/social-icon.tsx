@@ -13,7 +13,7 @@ import {
   XIcon,
   YouTubeIcon,
 } from "@/shared/ui/icons";
-import type { SocialPlatform } from "@/lib/social";
+import type { SocialPlatform } from "../model/social";
 
 type IconComponent = React.ComponentType<{
   className?: string;

@@ -2,7 +2,8 @@ import type { CollectionConfig } from "payload";
 
 // Relative import: the Payload CLI loads this through tsx, which does not
 // resolve the `@/*` alias.
-import { revalidateHooks } from "../shared/cms/revalidate";
+import { revalidateHooks } from "../../../shared/cms/revalidate";
+import { CASE_STUDIES_TAG } from "../model/tags";
 
 export const CaseStudies: CollectionConfig = {
   slug: "case-studies",
@@ -38,7 +39,7 @@ export const CaseStudies: CollectionConfig = {
     defaultColumns: ["title", "_status", "link", "order"],
     group: "Content",
   },
-  hooks: revalidateHooks("case-studies"),
+  hooks: revalidateHooks(CASE_STUDIES_TAG),
   defaultSort: "order",
   fields: [
     {

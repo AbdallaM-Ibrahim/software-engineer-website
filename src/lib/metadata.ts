@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import { getProfile, getServiceBySlug } from "@/lib/data";
+import { getServiceBySlug } from "@/lib/data";
+import { getProfile } from "@/features/profile/server";
 import { getDictionary } from "@/shared/i18n";
 import {
   DEFAULT_LOCALE,
