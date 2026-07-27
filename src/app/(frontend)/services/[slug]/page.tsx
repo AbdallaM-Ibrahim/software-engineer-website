@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { ServicePage } from "@/components/pages/service-page";
-import { buildServiceMetadata } from "@/lib/metadata";
+import { ServicePage } from "@/views/service-detail/service-page";
+import { buildServiceMetadata } from "@/features/seo/server";
 import { isDraftMode } from "@/shared/cms/draft";
 
 // Rendered on demand, with data from the cache. No generateStaticParams: that

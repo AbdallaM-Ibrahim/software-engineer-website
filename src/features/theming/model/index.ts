@@ -1,0 +1,1 @@
+export { ARABIC_FONT_VARIABLES, LATIN_FONT_VARIABLES } from "./fonts";

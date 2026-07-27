@@ -3,7 +3,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 
-import { getServices } from "@/lib/data";
+import { getServices } from "@/features/services/server";
 import { getPayloadClient } from "@/shared/cms/payload";
 import {
   CHANNEL_LABELS,

@@ -12,7 +12,7 @@ import sharp from "sharp";
 
 import { Users } from "./shared/cms/collections/users.collection";
 import { Media } from "./shared/cms/collections/media.collection";
-import { Services } from "./collections/Services";
+import { Services } from "./features/services/cms/services.collection";
 import { Skills } from "./features/resume/cms/skills.collection";
 import { Experience } from "./features/resume/cms/experience.collection";
 import { Education } from "./features/resume/cms/education.collection";

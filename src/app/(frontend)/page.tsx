@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { HomePage } from "@/components/pages/home-page";
-import { buildHomeMetadata } from "@/lib/metadata";
+import { HomePage } from "@/views/home/home-page";
+import { buildHomeMetadata } from "@/features/seo/server";
 import { isDraftMode } from "@/shared/cms/draft";
 
 // Rendered per request, but the DB reads come from the tagged data cache

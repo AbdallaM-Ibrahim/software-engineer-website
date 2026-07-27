@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { ServicesIndexPage } from "@/components/pages/services-index-page";
-import { buildServicesIndexMetadata } from "@/lib/metadata";
+import { ServicesIndexPage } from "@/views/services-index/services-index-page";
+import { buildServicesIndexMetadata } from "@/features/seo/server";
 import { isDraftMode } from "@/shared/cms/draft";
 
 // Dynamic, with data served from the cache — see the English home page.

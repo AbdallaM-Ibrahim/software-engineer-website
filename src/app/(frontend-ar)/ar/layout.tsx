@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "../../(frontend)/globals.css";
 
-import { RootHtml } from "@/components/root-html";
-import { baseMetadata } from "@/lib/metadata";
+import { RootHtml } from "@/views/shell/root-html";
+import { baseMetadata } from "@/features/seo/server";
 
 // Root layout for the Arabic site at /ar. A separate route group from the
 // English one because it renders a different <html> — lang="ar", dir="rtl" —

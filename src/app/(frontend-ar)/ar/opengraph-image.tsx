@@ -1,4 +1,4 @@
-import { OG_CONTENT_TYPE, OG_SIZE, renderOgCard } from "@/lib/og";
+import { OG_CONTENT_TYPE, OG_SIZE, renderOgCard } from "@/features/seo/ui";
 
 // On demand, not prerendered — see the English home opengraph-image.
 export const dynamic = "force-dynamic";

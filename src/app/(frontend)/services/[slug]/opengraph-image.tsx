@@ -1,5 +1,5 @@
-import { getServiceBySlug } from "@/lib/data";
-import { OG_CONTENT_TYPE, OG_SIZE, renderOgCard } from "@/lib/og";
+import { getServiceBySlug } from "@/features/services/server";
+import { OG_CONTENT_TYPE, OG_SIZE, renderOgCard } from "@/features/seo/ui";
 
 // Generated per request from CMS data, not prerendered — see the home card.
 export const dynamic = "force-dynamic";

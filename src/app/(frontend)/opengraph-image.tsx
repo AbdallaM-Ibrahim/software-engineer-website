@@ -1,4 +1,4 @@
-import { OG_CONTENT_TYPE, OG_SIZE, renderOgCard } from "@/lib/og";
+import { OG_CONTENT_TYPE, OG_SIZE, renderOgCard } from "@/features/seo/ui";
 
 // Rendered on demand rather than prerendered at build. The card is cheap to
 // generate and this keeps the raster pipeline off the build machine, whose

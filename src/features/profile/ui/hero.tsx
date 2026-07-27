@@ -8,7 +8,8 @@ import { MetricStrip, type Metric } from "./metric-strip";
 import { findLink } from "../model";
 import type { Dictionary } from "@/shared/i18n";
 import { asMedia, mediaAlt } from "@/shared/cms/media";
-import { type Locale, sectionHref } from "@/shared/site";
+import type { Locale } from "@/shared/site";
+import { sectionHref } from "@/features/navigation/model";
 import type { Profile } from "@/payload-types";
 
 const FALLBACK_TAGLINE =

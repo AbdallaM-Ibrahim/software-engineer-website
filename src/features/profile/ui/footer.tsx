@@ -1,9 +1,10 @@
 import { Button } from "@/shared/ui/button";
 import { SocialIcon } from "./social-icon";
-import { LocaleSwitcher } from "@/components/locale-switcher";
+import { LocaleSwitcher } from "@/features/navigation/ui";
 import { contactLinks } from "../model";
 import type { Dictionary } from "@/shared/i18n";
-import { type Locale, sectionHref } from "@/shared/site";
+import type { Locale } from "@/shared/site";
+import { sectionHref } from "@/features/navigation/model";
 import type { Profile } from "@/payload-types";
 
 export function Footer({
