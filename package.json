@@ -15,7 +15,7 @@
     "generate:types": "tsx node_modules/payload/bin.js generate:types",
     "generate:importmap": "tsx node_modules/payload/bin.js generate:importmap",
     "seed": "tsx --env-file=.env src/seed.ts",
-    "email": "email dev --dir emails --port 3001",
+    "email": "email dev --dir src/features/contact/emails --port 3001",
     "email:sync": "tsx --env-file=.env scripts/sync-email-templates.tsx",
     "test": "pnpm test:unit && pnpm test:e2e",
     "test:unit": "vitest run",

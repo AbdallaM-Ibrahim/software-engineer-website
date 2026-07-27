@@ -6,7 +6,7 @@ import { Reveal } from "@/shared/ui/reveal";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { SocialIcon } from "@/components/social-icon";
 import { WhatsAppIcon } from "@/shared/ui/icons";
-import { ContactForm } from "@/components/sections/contact-form";
+import { ContactForm } from "./contact-form";
 import { contactLinks, resolveWhatsappInfo } from "@/lib/contact-links";
 import type { Dictionary } from "@/shared/i18n";
 import { handleFrom } from "@/lib/social";

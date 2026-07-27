@@ -25,7 +25,7 @@ import { Education } from "@/components/sections/education";
 import { WhereIWork } from "@/components/sections/where-i-work";
 import { Work } from "@/components/sections/work";
 import { Testimonials } from "@/components/sections/testimonials";
-import { Contact } from "@/components/sections/contact";
+import { Contact } from "@/features/contact/ui";
 import { Footer } from "@/components/sections/footer";
 import { RefreshOnSave } from "@/components/refresh-on-save";
 import { EmptyState } from "@/components/pages/empty-state";

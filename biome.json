@@ -209,6 +209,7 @@
         "src/fields/**",
         "src/features/*/cms/**",
         "src/features/*/model/tags.ts",
+        "src/features/contact/model/**",
         "src/shared/cms/collections/**",
         "src/shared/cms/fields/**",
         "src/shared/cms/revalidate.ts"

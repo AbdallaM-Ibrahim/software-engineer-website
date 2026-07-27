@@ -1,6 +1,6 @@
 /**
- * Renders the React Email templates in ./emails and uploads them to Resend as
- * published Templates.
+ * Renders the React Email templates in src/features/contact/emails and uploads
+ * them to Resend as published Templates.
  *
  * React Email is the authoring layer; Resend Templates is the serving layer.
  * The runtime never renders an email — it sends `template: { id, variables }`,
@@ -21,23 +21,38 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { render } from "react-email";
-import type { CreateTemplateOptions, Resend } from "resend";
+import { type CreateTemplateOptions, Resend } from "resend";
 
 import {
   ContactAutoReply,
   type ContactAutoReplyProps,
-} from "../emails/contact-auto-reply";
+} from "../src/features/contact/emails/contact-auto-reply";
 import {
   ContactNotification,
   type ContactNotificationProps,
-} from "../emails/contact-notification";
+} from "../src/features/contact/emails/contact-notification";
 import {
   CONTACT_AUTO_REPLY_TEMPLATE,
   CONTACT_NOTIFICATION_TEMPLATE,
-  getManagementResend,
   OWNER_NAME,
   SITE_URL,
-} from "../src/lib/email";
+} from "../src/features/contact/model";
+
+/**
+ * Full-access client. Deliberately built here rather than exported from the
+ * app: template CRUD is the only thing that needs this scope, so no
+ * request-path module can reach a key that may rewrite templates. A
+ * sending-only key returns 401 restricted_api_key on /templates.
+ */
+function getManagementResend(): Resend {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error(
+      "RESEND_API_KEY is not set — template sync needs a full-access key.",
+    );
+  }
+  return new Resend(apiKey);
+}
 
 type Variables = NonNullable<CreateTemplateOptions["variables"]>;
 

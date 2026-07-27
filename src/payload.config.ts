@@ -18,7 +18,7 @@ import { Experience } from "./collections/Experience";
 import { Education } from "./collections/Education";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Testimonials } from "./collections/Testimonials";
-import { ContactFailures } from "./collections/ContactFailures";
+import { ContactFailures } from "./features/contact/cms/contact-failures.collection";
 import { Profile } from "./globals/Profile";
 
 const filename = fileURLToPath(import.meta.url);
@@ -33,7 +33,7 @@ const s3Enabled = Boolean(process.env.S3_BUCKET && process.env.S3_ENDPOINT);
 // adapter it writes them to the console and warns on every boot. It reuses the
 // sending-scoped Resend key — the same one the contact route uses.
 //
-// NOTE: parsed inline rather than imported from src/lib/email.ts because this
+// NOTE: parsed inline rather than imported from the contact feature because this
 // file is also loaded by the Payload CLI through tsx, which does not resolve the
 // `@/*` tsconfig path alias.
 const emailApiKey =

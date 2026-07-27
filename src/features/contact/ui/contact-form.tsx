@@ -25,7 +25,7 @@ import {
   type ContactValues,
   type InquiryType,
   contactSchema,
-} from "@/lib/contact-schema";
+} from "../model";
 import type { FormStrings } from "@/shared/i18n";
 import type { Service } from "@/payload-types";
 
