@@ -203,6 +203,37 @@
     },
     {
       "includes": [
+        "src/**",
+        "!src/features/*/model/types.ts",
+        "!src/shared/cms/**",
+        "!src/payload.config.ts",
+        "!src/seed.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/*/*/**"],
+                    "message": "Reaching into a feature's internals. Import a segment barrel instead: @/features/<name>/{model,server,ui}. Within a feature, use a relative import."
+                  },
+                  {
+                    "group": ["@/payload-types"],
+                    "message": "payload-types.ts is generated. Re-export the type from your feature's model/types.ts and import it from there, so the generated file has one importer per feature."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+
+    {
+      "includes": [
         "src/payload.config.ts",
         "src/collections/**",
         "src/globals/**",

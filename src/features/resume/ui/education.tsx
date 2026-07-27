@@ -3,7 +3,7 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 import { dateRange } from "@/shared/lib/format";
 import type { Dictionary } from "@/shared/i18n";
 import type { Locale } from "@/shared/site";
-import type { Education as EducationType } from "@/payload-types";
+import type { Education as EducationType } from "../model";
 
 export function Education({
   items,

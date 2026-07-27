@@ -1,13 +1,9 @@
 import { type Node, clean } from "@/features/seo/model";
 import { mediaUrl } from "@/shared/cms/media";
 import { type Locale, absoluteUrl } from "@/shared/site";
-import type {
-  CaseStudy,
-  Education,
-  Experience,
-  Profile,
-  Skill,
-} from "@/payload-types";
+import type { CaseStudy } from "@/features/work/model";
+import type { Education, Experience, Skill } from "@/features/resume/model";
+import type { Profile } from "./types";
 
 import { contactLinks } from "./contact-links";
 

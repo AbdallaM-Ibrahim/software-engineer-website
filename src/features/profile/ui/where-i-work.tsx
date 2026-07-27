@@ -3,7 +3,7 @@ import { Clock, Globe, Handshake, Languages } from "lucide-react";
 import { Reveal } from "@/shared/ui/reveal";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import type { Dictionary } from "@/shared/i18n";
-import type { Profile } from "@/payload-types";
+import type { Profile } from "../model";
 
 type Availability = NonNullable<Profile["availability"]>;
 

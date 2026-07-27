@@ -1,5 +1,5 @@
 import { socialLabel, whatsappLink, whatsappNumberFromUrl } from "./social";
-import type { Profile } from "@/payload-types";
+import type { Profile } from "./types";
 
 export type ContactLink = {
   id: string;

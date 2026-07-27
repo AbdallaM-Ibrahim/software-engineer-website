@@ -27,7 +27,7 @@ import {
   contactSchema,
 } from "../model";
 import type { FormStrings } from "@/shared/i18n";
-import type { Service } from "@/payload-types";
+import type { Service } from "@/features/services/model";
 
 /** Reads ?service= and ?type= so a service page's CTA carries intent through. */
 function usePrefill(): { service?: string; inquiryType?: InquiryType } {

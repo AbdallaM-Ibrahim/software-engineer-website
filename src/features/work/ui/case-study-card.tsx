@@ -16,7 +16,7 @@ import {
 import { toLines } from "@/shared/lib/format";
 import type { CaseStudyStrings } from "@/shared/i18n";
 import { asMedia, mediaAlt } from "@/shared/cms/media";
-import type { CaseStudy } from "@/payload-types";
+import type { CaseStudy } from "../model";
 
 const THUMB_SIZES = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
 

@@ -12,7 +12,7 @@ Production host: **abdalla.futuresolve.net**
 - **Tailwind CSS v4** + **shadcn/ui** (Radix) — light/dark theme via `next-themes`
 - **Payload CMS 3.86** (admin at `/admin`, Local API for reads) on **MongoDB** (Mongoose)
 - **TanStack Query** (contact-form mutation), **react-hook-form** + **zod** (validation)
-- CSS transitions for motion (`src/components/reveal.tsx`) — no animation library
+- CSS transitions for motion (`src/shared/ui/reveal.tsx`) — no animation library
 - **pnpm** as package manager, **Biome** for lint + format, **Vitest** for unit
   tests and **Playwright** for e2e
 - S3-compatible media storage (AWS S3 / Cloudflare R2 / DigitalOcean Spaces / MinIO), local disk by default
@@ -38,7 +38,7 @@ Values live in `.env` (already present for local dev):
 | `RESEND_FROM_EMAIL` | `From` header, e.g. `Abdalla Mostafa <onboarding@resend.dev>` |
 | `CONTACT_TO_EMAIL` | Where contact submissions land. Falls back to `Profile.contact.email` in Payload, then to a hardcoded address. |
 | `CONTACT_AUTO_REPLY` | `true` enables the visitor auto-reply. Keep `false` without a verified domain. |
-| `NEXT_PUBLIC_SITE_URL` | Canonical origin. Every absolute URL — canonicals, hreflang, sitemap, JSON-LD, OG images — derives from it (`src/lib/site.ts`). Set to the production domain on deploy. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin. Every absolute URL — canonicals, hreflang, sitemap, JSON-LD, OG images — derives from it (`src/shared/site`). Set to the production domain on deploy. |
 | `GOOGLE_SITE_VERIFICATION` | Google Search Console verification token (the meta-tag content). Omit to emit no verification tag. |
 | `NEXT_PUBLIC_MEDIA_URL` | Public base URL of the media bucket once S3/R2 is configured — declares the host `next/image` may optimise from. Leave blank while media is on local disk. |
 | `PAYLOAD_MCP_API_KEY` | Payload MCP key, minted in `/admin` under MCP → API Keys. Mirrored in the gitignored `.mcp.json`. |
@@ -128,7 +128,7 @@ own, and without it Payload aborts with *"missing secret key"*.
 
 **Live preview** renders the real site in an iframe beside the editor, with
 mobile/tablet/desktop breakpoints. The site is server-rendered, so the bridge in
-`src/components/refresh-on-save.tsx` listens for the admin's save message and calls
+`src/shared/cms/refresh-on-save.tsx` listens for the admin's save message and calls
 `router.refresh()` — no reload, no lost scroll position. It previews `NEXT_PUBLIC_SITE_URL`,
 so set that when previewing anything other than `http://localhost:3000`.
 
@@ -187,7 +187,7 @@ going out until you publish again.
 which substitutes raw and unescaped. Visitor input is therefore escaped for the
 HTML body, while the subject line and plain-text part read separate raw `*_TEXT`
 variables — escaping those would surface literal `&lt;` and `<br />` to the
-reader. Both sets are sent together from the route; see `src/lib/email.ts`.
+reader. Both sets are sent together from the route; see `src/features/contact/`.
 
 **Sandbox limit.** With no verified domain, `onboarding@resend.dev` only delivers
 to the Resend account owner. The owner notification works; the visitor auto-reply
@@ -288,4 +288,4 @@ src/
   `lexicalEditor()` back to `payload.config.ts` if you introduce a richText field.
 - The contact form is **UI-complete and validated but not wired to email** — it runs a
   stubbed TanStack mutation and shows a success toast. Swap the `mutationFn` in
-  `src/components/sections/contact-form.tsx` for a real endpoint to make it live.
+  `src/features/contact/ui/contact-form.tsx` for a real endpoint to make it live.

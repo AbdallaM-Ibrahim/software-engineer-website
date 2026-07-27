@@ -30,7 +30,7 @@ import {
   type JSXConvertersFunction,
   RichText,
 } from "@payloadcms/richtext-lexical/react";
-import type { CaseStudy } from "@/payload-types";
+import type { CaseStudy } from "@/features/work/model";
 
 /**
  * A single service landing page at /services/<slug>.

@@ -1,4 +1,4 @@
-import type { CaseStudy } from "@/payload-types";
+import type { CaseStudy } from "./types";
 import type { Metric } from "@/features/profile/ui";
 
 /**

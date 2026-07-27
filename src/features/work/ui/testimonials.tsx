@@ -5,7 +5,7 @@ import { Reveal } from "@/shared/ui/reveal";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { initials } from "@/shared/lib/format";
 import type { Dictionary } from "@/shared/i18n";
-import type { Testimonial } from "@/payload-types";
+import type { Testimonial } from "../model";
 
 export function Testimonials({
   items,

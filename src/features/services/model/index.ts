@@ -9,3 +9,4 @@ export {
 } from "./headings";
 export { buildFaqPage, buildService } from "./schema";
 export { SERVICES_TAG } from "./tags";
+export type { Service } from "./types";

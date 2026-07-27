@@ -5,7 +5,7 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 import { dateRange, toLines } from "@/shared/lib/format";
 import type { Dictionary } from "@/shared/i18n";
 import type { Locale } from "@/shared/site";
-import type { Experience as ExperienceType } from "@/payload-types";
+import type { Experience as ExperienceType } from "../model";
 
 export function Experience({
   items,

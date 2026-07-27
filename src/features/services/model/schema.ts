@@ -1,7 +1,7 @@
 import { PERSON_ID } from "@/features/profile/model";
 import { type Node, clean } from "@/features/seo/model";
 import { type Locale, absoluteUrl } from "@/shared/site";
-import type { Service } from "@/payload-types";
+import type { Service } from "./types";
 
 /**
  * A service page's own nodes. Both reference the site-wide Person by `@id`

@@ -10,7 +10,8 @@ import { ContactForm } from "./contact-form";
 import { contactLinks, resolveWhatsappInfo } from "@/features/profile/model";
 import type { Dictionary } from "@/shared/i18n";
 import { handleFrom } from "@/features/profile/model";
-import type { Profile, Service } from "@/payload-types";
+import type { Profile } from "@/features/profile/model";
+import type { Service } from "@/features/services/model";
 
 type Entry = {
   key: string;

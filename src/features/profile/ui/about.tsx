@@ -12,7 +12,8 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 import { toParagraphs } from "@/shared/lib/format";
 import type { Dictionary } from "@/shared/i18n";
 import { type Locale, localePath } from "@/shared/site";
-import type { Profile, Service } from "@/payload-types";
+import type { Service } from "@/features/services/model";
+import type { Profile } from "../model";
 
 const ICONS = {
   code: Code2,

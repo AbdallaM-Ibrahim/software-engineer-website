@@ -93,11 +93,13 @@ build. Hooks install via the `prepare` script on `pnpm install`; re-sync with
 
 - **After any Payload schema change**, run `pnpm generate:types`. After adding a
   custom admin component, also run `pnpm generate:importmap`.
-- **`src/payload.config.ts`, `src/globals/*` and `src/collections/*` are loaded
-  by the Payload CLI through tsx, which does not resolve the `@/*` alias.** Use
+- **`src/payload.config.ts` and every `features/*/cms/*` module are loaded by
+  the Payload CLI through tsx, which does not resolve the `@/*` alias.** Use
   relative imports there, or inline the helper. This is why `parseFromAddress`
-  and `SITE_URL` are duplicated inside `payload.config.ts`, and why
-  `src/collections/*` import `../lib/revalidate` relatively.
+  and `SITE_URL` are duplicated inside `payload.config.ts`. **Biome now enforces
+  this** — an aliased import in a `cms/` segment is a lint error rather than a
+  failure you only see when you next run the CLI. The same applies to
+  `features/contact/model/*`, which `pnpm email:sync` imports under tsx.
 - **`pnpm seed` is destructive.** It deletes every document in the content
   collections. Testimonials are never re-seeded, so anything added by hand in
   `/admin` is lost. Check what is in the database before running it.
@@ -110,20 +112,23 @@ build. Hooks install via the `prepare` script on `pnpm install`; re-sync with
   translation too. An `en`-only edit to a localized field silently renders the
   English value on the Arabic page; if that document's `translationReviewed`
   flag is already ticked, that English text ships as *indexed* Arabic. Localized
-  content lives in the CMS; UI strings live in `src/lib/i18n.ts` (both locales).
+  content lives in the CMS; UI strings live in `src/shared/i18n` — `en.ts` and
+  `ar.ts`, with the shape in `types.ts`.
 - **`/ar` pages are `noindex` until `translationReviewed` is ticked** on the
   document (and the Profile global). Until then they render for proofreading but
   stay out of the sitemap and the hreflang set. Flip the flag only after a human
   has read the Arabic.
-- **Content reads are cached and tagged** (`src/lib/data.ts`); a write must go
-  through a `revalidateHooks`/`revalidateGlobalHooks` hook or the live page
+- **Content reads are cached and tagged.** Each feature's `server/` segment
+  reads through `cachedRead` (`src/shared/cms/cached-read.ts`), and a write must
+  go through a `revalidateHooks`/`revalidateGlobalHooks` hook or the live page
   serves stale content. Every collection and the Profile global already wires
-  one. Next 16's `revalidateTag` needs a second argument — see
-  `src/lib/revalidate.ts`.
+  one. The tag is a constant in the feature's `model/tags.ts`, imported by both
+  sides, so the reader and the hook cannot drift. Next 16's `revalidateTag`
+  needs a second argument — see `src/shared/cms/revalidate.ts`.
 - **Rich text (Lexical) is enabled** for the Services `body`. The old note about
   keeping `@lexical` out of the module graph is void; if `pnpm build` ever fails
   inside `@lexical`, that dependency regressed.
-- **`i18n.ts` holds functions (`count`, `copyright`)**, so a whole `Dictionary`
+- **The `Dictionary` holds functions (`count`, `copyright`)**, so a whole `Dictionary`
   cannot be passed to a Client Component — React can't serialize the functions.
   Pass a string subset (`NavStrings`, `FormStrings`, `caseStudyStrings(dict)`).
 - **Resend needs two keys.** `RESEND_API_KEY` is full-access and used only by
@@ -162,15 +167,24 @@ build. Hooks install via the `prepare` script on `pnpm install`; re-sync with
 
 Two runners, split by file suffix so neither globs the other's files:
 
-- **Vitest owns `tests/unit/**/*.test.ts`** — pure modules only, `environment:
-  "node"`, no DOM. This is where routing rules and registry invariants are
+- **Vitest owns `src/**/*.test.ts`** — pure modules only, `environment:
+  "node"`, no DOM. Unit tests sit beside the `model/` segment they pin, so a
+  feature carries its own. This is where routing rules and registry invariants are
   pinned, because asserting them through a browser is slow and flake-prone.
 - **Playwright owns `tests/e2e/**/*.spec.ts`** — anything that needs a page.
 
 Prefer neither where an invariant can be encoded in a type or a data shape:
-`src/lib/sections.ts` makes non-contiguous section ownership unrepresentable
+`src/features/navigation/model/sections.ts` makes non-contiguous section
+ownership unrepresentable
 rather than merely asserted, and `tsc` catches a bad nav label key. A test tells
 you after the fact; a type stops it being written.
+
+**A stray server on :3000 will silently invalidate the whole e2e run.**
+`webServer.reuseExistingServer` is on outside CI, so if anything is already
+listening on the port, Playwright attaches to *that* instead of starting a
+production server from your build — and you get failures (or a false pass) that
+have nothing to do with your changes. Check the port before blaming a spec, and
+either stop the process or run on another port with `PW_PORT=3100 pnpm test:e2e`.
 
 Playwright specs are read-only against the CMS and run fully parallel;
 contact-form specs stub `/api/contact`, so the suite never sends real mail. Specs

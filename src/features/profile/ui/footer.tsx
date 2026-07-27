@@ -5,7 +5,7 @@ import { contactLinks } from "../model";
 import type { Dictionary } from "@/shared/i18n";
 import type { Locale } from "@/shared/site";
 import { sectionHref } from "@/features/navigation/model";
-import type { Profile } from "@/payload-types";
+import type { Profile } from "../model";
 
 export function Footer({
   profile,

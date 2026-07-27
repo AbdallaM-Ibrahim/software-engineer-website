@@ -2,7 +2,7 @@ import { Badge } from "@/shared/ui/badge";
 import { Reveal } from "@/shared/ui/reveal";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import type { Dictionary } from "@/shared/i18n";
-import type { Skill } from "@/payload-types";
+import type { Skill } from "../model";
 
 export function Skills({
   skills,

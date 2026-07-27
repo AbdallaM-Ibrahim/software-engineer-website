@@ -23,3 +23,4 @@ export {
   PERSON_ID,
   WEBSITE_ID,
 } from "./schema";
+export type { Profile } from "./types";
